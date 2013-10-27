@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.common.base.CaseFormat;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.Descriptor;
@@ -22,16 +23,18 @@ import static java.lang.String.format;
 
 public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<MessageOrBuilder> {
   private final T defaultInstance;
+  private final CaseFormat format;
   private final boolean build;
 
   @SuppressWarnings("unchecked")
-  public ProtobufDeserializer(Class<T> messageType, boolean build) throws JsonMappingException {
+  public ProtobufDeserializer(Class<T> messageType, CaseFormat format, boolean build) throws JsonMappingException {
     try {
       this.defaultInstance = (T) messageType.getMethod("getDefaultInstance").invoke(null);
     } catch (Exception e) {
       throw new JsonMappingException("Unable to get default instance for type " + messageType, e);
     }
 
+    this.format = format;
     this.build = build;
   }
 
@@ -61,14 +64,18 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
         throw new JsonParseException("Expected field name token", parser.getCurrentLocation());
       }
 
-      String fieldName = parser.getCurrentName();
+      String fieldName = translate(parser.getCurrentName());
       FieldDescriptor field = descriptor.findFieldByName(fieldName);
       if (field == null) {
-        throw unrecognizedField(parser);
+        throw unrecognizedField(defaultInstance.getClass(), parser);
       }
       parser.nextToken();
       setField(builder, field, parser);
     }
+  }
+
+  private String translate(String fieldName) {
+    return format.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
   }
 
   private void setField(Message.Builder builder, FieldDescriptor field, JsonParser parser) throws IOException {
@@ -198,33 +205,28 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
     return values;
   }
 
-  private JsonParseException unrecognizedField(JsonParser parser) throws IOException {
-    String message = format("Unrecognized field '%s' for message %s", parser.getCurrentName(),
-            defaultInstance.getClass());
+  private static JsonParseException unrecognizedField(Class<?> messageType, JsonParser parser) throws IOException {
+    String message = format("Unrecognized field '%s' for message %s", parser.getCurrentName(), messageType);
     throw parseException(message, parser.getCurrentLocation());
   }
 
-  private JsonParseException invalidEnum(FieldDescriptor field, JsonParser parser) throws IOException {
+  private static JsonParseException invalidEnum(FieldDescriptor field, JsonParser parser) throws IOException {
     String message = format("Unrecognized value '%s' for enum %s", parser.getText(), field.getEnumType().getFullName());
     throw parseException(message, parser.getCurrentLocation());
   }
 
-  private JsonParseException invalidToken(FieldDescriptor field, JsonParser parser) throws IOException {
+  private static JsonParseException invalidToken(FieldDescriptor field, JsonParser parser) throws IOException {
     String message = format("Cannot deserialize %s out of token %s for field %s", field.getJavaType(),
-            parser.getCurrentToken(), qualifiedName(field.getName()));
+            parser.getCurrentToken(), field.getFullName());
     throw parseException(message, parser.getCurrentLocation());
   }
 
-  private JsonParseException unexpectedArray(FieldDescriptor field, JsonParser parser) throws IOException {
-    String message = "Cannot deserialize array into non-repeated field " + qualifiedName(field.getName());
+  private static JsonParseException unexpectedArray(FieldDescriptor field, JsonParser parser) throws IOException {
+    String message = "Cannot deserialize array into non-repeated field " + field.getFullName();
     throw parseException(message, parser.getCurrentLocation());
   }
 
   private static JsonParseException parseException(String message, JsonLocation location) throws IOException {
     throw new JsonParseException(message, location);
-  }
-
-  private String qualifiedName(String fieldName) {
-    return defaultInstance.getClass() + "." + fieldName;
   }
 }
