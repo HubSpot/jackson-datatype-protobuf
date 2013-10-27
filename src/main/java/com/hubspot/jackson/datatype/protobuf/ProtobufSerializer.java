@@ -35,7 +35,7 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
 
       if (field.isRepeated()) {
         generator.writeArrayFieldStart(translate(field.getName()));
-        for (Object subValue : ((Iterable<?>) message.getField(field))) {
+        for (Object subValue : ((Iterable<?>) value)) {
           writeValue(field, subValue, generator, serializerProvider);
         }
         generator.writeEndArray();
