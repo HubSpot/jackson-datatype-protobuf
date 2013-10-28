@@ -2,9 +2,9 @@ package com.hubspot.jackson.datatype.protobuf;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.google.common.base.CaseFormat;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -17,39 +17,35 @@ import java.util.Map.Entry;
 import static java.lang.String.format;
 
 public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
-  private final CaseFormat format;
 
-  public ProtobufSerializer(CaseFormat format) {
+  public ProtobufSerializer() {
     super(MessageOrBuilder.class);
-    this.format = format;
   }
 
   @Override
-  public void serialize(MessageOrBuilder message, JsonGenerator generator,
-                        SerializerProvider serializerProvider) throws IOException {
+  public void serialize(MessageOrBuilder message, JsonGenerator generator, SerializerProvider serializerProvider)
+          throws IOException {
     generator.writeStartObject();
 
+    PropertyNamingStrategyBase namingStrategy =
+            new PropertyNamingStrategyWrapper(serializerProvider.getConfig().getPropertyNamingStrategy());
     for (Entry<FieldDescriptor, Object> record : message.getAllFields().entrySet()) {
       FieldDescriptor field = record.getKey();
       Object value = record.getValue();
 
       if (field.isRepeated()) {
-        generator.writeArrayFieldStart(translate(field.getName()));
+        generator.writeArrayFieldStart(namingStrategy.translate(field.getName()));
         for (Object subValue : ((Iterable<?>) value)) {
           writeValue(field, subValue, generator, serializerProvider);
         }
         generator.writeEndArray();
       } else {
-        generator.writeFieldName(translate(field.getName()));
+        generator.writeFieldName(namingStrategy.translate(field.getName()));
         writeValue(field, value, generator, serializerProvider);
       }
     }
 
     generator.writeEndObject();
-  }
-
-  private String translate(String fieldName) {
-    return CaseFormat.LOWER_UNDERSCORE.to(format, fieldName);
   }
 
   private void writeValue(FieldDescriptor field, Object value, JsonGenerator generator,
