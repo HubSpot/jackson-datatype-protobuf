@@ -21,7 +21,7 @@ To use module on Maven-based projects, use following dependency:
 
 ### Registering module
 
-Like all standard Jackson modules (libraries that implement Module interface), registration is done as follows:
+Registration is done as follows:
 
 ```java
 ObjectMapper mapper = new ObjectMapper();
