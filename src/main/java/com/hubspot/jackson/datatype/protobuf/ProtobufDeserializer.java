@@ -55,7 +55,8 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
 
   private void populate(Message.Builder builder, JsonParser parser, PropertyNamingStrategyBase namingStrategy)
           throws IOException {
-    if (!JsonToken.START_OBJECT.equals(parser.getCurrentToken())) {
+    if (!JsonToken.START_OBJECT.equals(parser.getCurrentToken()) &&
+        !JsonToken.START_OBJECT.equals(parser.nextToken())) {
       throw new JsonParseException("Expected start object token", parser.getCurrentLocation());
     }
 
