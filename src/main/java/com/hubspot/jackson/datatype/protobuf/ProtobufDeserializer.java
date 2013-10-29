@@ -1,5 +1,7 @@
 package com.hubspot.jackson.datatype.protobuf;
 
+import com.fasterxml.jackson.core.Base64Variant;
+import com.fasterxml.jackson.core.Base64Variants;
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -15,7 +17,6 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
-import org.apache.commons.codec.binary.Base64;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,6 +25,8 @@ import java.util.Map;
 import static java.lang.String.format;
 
 public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<MessageOrBuilder> {
+  private static final Base64Variant BASE64 = Base64Variants.getDefaultVariant();
+
   private final T defaultInstance;
   private final boolean build;
 
@@ -123,7 +126,7 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
             value = parser.getText();
             break;
           case BYTE_STRING:
-            value = ByteString.copyFrom(Base64.decodeBase64(parser.getText()));
+            value = ByteString.copyFrom(BASE64.decode(parser.getText()));
             break;
           default:
             throw invalidToken(field, parser);
