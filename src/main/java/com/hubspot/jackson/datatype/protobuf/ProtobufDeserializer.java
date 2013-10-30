@@ -5,29 +5,39 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
+import com.fasterxml.jackson.databind.deser.impl.NullProvider;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.type.SimpleType;
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.Descriptor;
+import com.google.protobuf.Descriptors.EnumDescriptor;
+import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.format;
 
-public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<MessageOrBuilder> {
+public class ProtobufDeserializer<T extends Message> extends StdDeserializer<MessageOrBuilder> {
   private final T defaultInstance;
   private final boolean build;
 
   @SuppressWarnings("unchecked")
   public ProtobufDeserializer(Class<T> messageType, boolean build) throws JsonMappingException {
+    super(messageType);
+
     try {
       this.defaultInstance = (T) messageType.getMethod("getDefaultInstance").invoke(null);
     } catch (Exception e) {
@@ -67,8 +77,8 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
       }
 
       FieldDescriptor field = fieldLookup.get(parser.getCurrentName());
-      if (field == null) {
-        throw unrecognizedField(defaultInstance.getClass(), parser);
+      if (field == null && !context.handleUnknownProperty(parser, this, builder, parser.getCurrentName())) {
+        context.reportUnknownProperty(builder, parser.getCurrentName(), this);
       }
       parser.nextToken();
       setField(builder, field, parser, context);
@@ -94,8 +104,12 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
 
     if (value != null) {
       if (field.isRepeated()) {
-        for (Object subValue : (Iterable<?>) value) {
-          builder.addRepeatedField(field, subValue);
+        if (value instanceof Iterable) {
+          for (Object subValue : (Iterable<?>) value) {
+            builder.addRepeatedField(field, subValue);
+          }
+        } else if (context.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)) {
+          builder.addRepeatedField(field, value);
         }
       } else {
         builder.setField(field, value);
@@ -114,8 +128,9 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
           case ENUM:
             value = field.getEnumType().findValueByName(parser.getText());
 
-            if (value == null) {
-              throw invalidEnum(field, parser);
+            if (value == null && !ignorableEnum(parser.getText().trim(), context)) {
+              throw context.weirdStringException(parser.getText(), field.getEnumType().getClass(),
+                      "value not one of declared Enum instance names");
             }
             break;
           case STRING:
@@ -158,6 +173,18 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
           case STRING:
             value = parser.getValueAsString();
             break;
+          case ENUM:
+            if (allowNumbersForEnums(context)) {
+              value = field.getEnumType().findValueByNumber(parser.getIntValue());
+
+              if (value == null && !ignoreUnknownEnums(context)) {
+                throw context.weirdNumberException(parser.getIntValue(), field.getEnumType().getClass(),
+                        "index value outside legal index range " + indexRange(field.getEnumType()));
+              }
+            } else {
+              throw context.mappingException("Not allowed to deserialize Enum value out of JSON number " +
+                                             "(disable DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS to allow)");
+            }
           default:
             throw invalidToken(field, parser);
         }
@@ -196,6 +223,33 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
         }
         break;
       case VALUE_NULL:
+        final NullProvider nullProvider;
+
+        switch (field.getJavaType()) {
+          case INT:
+            nullProvider = new NullProvider(SimpleType.construct(Integer.class), 0);
+            break;
+          case LONG:
+            nullProvider = new NullProvider(SimpleType.construct(Long.class), 0L);
+            break;
+          case FLOAT:
+            nullProvider = new NullProvider(SimpleType.construct(Float.class), 0.0f);
+            break;
+          case DOUBLE:
+            nullProvider = new NullProvider(SimpleType.construct(Double.class), 0.0d);
+            break;
+          case BOOLEAN:
+            nullProvider = new NullProvider(SimpleType.construct(Boolean.class), false);
+            break;
+          default:
+            nullProvider = null;
+        }
+
+        if (nullProvider != null) {
+          // will throw exception if DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES is enabled
+          nullProvider.nullValue(context);
+        }
+
         value = null;
         break;
       default:
@@ -218,14 +272,33 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
     return values;
   }
 
-  private static JsonParseException unrecognizedField(Class<?> messageType, JsonParser parser) throws IOException {
-    String message = format("Unrecognized field '%s' for message %s", parser.getCurrentName(), messageType);
-    throw parseException(message, parser.getCurrentLocation());
+  private static boolean ignorableEnum(String value, DeserializationContext context) {
+    return (acceptEmptyStringAsNull(context) && value.length() == 0) || ignoreUnknownEnums(context);
   }
 
-  private static JsonParseException invalidEnum(FieldDescriptor field, JsonParser parser) throws IOException {
-    String message = format("Unrecognized value '%s' for enum %s", parser.getText(), field.getEnumType().getFullName());
-    throw parseException(message, parser.getCurrentLocation());
+  private static boolean acceptEmptyStringAsNull(DeserializationContext context) {
+    return context.isEnabled(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+  }
+
+  private static boolean allowNumbersForEnums(DeserializationContext context) {
+    return !context.isEnabled(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS);
+  }
+
+  private static boolean ignoreUnknownEnums(DeserializationContext context) {
+    return context.isEnabled(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL);
+  }
+
+  private static String indexRange(EnumDescriptor field) {
+    List<Integer> indices = Lists.transform(field.getValues(), new Function<EnumValueDescriptor, Integer>() {
+      @Override
+      public Integer apply(EnumValueDescriptor value) {
+        return value.getIndex();
+      }
+    });
+
+    Collections.sort(indices);
+
+    return "[" + Joiner.on(',').join(indices) + "]";
   }
 
   private static JsonParseException invalidToken(FieldDescriptor field, JsonParser parser) throws IOException {

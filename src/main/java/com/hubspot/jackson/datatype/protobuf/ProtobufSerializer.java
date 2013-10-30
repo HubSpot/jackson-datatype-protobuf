@@ -3,6 +3,7 @@ package com.hubspot.jackson.datatype.protobuf;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.google.protobuf.ByteString;
@@ -11,6 +12,7 @@ import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.MessageOrBuilder;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map.Entry;
 
 import static java.lang.String.format;
@@ -33,11 +35,20 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
       Object value = record.getValue();
 
       if (field.isRepeated()) {
-        generator.writeArrayFieldStart(namingStrategy.translate(field.getName()));
-        for (Object subValue : ((Iterable<?>) value)) {
-          writeValue(field, subValue, generator, serializerProvider);
+        List<?> valueList = (List<?>) value;
+
+        if (valueList.isEmpty() && !writeEmptyArrays(serializerProvider)) {
+          // write nothing
+        } else if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
+          generator.writeFieldName(namingStrategy.translate(field.getName()));
+          writeValue(field, valueList.get(0), generator, serializerProvider);
+        } else {
+          generator.writeArrayFieldStart(namingStrategy.translate(field.getName()));
+          for (Object subValue : valueList) {
+            writeValue(field, subValue, generator, serializerProvider);
+          }
+          generator.writeEndArray();
         }
-        generator.writeEndArray();
       } else {
         generator.writeFieldName(namingStrategy.translate(field.getName()));
         writeValue(field, value, generator, serializerProvider);
@@ -69,7 +80,13 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
         generator.writeString((String) value);
         break;
       case ENUM:
-        generator.writeString(((EnumValueDescriptor) value).getName());
+        EnumValueDescriptor enumDescriptor = (EnumValueDescriptor) value;
+
+        if (writeEnumsUsingIndex(serializerProvider)) {
+          generator.writeNumber(enumDescriptor.getIndex());
+        } else {
+          generator.writeString(enumDescriptor.getName());
+        }
         break;
       case BYTE_STRING:
         generator.writeString(serializerProvider.getConfig().getBase64Variant().encode(((ByteString) value).toByteArray()));
@@ -80,6 +97,18 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
       default:
         throw unrecognizedType(field);
     }
+  }
+
+  private static boolean writeEmptyArrays(SerializerProvider config) {
+    return config.isEnabled(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
+  }
+
+  private static boolean writeSingleElementArraysUnwrapped(SerializerProvider config) {
+    return config.isEnabled(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
+  }
+
+  private static boolean writeEnumsUsingIndex(SerializerProvider config) {
+    return config.isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX);
   }
 
   private static IOException unrecognizedType(FieldDescriptor field) throws IOException {
