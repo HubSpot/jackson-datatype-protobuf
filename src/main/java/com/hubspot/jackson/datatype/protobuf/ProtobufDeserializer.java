@@ -1,7 +1,5 @@
 package com.hubspot.jackson.datatype.protobuf;
 
-import com.fasterxml.jackson.core.Base64Variant;
-import com.fasterxml.jackson.core.Base64Variants;
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -25,8 +23,6 @@ import java.util.Map;
 import static java.lang.String.format;
 
 public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<MessageOrBuilder> {
-  private static final Base64Variant BASE64 = Base64Variants.getDefaultVariant();
-
   private final T defaultInstance;
   private final boolean build;
 
@@ -45,9 +41,7 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
   public MessageOrBuilder deserialize(JsonParser parser, DeserializationContext context) throws IOException {
     Message.Builder builder = defaultInstance.newBuilderForType();
 
-    PropertyNamingStrategyBase namingStrategy =
-            new PropertyNamingStrategyWrapper(context.getConfig().getPropertyNamingStrategy());
-    populate(builder, parser, namingStrategy);
+    populate(builder, parser, context);
 
     if (build) {
       return builder.build();
@@ -56,7 +50,7 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
     }
   }
 
-  private void populate(Message.Builder builder, JsonParser parser, PropertyNamingStrategyBase namingStrategy)
+  private void populate(Message.Builder builder, JsonParser parser, DeserializationContext context)
           throws IOException {
     if (!JsonToken.START_OBJECT.equals(parser.getCurrentToken()) &&
         !JsonToken.START_OBJECT.equals(parser.nextToken())) {
@@ -64,7 +58,7 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
     }
 
     Descriptor descriptor = builder.getDescriptorForType();
-    Map<String, FieldDescriptor> fieldLookup = buildFieldLookup(descriptor, namingStrategy);
+    Map<String, FieldDescriptor> fieldLookup = buildFieldLookup(descriptor, context);
 
     while (!parser.nextToken().equals(JsonToken.END_OBJECT)) {
       JsonToken token = parser.getCurrentToken();
@@ -77,12 +71,14 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
         throw unrecognizedField(defaultInstance.getClass(), parser);
       }
       parser.nextToken();
-      setField(builder, field, parser, namingStrategy);
+      setField(builder, field, parser, context);
     }
   }
 
-  private Map<String, FieldDescriptor> buildFieldLookup(Descriptor descriptor,
-                                                        PropertyNamingStrategyBase namingStrategy) {
+  private Map<String, FieldDescriptor> buildFieldLookup(Descriptor descriptor, DeserializationContext context) {
+    PropertyNamingStrategyBase namingStrategy =
+            new PropertyNamingStrategyWrapper(context.getConfig().getPropertyNamingStrategy());
+
     Map<String, FieldDescriptor> fieldLookup = Maps.newHashMap();
 
     for (FieldDescriptor field : descriptor.getFields()) {
@@ -93,8 +89,8 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
   }
 
   private void setField(Message.Builder builder, FieldDescriptor field, JsonParser parser,
-                        PropertyNamingStrategyBase namingStrategy) throws IOException {
-    Object value = readValue(builder, field, parser, namingStrategy);
+                        DeserializationContext context) throws IOException {
+    Object value = readValue(builder, field, parser, context);
 
     if (value != null) {
       if (field.isRepeated()) {
@@ -108,7 +104,7 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
   }
 
   private Object readValue(Message.Builder builder, FieldDescriptor field, JsonParser parser,
-                           PropertyNamingStrategyBase namingStrategy) throws IOException {
+                           DeserializationContext context) throws IOException {
     JsonToken token = parser.getCurrentToken();
 
     final Object value;
@@ -126,7 +122,7 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
             value = parser.getText();
             break;
           case BYTE_STRING:
-            value = ByteString.copyFrom(BASE64.decode(parser.getText()));
+            value = ByteString.copyFrom(context.getBase64Variant().decode(parser.getText()));
             break;
           default:
             throw invalidToken(field, parser);
@@ -185,7 +181,7 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
         switch (field.getJavaType()) {
           case MESSAGE:
             Message.Builder subBuilder = builder.newBuilderForField(field);
-            populate(subBuilder, parser, namingStrategy);
+            populate(subBuilder, parser, context);
             value = subBuilder.build();
             break;
           default:
@@ -194,7 +190,7 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
         break;
       case START_ARRAY:
         if (field.isRepeated()) {
-          value = readArray(builder, field, parser, namingStrategy);
+          value = readArray(builder, field, parser, context);
         } else {
           throw unexpectedArray(field, parser);
         }
@@ -210,10 +206,10 @@ public class ProtobufDeserializer<T extends Message> extends JsonDeserializer<Me
   }
 
   private List<Object> readArray(Message.Builder builder, FieldDescriptor field, JsonParser parser,
-                                 PropertyNamingStrategyBase namingStrategy) throws IOException {
+                                 DeserializationContext context) throws IOException {
     List<Object> values = Lists.newArrayList();
     while (!JsonToken.END_ARRAY.equals(parser.nextToken())) {
-      Object value = readValue(builder, field, parser, namingStrategy);
+      Object value = readValue(builder, field, parser, context);
 
       if (value != null) {
         values.add(value);

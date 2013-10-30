@@ -1,7 +1,5 @@
 package com.hubspot.jackson.datatype.protobuf;
 
-import com.fasterxml.jackson.core.Base64Variant;
-import com.fasterxml.jackson.core.Base64Variants;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
@@ -18,7 +16,6 @@ import java.util.Map.Entry;
 import static java.lang.String.format;
 
 public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
-  private static final Base64Variant BASE64 = Base64Variants.getDefaultVariant();
 
   public ProtobufSerializer() {
     super(MessageOrBuilder.class);
@@ -75,7 +72,7 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
         generator.writeString(((EnumValueDescriptor) value).getName());
         break;
       case BYTE_STRING:
-        generator.writeString(BASE64.encode(((ByteString) value).toByteArray()));
+        generator.writeString(serializerProvider.getConfig().getBase64Variant().encode(((ByteString) value).toByteArray()));
         break;
       case MESSAGE:
         serialize((MessageOrBuilder) value, generator, serializerProvider);
