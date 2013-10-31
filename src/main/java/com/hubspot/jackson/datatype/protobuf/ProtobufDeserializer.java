@@ -1,6 +1,5 @@
 package com.hubspot.jackson.datatype.protobuf;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -61,7 +60,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
           throws IOException {
     if (!JsonToken.START_OBJECT.equals(parser.getCurrentToken()) &&
         !JsonToken.START_OBJECT.equals(parser.nextToken())) {
-      throw new JsonParseException("Expected start object token", parser.getCurrentLocation());
+      throw context.mappingException(builder.getClass());
     }
 
     Descriptor descriptor = builder.getDescriptorForType();
@@ -70,7 +69,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     while (!parser.nextToken().equals(JsonToken.END_OBJECT)) {
       JsonToken token = parser.getCurrentToken();
       if (!token.equals(JsonToken.FIELD_NAME)) {
-        throw new JsonParseException("Expected field name token", parser.getCurrentLocation());
+        throw context.wrongTokenException(parser, JsonToken.FIELD_NAME, "");
       }
 
       FieldDescriptor field = fieldLookup.get(parser.getCurrentName());
@@ -122,7 +121,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
       if (field.isRepeated()) {
         return readArray(builder, field, parser, context);
       } else {
-        throw context.mappingException(builder.getClass(), parser.getCurrentToken());
+        throw mappingException(field, context);
       }
     }
 
@@ -171,7 +170,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
             value = ByteString.copyFrom(context.getBase64Variant().decode(parser.getText()));
             break;
           default:
-            throw context.mappingException(ByteString.class, parser.getCurrentToken());
+            throw mappingException(field, context);
         }
         break;
       case ENUM:
@@ -198,7 +197,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
             }
             break;
           default:
-            throw context.mappingException(Enum.class, parser.getCurrentToken());
+            throw mappingException(field, context);
         }
         break;
       case MESSAGE:
@@ -209,11 +208,11 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
             value = subBuilder.build();
             break;
           default:
-            throw context.mappingException(builder.newBuilderForField(field).getClass(), parser.getCurrentToken());
+            throw mappingException(field, context);
         }
         break;
       default:
-        throw context.mappingException(builder.getClass());
+        throw mappingException(field, context);
     }
 
     return value;
@@ -259,5 +258,12 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     Collections.sort(indices);
 
     return "[" + Joiner.on(',').join(indices) + "]";
+  }
+
+  private static JsonMappingException mappingException(FieldDescriptor field, DeserializationContext context)
+          throws IOException {
+    JsonToken token = context.getParser().getCurrentToken();
+    String message = "Can not deserialize instance of " + field.getJavaType() + " out of " + token + " token";
+    throw context.mappingException(message);
   }
 }
