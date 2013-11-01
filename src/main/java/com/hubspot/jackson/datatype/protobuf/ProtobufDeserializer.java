@@ -106,6 +106,8 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
           }
         } else if (context.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)) {
           builder.addRepeatedField(field, value);
+        } else {
+          throw mappingException(field, context);
         }
       } else {
         builder.setField(field, value);
