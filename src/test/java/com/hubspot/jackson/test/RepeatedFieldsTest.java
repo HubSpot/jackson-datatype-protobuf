@@ -13,7 +13,7 @@ import static com.hubspot.jackson.test.util.ObjectMapperHelper.underscore;
 import static com.hubspot.jackson.test.util.ObjectMapperHelper.writeAndReadBack;
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class TestRepeatedFields {
+public class RepeatedFieldsTest {
 
   @Test
   public void testSingleMessageCamelCase() {

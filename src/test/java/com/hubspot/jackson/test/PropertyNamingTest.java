@@ -13,7 +13,7 @@ import static com.hubspot.jackson.test.util.ObjectMapperHelper.toTree;
 import static com.hubspot.jackson.test.util.ObjectMapperHelper.underscore;
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class TestPropertyNaming {
+public class PropertyNamingTest {
 
   @Test
   public void testSingleCamelCase() {

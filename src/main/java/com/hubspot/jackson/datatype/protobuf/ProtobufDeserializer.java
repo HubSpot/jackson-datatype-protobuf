@@ -73,9 +73,16 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
       }
 
       FieldDescriptor field = fieldLookup.get(parser.getCurrentName());
-      if (field == null && !context.handleUnknownProperty(parser, this, builder, parser.getCurrentName())) {
-        context.reportUnknownProperty(builder, parser.getCurrentName(), this);
+      if (field == null) {
+        if (!context.handleUnknownProperty(parser, this, builder, parser.getCurrentName())) {
+          context.reportUnknownProperty(builder, parser.getCurrentName(), this);
+        }
+
+        parser.nextToken();
+        parser.skipChildren();
+        continue;
       }
+
       parser.nextToken();
       setField(builder, field, parser, context);
     }
@@ -132,44 +139,56 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
         value = _parseInteger(parser, context);
 
         if (value == null) {
-          new NullProvider(SimpleType.construct(Integer.class), 0).nullValue(context);
+          new NullProvider(SimpleType.construct(Integer.TYPE), 0).nullValue(context);
         }
         break;
       case LONG:
         value = _parseLong(parser, context);
 
         if (value == null) {
-          new NullProvider(SimpleType.construct(Long.class), 0L).nullValue(context);
+          new NullProvider(SimpleType.construct(Long.TYPE), 0L).nullValue(context);
         }
         break;
       case FLOAT:
         value = _parseFloat(parser, context);
 
         if (value == null) {
-          new NullProvider(SimpleType.construct(Float.class), 0.0f).nullValue(context);
+          new NullProvider(SimpleType.construct(Float.TYPE), 0.0f).nullValue(context);
         }
         break;
       case DOUBLE:
         value = _parseDouble(parser, context);
 
         if (value == null) {
-          new NullProvider(SimpleType.construct(Double.class), 0.0d).nullValue(context);
+          new NullProvider(SimpleType.construct(Double.TYPE), 0.0d).nullValue(context);
         }
         break;
       case BOOLEAN:
         value = _parseBoolean(parser, context);
 
         if (value == null) {
-          new NullProvider(SimpleType.construct(Boolean.class), false).nullValue(context);
+          new NullProvider(SimpleType.construct(Boolean.TYPE), false).nullValue(context);
         }
         break;
       case STRING:
-        value = _parseString(parser, context);
+        switch (parser.getCurrentToken()) {
+          case VALUE_STRING:
+            value = parser.getText();
+            break;
+          case VALUE_NULL:
+            value = null;
+            break;
+          default:
+            value = _parseString(parser, context);
+        }
         break;
       case BYTE_STRING:
         switch (parser.getCurrentToken()) {
           case VALUE_STRING:
             value = ByteString.copyFrom(context.getBase64Variant().decode(parser.getText()));
+            break;
+          case VALUE_NULL:
+            value = null;
             break;
           default:
             throw mappingException(field, context);
@@ -198,6 +217,9 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
                       "(disable DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS to allow)");
             }
             break;
+          case VALUE_NULL:
+            value = null;
+            break;
           default:
             throw mappingException(field, context);
         }
@@ -208,6 +230,9 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
             Message.Builder subBuilder = builder.newBuilderForField(field);
             populate(subBuilder, parser, context);
             value = subBuilder.build();
+            break;
+          case VALUE_NULL:
+            value = null;
             break;
           default:
             throw mappingException(field, context);
@@ -256,6 +281,9 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
         return value.getIndex();
       }
     });
+
+    // Guava returns non-modifiable list
+    indices = Lists.newArrayList(indices);
 
     Collections.sort(indices);
 

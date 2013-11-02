@@ -37,9 +37,7 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
       if (field.isRepeated()) {
         List<?> valueList = (List<?>) value;
 
-        if (valueList.isEmpty() && !writeEmptyArrays(serializerProvider)) {
-          // write nothing
-        } else if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
+        if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
           generator.writeFieldName(namingStrategy.translate(field.getName()));
           writeValue(field, valueList.get(0), generator, serializerProvider);
         } else {
@@ -52,6 +50,19 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
       } else {
         generator.writeFieldName(namingStrategy.translate(field.getName()));
         writeValue(field, value, generator, serializerProvider);
+      }
+    }
+
+    if (writeEmptyArrays(serializerProvider)) {
+      for (FieldDescriptor field : message.getDescriptorForType().getFields()) {
+        if (field.isRepeated()) {
+          List<?> valueList = (List<?>) message.getField(field);
+
+          if (valueList.isEmpty()) {
+            generator.writeArrayFieldStart(namingStrategy.translate(field.getName()));
+            generator.writeEndArray();
+          }
+        }
       }
     }
 
@@ -83,7 +94,7 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
         EnumValueDescriptor enumDescriptor = (EnumValueDescriptor) value;
 
         if (writeEnumsUsingIndex(serializerProvider)) {
-          generator.writeNumber(enumDescriptor.getIndex());
+          generator.writeNumber(enumDescriptor.getNumber());
         } else {
           generator.writeString(enumDescriptor.getName());
         }
