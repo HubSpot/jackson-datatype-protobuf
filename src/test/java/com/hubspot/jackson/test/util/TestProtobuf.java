@@ -8,18 +8,33 @@ public final class TestProtobuf {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+  /**
+   * Protobuf enum {@code com.hubspot.jackson.test.util.Enum}
+   */
   public enum Enum
       implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>ONE = 1;</code>
+     */
     ONE(0, 1),
+    /**
+     * <code>TWO = 2;</code>
+     */
     TWO(1, 2),
     ;
-    
+
+    /**
+     * <code>ONE = 1;</code>
+     */
     public static final int ONE_VALUE = 1;
+    /**
+     * <code>TWO = 2;</code>
+     */
     public static final int TWO_VALUE = 2;
-    
-    
+
+
     public final int getNumber() { return value; }
-    
+
     public static Enum valueOf(int value) {
       switch (value) {
         case 1: return ONE;
@@ -27,7 +42,7 @@ public final class TestProtobuf {
         default: return null;
       }
     }
-    
+
     public static com.google.protobuf.Internal.EnumLiteMap<Enum>
         internalGetValueMap() {
       return internalValueMap;
@@ -39,7 +54,7 @@ public final class TestProtobuf {
               return Enum.valueOf(number);
             }
           };
-    
+
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
       return getDescriptor().getValues().get(index);
@@ -52,11 +67,9 @@ public final class TestProtobuf {
         getDescriptor() {
       return com.hubspot.jackson.test.util.TestProtobuf.getDescriptor().getEnumTypes().get(0);
     }
-    
-    private static final Enum[] VALUES = {
-      ONE, TWO, 
-    };
-    
+
+    private static final Enum[] VALUES = values();
+
     public static Enum valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
@@ -65,841 +78,248 @@ public final class TestProtobuf {
       }
       return VALUES[desc.getIndex()];
     }
-    
+
     private final int index;
     private final int value;
-    
+
     private Enum(int index, int value) {
       this.index = index;
       this.value = value;
     }
-    
+
     // @@protoc_insertion_point(enum_scope:com.hubspot.jackson.test.util.Enum)
   }
-  
+
   public interface AllFieldsOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // optional double double = 1;
+    /**
+     * <code>optional double double = 1;</code>
+     */
     boolean hasDouble();
+    /**
+     * <code>optional double double = 1;</code>
+     */
     double getDouble();
-    
+
     // optional float float = 2;
+    /**
+     * <code>optional float float = 2;</code>
+     */
     boolean hasFloat();
+    /**
+     * <code>optional float float = 2;</code>
+     */
     float getFloat();
-    
+
     // optional int32 int32 = 3;
+    /**
+     * <code>optional int32 int32 = 3;</code>
+     */
     boolean hasInt32();
+    /**
+     * <code>optional int32 int32 = 3;</code>
+     */
     int getInt32();
-    
+
     // optional int64 int64 = 4;
+    /**
+     * <code>optional int64 int64 = 4;</code>
+     */
     boolean hasInt64();
+    /**
+     * <code>optional int64 int64 = 4;</code>
+     */
     long getInt64();
-    
+
     // optional uint32 uint32 = 5;
+    /**
+     * <code>optional uint32 uint32 = 5;</code>
+     */
     boolean hasUint32();
+    /**
+     * <code>optional uint32 uint32 = 5;</code>
+     */
     int getUint32();
-    
+
     // optional uint64 uint64 = 6;
+    /**
+     * <code>optional uint64 uint64 = 6;</code>
+     */
     boolean hasUint64();
+    /**
+     * <code>optional uint64 uint64 = 6;</code>
+     */
     long getUint64();
-    
+
     // optional sint32 sint32 = 7;
+    /**
+     * <code>optional sint32 sint32 = 7;</code>
+     */
     boolean hasSint32();
+    /**
+     * <code>optional sint32 sint32 = 7;</code>
+     */
     int getSint32();
-    
+
     // optional sint64 sint64 = 8;
+    /**
+     * <code>optional sint64 sint64 = 8;</code>
+     */
     boolean hasSint64();
+    /**
+     * <code>optional sint64 sint64 = 8;</code>
+     */
     long getSint64();
-    
+
     // optional fixed32 fixed32 = 9;
+    /**
+     * <code>optional fixed32 fixed32 = 9;</code>
+     */
     boolean hasFixed32();
+    /**
+     * <code>optional fixed32 fixed32 = 9;</code>
+     */
     int getFixed32();
-    
+
     // optional fixed64 fixed64 = 10;
+    /**
+     * <code>optional fixed64 fixed64 = 10;</code>
+     */
     boolean hasFixed64();
+    /**
+     * <code>optional fixed64 fixed64 = 10;</code>
+     */
     long getFixed64();
-    
+
     // optional sfixed32 sfixed32 = 11;
+    /**
+     * <code>optional sfixed32 sfixed32 = 11;</code>
+     */
     boolean hasSfixed32();
+    /**
+     * <code>optional sfixed32 sfixed32 = 11;</code>
+     */
     int getSfixed32();
-    
+
     // optional sfixed64 sfixed64 = 12;
+    /**
+     * <code>optional sfixed64 sfixed64 = 12;</code>
+     */
     boolean hasSfixed64();
+    /**
+     * <code>optional sfixed64 sfixed64 = 12;</code>
+     */
     long getSfixed64();
-    
+
     // optional bool bool = 13;
+    /**
+     * <code>optional bool bool = 13;</code>
+     */
     boolean hasBool();
+    /**
+     * <code>optional bool bool = 13;</code>
+     */
     boolean getBool();
-    
+
     // optional string string = 14;
+    /**
+     * <code>optional string string = 14;</code>
+     */
     boolean hasString();
-    String getString();
-    
+    /**
+     * <code>optional string string = 14;</code>
+     */
+    java.lang.String getString();
+    /**
+     * <code>optional string string = 14;</code>
+     */
+    com.google.protobuf.ByteString
+        getStringBytes();
+
     // optional bytes bytes = 15;
+    /**
+     * <code>optional bytes bytes = 15;</code>
+     */
     boolean hasBytes();
+    /**
+     * <code>optional bytes bytes = 15;</code>
+     */
     com.google.protobuf.ByteString getBytes();
-    
+
     // optional .com.hubspot.jackson.test.util.Enum enum = 16;
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
     boolean hasEnum();
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
     com.hubspot.jackson.test.util.TestProtobuf.Enum getEnum();
-    
+
     // optional .com.hubspot.jackson.test.util.Nested nested = 17;
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
     boolean hasNested();
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
     com.hubspot.jackson.test.util.TestProtobuf.Nested getNested();
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
     com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder getNestedOrBuilder();
   }
+  /**
+   * Protobuf type {@code com.hubspot.jackson.test.util.AllFields}
+   */
   public static final class AllFields extends
       com.google.protobuf.GeneratedMessage
       implements AllFieldsOrBuilder {
     // Use AllFields.newBuilder() to construct.
-    private AllFields(Builder builder) {
+    private AllFields(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private AllFields(boolean noInit) {}
-    
+    private AllFields(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final AllFields defaultInstance;
     public static AllFields getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public AllFields getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_AllFields_descriptor;
-    }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_AllFields_fieldAccessorTable;
-    }
-    
-    private int bitField0_;
-    // optional double double = 1;
-    public static final int DOUBLE_FIELD_NUMBER = 1;
-    private double double_;
-    public boolean hasDouble() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    public double getDouble() {
-      return double_;
-    }
-    
-    // optional float float = 2;
-    public static final int FLOAT_FIELD_NUMBER = 2;
-    private float float_;
-    public boolean hasFloat() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    public float getFloat() {
-      return float_;
-    }
-    
-    // optional int32 int32 = 3;
-    public static final int INT32_FIELD_NUMBER = 3;
-    private int int32_;
-    public boolean hasInt32() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    public int getInt32() {
-      return int32_;
-    }
-    
-    // optional int64 int64 = 4;
-    public static final int INT64_FIELD_NUMBER = 4;
-    private long int64_;
-    public boolean hasInt64() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    public long getInt64() {
-      return int64_;
-    }
-    
-    // optional uint32 uint32 = 5;
-    public static final int UINT32_FIELD_NUMBER = 5;
-    private int uint32_;
-    public boolean hasUint32() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    public int getUint32() {
-      return uint32_;
-    }
-    
-    // optional uint64 uint64 = 6;
-    public static final int UINT64_FIELD_NUMBER = 6;
-    private long uint64_;
-    public boolean hasUint64() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    public long getUint64() {
-      return uint64_;
-    }
-    
-    // optional sint32 sint32 = 7;
-    public static final int SINT32_FIELD_NUMBER = 7;
-    private int sint32_;
-    public boolean hasSint32() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    public int getSint32() {
-      return sint32_;
-    }
-    
-    // optional sint64 sint64 = 8;
-    public static final int SINT64_FIELD_NUMBER = 8;
-    private long sint64_;
-    public boolean hasSint64() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
-    }
-    public long getSint64() {
-      return sint64_;
-    }
-    
-    // optional fixed32 fixed32 = 9;
-    public static final int FIXED32_FIELD_NUMBER = 9;
-    private int fixed32_;
-    public boolean hasFixed32() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
-    }
-    public int getFixed32() {
-      return fixed32_;
-    }
-    
-    // optional fixed64 fixed64 = 10;
-    public static final int FIXED64_FIELD_NUMBER = 10;
-    private long fixed64_;
-    public boolean hasFixed64() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
-    }
-    public long getFixed64() {
-      return fixed64_;
-    }
-    
-    // optional sfixed32 sfixed32 = 11;
-    public static final int SFIXED32_FIELD_NUMBER = 11;
-    private int sfixed32_;
-    public boolean hasSfixed32() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
-    }
-    public int getSfixed32() {
-      return sfixed32_;
-    }
-    
-    // optional sfixed64 sfixed64 = 12;
-    public static final int SFIXED64_FIELD_NUMBER = 12;
-    private long sfixed64_;
-    public boolean hasSfixed64() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
-    }
-    public long getSfixed64() {
-      return sfixed64_;
-    }
-    
-    // optional bool bool = 13;
-    public static final int BOOL_FIELD_NUMBER = 13;
-    private boolean bool_;
-    public boolean hasBool() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
-    }
-    public boolean getBool() {
-      return bool_;
-    }
-    
-    // optional string string = 14;
-    public static final int STRING_FIELD_NUMBER = 14;
-    private java.lang.Object string_;
-    public boolean hasString() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
-    }
-    public String getString() {
-      java.lang.Object ref = string_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          string_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getStringBytes() {
-      java.lang.Object ref = string_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        string_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    // optional bytes bytes = 15;
-    public static final int BYTES_FIELD_NUMBER = 15;
-    private com.google.protobuf.ByteString bytes_;
-    public boolean hasBytes() {
-      return ((bitField0_ & 0x00004000) == 0x00004000);
-    }
-    public com.google.protobuf.ByteString getBytes() {
-      return bytes_;
-    }
-    
-    // optional .com.hubspot.jackson.test.util.Enum enum = 16;
-    public static final int ENUM_FIELD_NUMBER = 16;
-    private com.hubspot.jackson.test.util.TestProtobuf.Enum enum_;
-    public boolean hasEnum() {
-      return ((bitField0_ & 0x00008000) == 0x00008000);
-    }
-    public com.hubspot.jackson.test.util.TestProtobuf.Enum getEnum() {
-      return enum_;
-    }
-    
-    // optional .com.hubspot.jackson.test.util.Nested nested = 17;
-    public static final int NESTED_FIELD_NUMBER = 17;
-    private com.hubspot.jackson.test.util.TestProtobuf.Nested nested_;
-    public boolean hasNested() {
-      return ((bitField0_ & 0x00010000) == 0x00010000);
-    }
-    public com.hubspot.jackson.test.util.TestProtobuf.Nested getNested() {
-      return nested_;
-    }
-    public com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder getNestedOrBuilder() {
-      return nested_;
-    }
-    
-    private void initFields() {
-      double_ = 0D;
-      float_ = 0F;
-      int32_ = 0;
-      int64_ = 0L;
-      uint32_ = 0;
-      uint64_ = 0L;
-      sint32_ = 0;
-      sint64_ = 0L;
-      fixed32_ = 0;
-      fixed64_ = 0L;
-      sfixed32_ = 0;
-      sfixed64_ = 0L;
-      bool_ = false;
-      string_ = "";
-      bytes_ = com.google.protobuf.ByteString.EMPTY;
-      enum_ = com.hubspot.jackson.test.util.TestProtobuf.Enum.ONE;
-      nested_ = com.hubspot.jackson.test.util.TestProtobuf.Nested.getDefaultInstance();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-      
-      memoizedIsInitialized = 1;
-      return true;
-    }
-    
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeDouble(1, double_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeFloat(2, float_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, int32_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt64(4, int64_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeUInt32(5, uint32_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeUInt64(6, uint64_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeSInt32(7, sint32_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeSInt64(8, sint64_);
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeFixed32(9, fixed32_);
-      }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeFixed64(10, fixed64_);
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeSFixed32(11, sfixed32_);
-      }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        output.writeSFixed64(12, sfixed64_);
-      }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        output.writeBool(13, bool_);
-      }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
-        output.writeBytes(14, getStringBytes());
-      }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
-        output.writeBytes(15, bytes_);
-      }
-      if (((bitField0_ & 0x00008000) == 0x00008000)) {
-        output.writeEnum(16, enum_.getNumber());
-      }
-      if (((bitField0_ & 0x00010000) == 0x00010000)) {
-        output.writeMessage(17, nested_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeDoubleSize(1, double_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(2, float_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, int32_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(4, int64_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(5, uint32_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(6, uint64_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeSInt32Size(7, sint32_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeSInt64Size(8, sint64_);
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFixed32Size(9, fixed32_);
-      }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFixed64Size(10, fixed64_);
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeSFixed32Size(11, sfixed32_);
-      }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeSFixed64Size(12, sfixed64_);
-      }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(13, bool_);
-      }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(14, getStringBytes());
-      }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(15, bytes_);
-      }
-      if (((bitField0_ & 0x00008000) == 0x00008000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(16, enum_.getNumber());
-      }
-      if (((bitField0_ & 0x00010000) == 0x00010000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(17, nested_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    private static final long serialVersionUID = 0L;
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
     }
-    
-    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(
+    private AllFields(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.hubspot.jackson.test.util.TestProtobuf.AllFields prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-    
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.hubspot.jackson.test.util.TestProtobuf.AllFieldsOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_AllFields_descriptor;
-      }
-      
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_AllFields_fieldAccessorTable;
-      }
-      
-      // Construct using com.hubspot.jackson.test.util.TestProtobuf.AllFields.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-      
-      private Builder(BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getNestedFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-      
-      public Builder clear() {
-        super.clear();
-        double_ = 0D;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        float_ = 0F;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        int32_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        int64_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        uint32_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        uint64_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        sint32_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000040);
-        sint64_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000080);
-        fixed32_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000100);
-        fixed64_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000200);
-        sfixed32_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000400);
-        sfixed64_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000800);
-        bool_ = false;
-        bitField0_ = (bitField0_ & ~0x00001000);
-        string_ = "";
-        bitField0_ = (bitField0_ & ~0x00002000);
-        bytes_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00004000);
-        enum_ = com.hubspot.jackson.test.util.TestProtobuf.Enum.ONE;
-        bitField0_ = (bitField0_ & ~0x00008000);
-        if (nestedBuilder_ == null) {
-          nested_ = com.hubspot.jackson.test.util.TestProtobuf.Nested.getDefaultInstance();
-        } else {
-          nestedBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00010000);
-        return this;
-      }
-      
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.hubspot.jackson.test.util.TestProtobuf.AllFields.getDescriptor();
-      }
-      
-      public com.hubspot.jackson.test.util.TestProtobuf.AllFields getDefaultInstanceForType() {
-        return com.hubspot.jackson.test.util.TestProtobuf.AllFields.getDefaultInstance();
-      }
-      
-      public com.hubspot.jackson.test.util.TestProtobuf.AllFields build() {
-        com.hubspot.jackson.test.util.TestProtobuf.AllFields result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-      
-      private com.hubspot.jackson.test.util.TestProtobuf.AllFields buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        com.hubspot.jackson.test.util.TestProtobuf.AllFields result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
-      public com.hubspot.jackson.test.util.TestProtobuf.AllFields buildPartial() {
-        com.hubspot.jackson.test.util.TestProtobuf.AllFields result = new com.hubspot.jackson.test.util.TestProtobuf.AllFields(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.double_ = double_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.float_ = float_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.int32_ = int32_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.int64_ = int64_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.uint32_ = uint32_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.uint64_ = uint64_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        result.sint32_ = sint32_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000080;
-        }
-        result.sint64_ = sint64_;
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000100;
-        }
-        result.fixed32_ = fixed32_;
-        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
-          to_bitField0_ |= 0x00000200;
-        }
-        result.fixed64_ = fixed64_;
-        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
-          to_bitField0_ |= 0x00000400;
-        }
-        result.sfixed32_ = sfixed32_;
-        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
-          to_bitField0_ |= 0x00000800;
-        }
-        result.sfixed64_ = sfixed64_;
-        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
-          to_bitField0_ |= 0x00001000;
-        }
-        result.bool_ = bool_;
-        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
-          to_bitField0_ |= 0x00002000;
-        }
-        result.string_ = string_;
-        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
-          to_bitField0_ |= 0x00004000;
-        }
-        result.bytes_ = bytes_;
-        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
-          to_bitField0_ |= 0x00008000;
-        }
-        result.enum_ = enum_;
-        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
-          to_bitField0_ |= 0x00010000;
-        }
-        if (nestedBuilder_ == null) {
-          result.nested_ = nested_;
-        } else {
-          result.nested_ = nestedBuilder_.build();
-        }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-      
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.hubspot.jackson.test.util.TestProtobuf.AllFields) {
-          return mergeFrom((com.hubspot.jackson.test.util.TestProtobuf.AllFields)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(com.hubspot.jackson.test.util.TestProtobuf.AllFields other) {
-        if (other == com.hubspot.jackson.test.util.TestProtobuf.AllFields.getDefaultInstance()) return this;
-        if (other.hasDouble()) {
-          setDouble(other.getDouble());
-        }
-        if (other.hasFloat()) {
-          setFloat(other.getFloat());
-        }
-        if (other.hasInt32()) {
-          setInt32(other.getInt32());
-        }
-        if (other.hasInt64()) {
-          setInt64(other.getInt64());
-        }
-        if (other.hasUint32()) {
-          setUint32(other.getUint32());
-        }
-        if (other.hasUint64()) {
-          setUint64(other.getUint64());
-        }
-        if (other.hasSint32()) {
-          setSint32(other.getSint32());
-        }
-        if (other.hasSint64()) {
-          setSint64(other.getSint64());
-        }
-        if (other.hasFixed32()) {
-          setFixed32(other.getFixed32());
-        }
-        if (other.hasFixed64()) {
-          setFixed64(other.getFixed64());
-        }
-        if (other.hasSfixed32()) {
-          setSfixed32(other.getSfixed32());
-        }
-        if (other.hasSfixed64()) {
-          setSfixed64(other.getSfixed64());
-        }
-        if (other.hasBool()) {
-          setBool(other.getBool());
-        }
-        if (other.hasString()) {
-          setString(other.getString());
-        }
-        if (other.hasBytes()) {
-          setBytes(other.getBytes());
-        }
-        if (other.hasEnum()) {
-          setEnum(other.getEnum());
-        }
-        if (other.hasNested()) {
-          mergeNested(other.getNested());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      public final boolean isInitialized() {
-        return true;
-      }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
           int tag = input.readTag();
           switch (tag) {
             case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
+              done = true;
+              break;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
+                done = true;
               }
               break;
             }
@@ -990,309 +410,1345 @@ public final class TestProtobuf {
               break;
             }
             case 138: {
-              com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder subBuilder = com.hubspot.jackson.test.util.TestProtobuf.Nested.newBuilder();
-              if (hasNested()) {
-                subBuilder.mergeFrom(getNested());
+              com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder subBuilder = null;
+              if (((bitField0_ & 0x00010000) == 0x00010000)) {
+                subBuilder = nested_.toBuilder();
               }
-              input.readMessage(subBuilder, extensionRegistry);
-              setNested(subBuilder.buildPartial());
+              nested_ = input.readMessage(com.hubspot.jackson.test.util.TestProtobuf.Nested.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(nested_);
+                nested_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00010000;
               break;
             }
           }
         }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
       }
-      
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_AllFields_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_AllFields_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.hubspot.jackson.test.util.TestProtobuf.AllFields.class, com.hubspot.jackson.test.util.TestProtobuf.AllFields.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<AllFields> PARSER =
+        new com.google.protobuf.AbstractParser<AllFields>() {
+      public AllFields parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new AllFields(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<AllFields> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // optional double double = 1;
+    public static final int DOUBLE_FIELD_NUMBER = 1;
+    private double double_;
+    /**
+     * <code>optional double double = 1;</code>
+     */
+    public boolean hasDouble() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional double double = 1;</code>
+     */
+    public double getDouble() {
+      return double_;
+    }
+
+    // optional float float = 2;
+    public static final int FLOAT_FIELD_NUMBER = 2;
+    private float float_;
+    /**
+     * <code>optional float float = 2;</code>
+     */
+    public boolean hasFloat() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional float float = 2;</code>
+     */
+    public float getFloat() {
+      return float_;
+    }
+
+    // optional int32 int32 = 3;
+    public static final int INT32_FIELD_NUMBER = 3;
+    private int int32_;
+    /**
+     * <code>optional int32 int32 = 3;</code>
+     */
+    public boolean hasInt32() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional int32 int32 = 3;</code>
+     */
+    public int getInt32() {
+      return int32_;
+    }
+
+    // optional int64 int64 = 4;
+    public static final int INT64_FIELD_NUMBER = 4;
+    private long int64_;
+    /**
+     * <code>optional int64 int64 = 4;</code>
+     */
+    public boolean hasInt64() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional int64 int64 = 4;</code>
+     */
+    public long getInt64() {
+      return int64_;
+    }
+
+    // optional uint32 uint32 = 5;
+    public static final int UINT32_FIELD_NUMBER = 5;
+    private int uint32_;
+    /**
+     * <code>optional uint32 uint32 = 5;</code>
+     */
+    public boolean hasUint32() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional uint32 uint32 = 5;</code>
+     */
+    public int getUint32() {
+      return uint32_;
+    }
+
+    // optional uint64 uint64 = 6;
+    public static final int UINT64_FIELD_NUMBER = 6;
+    private long uint64_;
+    /**
+     * <code>optional uint64 uint64 = 6;</code>
+     */
+    public boolean hasUint64() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional uint64 uint64 = 6;</code>
+     */
+    public long getUint64() {
+      return uint64_;
+    }
+
+    // optional sint32 sint32 = 7;
+    public static final int SINT32_FIELD_NUMBER = 7;
+    private int sint32_;
+    /**
+     * <code>optional sint32 sint32 = 7;</code>
+     */
+    public boolean hasSint32() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional sint32 sint32 = 7;</code>
+     */
+    public int getSint32() {
+      return sint32_;
+    }
+
+    // optional sint64 sint64 = 8;
+    public static final int SINT64_FIELD_NUMBER = 8;
+    private long sint64_;
+    /**
+     * <code>optional sint64 sint64 = 8;</code>
+     */
+    public boolean hasSint64() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional sint64 sint64 = 8;</code>
+     */
+    public long getSint64() {
+      return sint64_;
+    }
+
+    // optional fixed32 fixed32 = 9;
+    public static final int FIXED32_FIELD_NUMBER = 9;
+    private int fixed32_;
+    /**
+     * <code>optional fixed32 fixed32 = 9;</code>
+     */
+    public boolean hasFixed32() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional fixed32 fixed32 = 9;</code>
+     */
+    public int getFixed32() {
+      return fixed32_;
+    }
+
+    // optional fixed64 fixed64 = 10;
+    public static final int FIXED64_FIELD_NUMBER = 10;
+    private long fixed64_;
+    /**
+     * <code>optional fixed64 fixed64 = 10;</code>
+     */
+    public boolean hasFixed64() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional fixed64 fixed64 = 10;</code>
+     */
+    public long getFixed64() {
+      return fixed64_;
+    }
+
+    // optional sfixed32 sfixed32 = 11;
+    public static final int SFIXED32_FIELD_NUMBER = 11;
+    private int sfixed32_;
+    /**
+     * <code>optional sfixed32 sfixed32 = 11;</code>
+     */
+    public boolean hasSfixed32() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>optional sfixed32 sfixed32 = 11;</code>
+     */
+    public int getSfixed32() {
+      return sfixed32_;
+    }
+
+    // optional sfixed64 sfixed64 = 12;
+    public static final int SFIXED64_FIELD_NUMBER = 12;
+    private long sfixed64_;
+    /**
+     * <code>optional sfixed64 sfixed64 = 12;</code>
+     */
+    public boolean hasSfixed64() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>optional sfixed64 sfixed64 = 12;</code>
+     */
+    public long getSfixed64() {
+      return sfixed64_;
+    }
+
+    // optional bool bool = 13;
+    public static final int BOOL_FIELD_NUMBER = 13;
+    private boolean bool_;
+    /**
+     * <code>optional bool bool = 13;</code>
+     */
+    public boolean hasBool() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>optional bool bool = 13;</code>
+     */
+    public boolean getBool() {
+      return bool_;
+    }
+
+    // optional string string = 14;
+    public static final int STRING_FIELD_NUMBER = 14;
+    private java.lang.Object string_;
+    /**
+     * <code>optional string string = 14;</code>
+     */
+    public boolean hasString() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    /**
+     * <code>optional string string = 14;</code>
+     */
+    public java.lang.String getString() {
+      java.lang.Object ref = string_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          string_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string string = 14;</code>
+     */
+    public com.google.protobuf.ByteString
+        getStringBytes() {
+      java.lang.Object ref = string_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        string_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional bytes bytes = 15;
+    public static final int BYTES_FIELD_NUMBER = 15;
+    private com.google.protobuf.ByteString bytes_;
+    /**
+     * <code>optional bytes bytes = 15;</code>
+     */
+    public boolean hasBytes() {
+      return ((bitField0_ & 0x00004000) == 0x00004000);
+    }
+    /**
+     * <code>optional bytes bytes = 15;</code>
+     */
+    public com.google.protobuf.ByteString getBytes() {
+      return bytes_;
+    }
+
+    // optional .com.hubspot.jackson.test.util.Enum enum = 16;
+    public static final int ENUM_FIELD_NUMBER = 16;
+    private com.hubspot.jackson.test.util.TestProtobuf.Enum enum_;
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
+    public boolean hasEnum() {
+      return ((bitField0_ & 0x00008000) == 0x00008000);
+    }
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
+    public com.hubspot.jackson.test.util.TestProtobuf.Enum getEnum() {
+      return enum_;
+    }
+
+    // optional .com.hubspot.jackson.test.util.Nested nested = 17;
+    public static final int NESTED_FIELD_NUMBER = 17;
+    private com.hubspot.jackson.test.util.TestProtobuf.Nested nested_;
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
+    public boolean hasNested() {
+      return ((bitField0_ & 0x00010000) == 0x00010000);
+    }
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
+    public com.hubspot.jackson.test.util.TestProtobuf.Nested getNested() {
+      return nested_;
+    }
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
+    public com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder getNestedOrBuilder() {
+      return nested_;
+    }
+
+    private void initFields() {
+      double_ = 0D;
+      float_ = 0F;
+      int32_ = 0;
+      int64_ = 0L;
+      uint32_ = 0;
+      uint64_ = 0L;
+      sint32_ = 0;
+      sint64_ = 0L;
+      fixed32_ = 0;
+      fixed64_ = 0L;
+      sfixed32_ = 0;
+      sfixed64_ = 0L;
+      bool_ = false;
+      string_ = "";
+      bytes_ = com.google.protobuf.ByteString.EMPTY;
+      enum_ = com.hubspot.jackson.test.util.TestProtobuf.Enum.ONE;
+      nested_ = com.hubspot.jackson.test.util.TestProtobuf.Nested.getDefaultInstance();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeDouble(1, double_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeFloat(2, float_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, int32_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt64(4, int64_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeUInt32(5, uint32_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeUInt64(6, uint64_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeSInt32(7, sint32_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeSInt64(8, sint64_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeFixed32(9, fixed32_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeFixed64(10, fixed64_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeSFixed32(11, sfixed32_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeSFixed64(12, sfixed64_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeBool(13, bool_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeBytes(14, getStringBytes());
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        output.writeBytes(15, bytes_);
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        output.writeEnum(16, enum_.getNumber());
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        output.writeMessage(17, nested_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(1, double_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(2, float_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, int32_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(4, int64_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(5, uint32_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(6, uint64_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeSInt32Size(7, sint32_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeSInt64Size(8, sint64_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFixed32Size(9, fixed32_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFixed64Size(10, fixed64_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeSFixed32Size(11, sfixed32_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeSFixed64Size(12, sfixed64_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(13, bool_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(14, getStringBytes());
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(15, bytes_);
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(16, enum_.getNumber());
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(17, nested_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.AllFields parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.hubspot.jackson.test.util.TestProtobuf.AllFields prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code com.hubspot.jackson.test.util.AllFields}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.hubspot.jackson.test.util.TestProtobuf.AllFieldsOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_AllFields_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_AllFields_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.hubspot.jackson.test.util.TestProtobuf.AllFields.class, com.hubspot.jackson.test.util.TestProtobuf.AllFields.Builder.class);
+      }
+
+      // Construct using com.hubspot.jackson.test.util.TestProtobuf.AllFields.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getNestedFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        double_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        float_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        int32_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        int64_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        uint32_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        uint64_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        sint32_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        sint64_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        fixed32_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        fixed64_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000200);
+        sfixed32_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000400);
+        sfixed64_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000800);
+        bool_ = false;
+        bitField0_ = (bitField0_ & ~0x00001000);
+        string_ = "";
+        bitField0_ = (bitField0_ & ~0x00002000);
+        bytes_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00004000);
+        enum_ = com.hubspot.jackson.test.util.TestProtobuf.Enum.ONE;
+        bitField0_ = (bitField0_ & ~0x00008000);
+        if (nestedBuilder_ == null) {
+          nested_ = com.hubspot.jackson.test.util.TestProtobuf.Nested.getDefaultInstance();
+        } else {
+          nestedBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00010000);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_AllFields_descriptor;
+      }
+
+      public com.hubspot.jackson.test.util.TestProtobuf.AllFields getDefaultInstanceForType() {
+        return com.hubspot.jackson.test.util.TestProtobuf.AllFields.getDefaultInstance();
+      }
+
+      public com.hubspot.jackson.test.util.TestProtobuf.AllFields build() {
+        com.hubspot.jackson.test.util.TestProtobuf.AllFields result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.hubspot.jackson.test.util.TestProtobuf.AllFields buildPartial() {
+        com.hubspot.jackson.test.util.TestProtobuf.AllFields result = new com.hubspot.jackson.test.util.TestProtobuf.AllFields(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.double_ = double_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.float_ = float_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.int32_ = int32_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.int64_ = int64_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.uint32_ = uint32_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.uint64_ = uint64_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.sint32_ = sint32_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.sint64_ = sint64_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.fixed32_ = fixed32_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.fixed64_ = fixed64_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.sfixed32_ = sfixed32_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.sfixed64_ = sfixed64_;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.bool_ = bool_;
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        result.string_ = string_;
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00004000;
+        }
+        result.bytes_ = bytes_;
+        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
+          to_bitField0_ |= 0x00008000;
+        }
+        result.enum_ = enum_;
+        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
+          to_bitField0_ |= 0x00010000;
+        }
+        if (nestedBuilder_ == null) {
+          result.nested_ = nested_;
+        } else {
+          result.nested_ = nestedBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.hubspot.jackson.test.util.TestProtobuf.AllFields) {
+          return mergeFrom((com.hubspot.jackson.test.util.TestProtobuf.AllFields)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.hubspot.jackson.test.util.TestProtobuf.AllFields other) {
+        if (other == com.hubspot.jackson.test.util.TestProtobuf.AllFields.getDefaultInstance()) return this;
+        if (other.hasDouble()) {
+          setDouble(other.getDouble());
+        }
+        if (other.hasFloat()) {
+          setFloat(other.getFloat());
+        }
+        if (other.hasInt32()) {
+          setInt32(other.getInt32());
+        }
+        if (other.hasInt64()) {
+          setInt64(other.getInt64());
+        }
+        if (other.hasUint32()) {
+          setUint32(other.getUint32());
+        }
+        if (other.hasUint64()) {
+          setUint64(other.getUint64());
+        }
+        if (other.hasSint32()) {
+          setSint32(other.getSint32());
+        }
+        if (other.hasSint64()) {
+          setSint64(other.getSint64());
+        }
+        if (other.hasFixed32()) {
+          setFixed32(other.getFixed32());
+        }
+        if (other.hasFixed64()) {
+          setFixed64(other.getFixed64());
+        }
+        if (other.hasSfixed32()) {
+          setSfixed32(other.getSfixed32());
+        }
+        if (other.hasSfixed64()) {
+          setSfixed64(other.getSfixed64());
+        }
+        if (other.hasBool()) {
+          setBool(other.getBool());
+        }
+        if (other.hasString()) {
+          bitField0_ |= 0x00002000;
+          string_ = other.string_;
+          onChanged();
+        }
+        if (other.hasBytes()) {
+          setBytes(other.getBytes());
+        }
+        if (other.hasEnum()) {
+          setEnum(other.getEnum());
+        }
+        if (other.hasNested()) {
+          mergeNested(other.getNested());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.hubspot.jackson.test.util.TestProtobuf.AllFields parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.hubspot.jackson.test.util.TestProtobuf.AllFields) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
       private int bitField0_;
-      
+
       // optional double double = 1;
       private double double_ ;
+      /**
+       * <code>optional double double = 1;</code>
+       */
       public boolean hasDouble() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>optional double double = 1;</code>
+       */
       public double getDouble() {
         return double_;
       }
+      /**
+       * <code>optional double double = 1;</code>
+       */
       public Builder setDouble(double value) {
         bitField0_ |= 0x00000001;
         double_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional double double = 1;</code>
+       */
       public Builder clearDouble() {
         bitField0_ = (bitField0_ & ~0x00000001);
         double_ = 0D;
         onChanged();
         return this;
       }
-      
+
       // optional float float = 2;
       private float float_ ;
+      /**
+       * <code>optional float float = 2;</code>
+       */
       public boolean hasFloat() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>optional float float = 2;</code>
+       */
       public float getFloat() {
         return float_;
       }
+      /**
+       * <code>optional float float = 2;</code>
+       */
       public Builder setFloat(float value) {
         bitField0_ |= 0x00000002;
         float_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional float float = 2;</code>
+       */
       public Builder clearFloat() {
         bitField0_ = (bitField0_ & ~0x00000002);
         float_ = 0F;
         onChanged();
         return this;
       }
-      
+
       // optional int32 int32 = 3;
       private int int32_ ;
+      /**
+       * <code>optional int32 int32 = 3;</code>
+       */
       public boolean hasInt32() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
+      /**
+       * <code>optional int32 int32 = 3;</code>
+       */
       public int getInt32() {
         return int32_;
       }
+      /**
+       * <code>optional int32 int32 = 3;</code>
+       */
       public Builder setInt32(int value) {
         bitField0_ |= 0x00000004;
         int32_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional int32 int32 = 3;</code>
+       */
       public Builder clearInt32() {
         bitField0_ = (bitField0_ & ~0x00000004);
         int32_ = 0;
         onChanged();
         return this;
       }
-      
+
       // optional int64 int64 = 4;
       private long int64_ ;
+      /**
+       * <code>optional int64 int64 = 4;</code>
+       */
       public boolean hasInt64() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
+      /**
+       * <code>optional int64 int64 = 4;</code>
+       */
       public long getInt64() {
         return int64_;
       }
+      /**
+       * <code>optional int64 int64 = 4;</code>
+       */
       public Builder setInt64(long value) {
         bitField0_ |= 0x00000008;
         int64_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional int64 int64 = 4;</code>
+       */
       public Builder clearInt64() {
         bitField0_ = (bitField0_ & ~0x00000008);
         int64_ = 0L;
         onChanged();
         return this;
       }
-      
+
       // optional uint32 uint32 = 5;
       private int uint32_ ;
+      /**
+       * <code>optional uint32 uint32 = 5;</code>
+       */
       public boolean hasUint32() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
+      /**
+       * <code>optional uint32 uint32 = 5;</code>
+       */
       public int getUint32() {
         return uint32_;
       }
+      /**
+       * <code>optional uint32 uint32 = 5;</code>
+       */
       public Builder setUint32(int value) {
         bitField0_ |= 0x00000010;
         uint32_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional uint32 uint32 = 5;</code>
+       */
       public Builder clearUint32() {
         bitField0_ = (bitField0_ & ~0x00000010);
         uint32_ = 0;
         onChanged();
         return this;
       }
-      
+
       // optional uint64 uint64 = 6;
       private long uint64_ ;
+      /**
+       * <code>optional uint64 uint64 = 6;</code>
+       */
       public boolean hasUint64() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
+      /**
+       * <code>optional uint64 uint64 = 6;</code>
+       */
       public long getUint64() {
         return uint64_;
       }
+      /**
+       * <code>optional uint64 uint64 = 6;</code>
+       */
       public Builder setUint64(long value) {
         bitField0_ |= 0x00000020;
         uint64_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional uint64 uint64 = 6;</code>
+       */
       public Builder clearUint64() {
         bitField0_ = (bitField0_ & ~0x00000020);
         uint64_ = 0L;
         onChanged();
         return this;
       }
-      
+
       // optional sint32 sint32 = 7;
       private int sint32_ ;
+      /**
+       * <code>optional sint32 sint32 = 7;</code>
+       */
       public boolean hasSint32() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
+      /**
+       * <code>optional sint32 sint32 = 7;</code>
+       */
       public int getSint32() {
         return sint32_;
       }
+      /**
+       * <code>optional sint32 sint32 = 7;</code>
+       */
       public Builder setSint32(int value) {
         bitField0_ |= 0x00000040;
         sint32_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional sint32 sint32 = 7;</code>
+       */
       public Builder clearSint32() {
         bitField0_ = (bitField0_ & ~0x00000040);
         sint32_ = 0;
         onChanged();
         return this;
       }
-      
+
       // optional sint64 sint64 = 8;
       private long sint64_ ;
+      /**
+       * <code>optional sint64 sint64 = 8;</code>
+       */
       public boolean hasSint64() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
+      /**
+       * <code>optional sint64 sint64 = 8;</code>
+       */
       public long getSint64() {
         return sint64_;
       }
+      /**
+       * <code>optional sint64 sint64 = 8;</code>
+       */
       public Builder setSint64(long value) {
         bitField0_ |= 0x00000080;
         sint64_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional sint64 sint64 = 8;</code>
+       */
       public Builder clearSint64() {
         bitField0_ = (bitField0_ & ~0x00000080);
         sint64_ = 0L;
         onChanged();
         return this;
       }
-      
+
       // optional fixed32 fixed32 = 9;
       private int fixed32_ ;
+      /**
+       * <code>optional fixed32 fixed32 = 9;</code>
+       */
       public boolean hasFixed32() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
+      /**
+       * <code>optional fixed32 fixed32 = 9;</code>
+       */
       public int getFixed32() {
         return fixed32_;
       }
+      /**
+       * <code>optional fixed32 fixed32 = 9;</code>
+       */
       public Builder setFixed32(int value) {
         bitField0_ |= 0x00000100;
         fixed32_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional fixed32 fixed32 = 9;</code>
+       */
       public Builder clearFixed32() {
         bitField0_ = (bitField0_ & ~0x00000100);
         fixed32_ = 0;
         onChanged();
         return this;
       }
-      
+
       // optional fixed64 fixed64 = 10;
       private long fixed64_ ;
+      /**
+       * <code>optional fixed64 fixed64 = 10;</code>
+       */
       public boolean hasFixed64() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
+      /**
+       * <code>optional fixed64 fixed64 = 10;</code>
+       */
       public long getFixed64() {
         return fixed64_;
       }
+      /**
+       * <code>optional fixed64 fixed64 = 10;</code>
+       */
       public Builder setFixed64(long value) {
         bitField0_ |= 0x00000200;
         fixed64_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional fixed64 fixed64 = 10;</code>
+       */
       public Builder clearFixed64() {
         bitField0_ = (bitField0_ & ~0x00000200);
         fixed64_ = 0L;
         onChanged();
         return this;
       }
-      
+
       // optional sfixed32 sfixed32 = 11;
       private int sfixed32_ ;
+      /**
+       * <code>optional sfixed32 sfixed32 = 11;</code>
+       */
       public boolean hasSfixed32() {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
+      /**
+       * <code>optional sfixed32 sfixed32 = 11;</code>
+       */
       public int getSfixed32() {
         return sfixed32_;
       }
+      /**
+       * <code>optional sfixed32 sfixed32 = 11;</code>
+       */
       public Builder setSfixed32(int value) {
         bitField0_ |= 0x00000400;
         sfixed32_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional sfixed32 sfixed32 = 11;</code>
+       */
       public Builder clearSfixed32() {
         bitField0_ = (bitField0_ & ~0x00000400);
         sfixed32_ = 0;
         onChanged();
         return this;
       }
-      
+
       // optional sfixed64 sfixed64 = 12;
       private long sfixed64_ ;
+      /**
+       * <code>optional sfixed64 sfixed64 = 12;</code>
+       */
       public boolean hasSfixed64() {
         return ((bitField0_ & 0x00000800) == 0x00000800);
       }
+      /**
+       * <code>optional sfixed64 sfixed64 = 12;</code>
+       */
       public long getSfixed64() {
         return sfixed64_;
       }
+      /**
+       * <code>optional sfixed64 sfixed64 = 12;</code>
+       */
       public Builder setSfixed64(long value) {
         bitField0_ |= 0x00000800;
         sfixed64_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional sfixed64 sfixed64 = 12;</code>
+       */
       public Builder clearSfixed64() {
         bitField0_ = (bitField0_ & ~0x00000800);
         sfixed64_ = 0L;
         onChanged();
         return this;
       }
-      
+
       // optional bool bool = 13;
       private boolean bool_ ;
+      /**
+       * <code>optional bool bool = 13;</code>
+       */
       public boolean hasBool() {
         return ((bitField0_ & 0x00001000) == 0x00001000);
       }
+      /**
+       * <code>optional bool bool = 13;</code>
+       */
       public boolean getBool() {
         return bool_;
       }
+      /**
+       * <code>optional bool bool = 13;</code>
+       */
       public Builder setBool(boolean value) {
         bitField0_ |= 0x00001000;
         bool_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional bool bool = 13;</code>
+       */
       public Builder clearBool() {
         bitField0_ = (bitField0_ & ~0x00001000);
         bool_ = false;
         onChanged();
         return this;
       }
-      
+
       // optional string string = 14;
       private java.lang.Object string_ = "";
+      /**
+       * <code>optional string string = 14;</code>
+       */
       public boolean hasString() {
         return ((bitField0_ & 0x00002000) == 0x00002000);
       }
-      public String getString() {
+      /**
+       * <code>optional string string = 14;</code>
+       */
+      public java.lang.String getString() {
         java.lang.Object ref = string_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           string_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setString(String value) {
+      /**
+       * <code>optional string string = 14;</code>
+       */
+      public com.google.protobuf.ByteString
+          getStringBytes() {
+        java.lang.Object ref = string_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          string_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string string = 14;</code>
+       */
+      public Builder setString(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1301,26 +1757,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string string = 14;</code>
+       */
       public Builder clearString() {
         bitField0_ = (bitField0_ & ~0x00002000);
         string_ = getDefaultInstance().getString();
         onChanged();
         return this;
       }
-      void setString(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00002000;
+      /**
+       * <code>optional string string = 14;</code>
+       */
+      public Builder setStringBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00002000;
         string_ = value;
         onChanged();
+        return this;
       }
-      
+
       // optional bytes bytes = 15;
       private com.google.protobuf.ByteString bytes_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes bytes = 15;</code>
+       */
       public boolean hasBytes() {
         return ((bitField0_ & 0x00004000) == 0x00004000);
       }
+      /**
+       * <code>optional bytes bytes = 15;</code>
+       */
       public com.google.protobuf.ByteString getBytes() {
         return bytes_;
       }
+      /**
+       * <code>optional bytes bytes = 15;</code>
+       */
       public Builder setBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
@@ -1330,21 +1806,33 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional bytes bytes = 15;</code>
+       */
       public Builder clearBytes() {
         bitField0_ = (bitField0_ & ~0x00004000);
         bytes_ = getDefaultInstance().getBytes();
         onChanged();
         return this;
       }
-      
+
       // optional .com.hubspot.jackson.test.util.Enum enum = 16;
       private com.hubspot.jackson.test.util.TestProtobuf.Enum enum_ = com.hubspot.jackson.test.util.TestProtobuf.Enum.ONE;
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public boolean hasEnum() {
         return ((bitField0_ & 0x00008000) == 0x00008000);
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public com.hubspot.jackson.test.util.TestProtobuf.Enum getEnum() {
         return enum_;
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public Builder setEnum(com.hubspot.jackson.test.util.TestProtobuf.Enum value) {
         if (value == null) {
           throw new NullPointerException();
@@ -1354,20 +1842,29 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public Builder clearEnum() {
         bitField0_ = (bitField0_ & ~0x00008000);
         enum_ = com.hubspot.jackson.test.util.TestProtobuf.Enum.ONE;
         onChanged();
         return this;
       }
-      
+
       // optional .com.hubspot.jackson.test.util.Nested nested = 17;
       private com.hubspot.jackson.test.util.TestProtobuf.Nested nested_ = com.hubspot.jackson.test.util.TestProtobuf.Nested.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.hubspot.jackson.test.util.TestProtobuf.Nested, com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder, com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder> nestedBuilder_;
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public boolean hasNested() {
         return ((bitField0_ & 0x00010000) == 0x00010000);
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public com.hubspot.jackson.test.util.TestProtobuf.Nested getNested() {
         if (nestedBuilder_ == null) {
           return nested_;
@@ -1375,6 +1872,9 @@ public final class TestProtobuf {
           return nestedBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public Builder setNested(com.hubspot.jackson.test.util.TestProtobuf.Nested value) {
         if (nestedBuilder_ == null) {
           if (value == null) {
@@ -1388,6 +1888,9 @@ public final class TestProtobuf {
         bitField0_ |= 0x00010000;
         return this;
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public Builder setNested(
           com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder builderForValue) {
         if (nestedBuilder_ == null) {
@@ -1399,6 +1902,9 @@ public final class TestProtobuf {
         bitField0_ |= 0x00010000;
         return this;
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public Builder mergeNested(com.hubspot.jackson.test.util.TestProtobuf.Nested value) {
         if (nestedBuilder_ == null) {
           if (((bitField0_ & 0x00010000) == 0x00010000) &&
@@ -1415,6 +1921,9 @@ public final class TestProtobuf {
         bitField0_ |= 0x00010000;
         return this;
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public Builder clearNested() {
         if (nestedBuilder_ == null) {
           nested_ = com.hubspot.jackson.test.util.TestProtobuf.Nested.getDefaultInstance();
@@ -1425,11 +1934,17 @@ public final class TestProtobuf {
         bitField0_ = (bitField0_ & ~0x00010000);
         return this;
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder getNestedBuilder() {
         bitField0_ |= 0x00010000;
         onChanged();
         return getNestedFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder getNestedOrBuilder() {
         if (nestedBuilder_ != null) {
           return nestedBuilder_.getMessageOrBuilder();
@@ -1437,6 +1952,9 @@ public final class TestProtobuf {
           return nested_;
         }
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           com.hubspot.jackson.test.util.TestProtobuf.Nested, com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder, com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder> 
           getNestedFieldBuilder() {
@@ -1450,399 +1968,1173 @@ public final class TestProtobuf {
         }
         return nestedBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:com.hubspot.jackson.test.util.AllFields)
     }
-    
+
     static {
       defaultInstance = new AllFields(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:com.hubspot.jackson.test.util.AllFields)
   }
-  
+
   public interface RepeatedFieldsOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // repeated double double = 1;
+    /**
+     * <code>repeated double double = 1;</code>
+     */
     java.util.List<java.lang.Double> getDoubleList();
+    /**
+     * <code>repeated double double = 1;</code>
+     */
     int getDoubleCount();
+    /**
+     * <code>repeated double double = 1;</code>
+     */
     double getDouble(int index);
-    
+
     // repeated float float = 2;
+    /**
+     * <code>repeated float float = 2;</code>
+     */
     java.util.List<java.lang.Float> getFloatList();
+    /**
+     * <code>repeated float float = 2;</code>
+     */
     int getFloatCount();
+    /**
+     * <code>repeated float float = 2;</code>
+     */
     float getFloat(int index);
-    
+
     // repeated int32 int32 = 3;
+    /**
+     * <code>repeated int32 int32 = 3;</code>
+     */
     java.util.List<java.lang.Integer> getInt32List();
+    /**
+     * <code>repeated int32 int32 = 3;</code>
+     */
     int getInt32Count();
+    /**
+     * <code>repeated int32 int32 = 3;</code>
+     */
     int getInt32(int index);
-    
+
     // repeated int64 int64 = 4;
+    /**
+     * <code>repeated int64 int64 = 4;</code>
+     */
     java.util.List<java.lang.Long> getInt64List();
+    /**
+     * <code>repeated int64 int64 = 4;</code>
+     */
     int getInt64Count();
+    /**
+     * <code>repeated int64 int64 = 4;</code>
+     */
     long getInt64(int index);
-    
+
     // repeated uint32 uint32 = 5;
+    /**
+     * <code>repeated uint32 uint32 = 5;</code>
+     */
     java.util.List<java.lang.Integer> getUint32List();
+    /**
+     * <code>repeated uint32 uint32 = 5;</code>
+     */
     int getUint32Count();
+    /**
+     * <code>repeated uint32 uint32 = 5;</code>
+     */
     int getUint32(int index);
-    
+
     // repeated uint64 uint64 = 6;
+    /**
+     * <code>repeated uint64 uint64 = 6;</code>
+     */
     java.util.List<java.lang.Long> getUint64List();
+    /**
+     * <code>repeated uint64 uint64 = 6;</code>
+     */
     int getUint64Count();
+    /**
+     * <code>repeated uint64 uint64 = 6;</code>
+     */
     long getUint64(int index);
-    
+
     // repeated sint32 sint32 = 7;
+    /**
+     * <code>repeated sint32 sint32 = 7;</code>
+     */
     java.util.List<java.lang.Integer> getSint32List();
+    /**
+     * <code>repeated sint32 sint32 = 7;</code>
+     */
     int getSint32Count();
+    /**
+     * <code>repeated sint32 sint32 = 7;</code>
+     */
     int getSint32(int index);
-    
+
     // repeated sint64 sint64 = 8;
+    /**
+     * <code>repeated sint64 sint64 = 8;</code>
+     */
     java.util.List<java.lang.Long> getSint64List();
+    /**
+     * <code>repeated sint64 sint64 = 8;</code>
+     */
     int getSint64Count();
+    /**
+     * <code>repeated sint64 sint64 = 8;</code>
+     */
     long getSint64(int index);
-    
+
     // repeated fixed32 fixed32 = 9;
+    /**
+     * <code>repeated fixed32 fixed32 = 9;</code>
+     */
     java.util.List<java.lang.Integer> getFixed32List();
+    /**
+     * <code>repeated fixed32 fixed32 = 9;</code>
+     */
     int getFixed32Count();
+    /**
+     * <code>repeated fixed32 fixed32 = 9;</code>
+     */
     int getFixed32(int index);
-    
+
     // repeated fixed64 fixed64 = 10;
+    /**
+     * <code>repeated fixed64 fixed64 = 10;</code>
+     */
     java.util.List<java.lang.Long> getFixed64List();
+    /**
+     * <code>repeated fixed64 fixed64 = 10;</code>
+     */
     int getFixed64Count();
+    /**
+     * <code>repeated fixed64 fixed64 = 10;</code>
+     */
     long getFixed64(int index);
-    
+
     // repeated sfixed32 sfixed32 = 11;
+    /**
+     * <code>repeated sfixed32 sfixed32 = 11;</code>
+     */
     java.util.List<java.lang.Integer> getSfixed32List();
+    /**
+     * <code>repeated sfixed32 sfixed32 = 11;</code>
+     */
     int getSfixed32Count();
+    /**
+     * <code>repeated sfixed32 sfixed32 = 11;</code>
+     */
     int getSfixed32(int index);
-    
+
     // repeated sfixed64 sfixed64 = 12;
+    /**
+     * <code>repeated sfixed64 sfixed64 = 12;</code>
+     */
     java.util.List<java.lang.Long> getSfixed64List();
+    /**
+     * <code>repeated sfixed64 sfixed64 = 12;</code>
+     */
     int getSfixed64Count();
+    /**
+     * <code>repeated sfixed64 sfixed64 = 12;</code>
+     */
     long getSfixed64(int index);
-    
+
     // repeated bool bool = 13;
+    /**
+     * <code>repeated bool bool = 13;</code>
+     */
     java.util.List<java.lang.Boolean> getBoolList();
+    /**
+     * <code>repeated bool bool = 13;</code>
+     */
     int getBoolCount();
+    /**
+     * <code>repeated bool bool = 13;</code>
+     */
     boolean getBool(int index);
-    
+
     // repeated string string = 14;
-    java.util.List<String> getStringList();
+    /**
+     * <code>repeated string string = 14;</code>
+     */
+    java.util.List<java.lang.String>
+    getStringList();
+    /**
+     * <code>repeated string string = 14;</code>
+     */
     int getStringCount();
-    String getString(int index);
-    
+    /**
+     * <code>repeated string string = 14;</code>
+     */
+    java.lang.String getString(int index);
+    /**
+     * <code>repeated string string = 14;</code>
+     */
+    com.google.protobuf.ByteString
+        getStringBytes(int index);
+
     // repeated bytes bytes = 15;
+    /**
+     * <code>repeated bytes bytes = 15;</code>
+     */
     java.util.List<com.google.protobuf.ByteString> getBytesList();
+    /**
+     * <code>repeated bytes bytes = 15;</code>
+     */
     int getBytesCount();
+    /**
+     * <code>repeated bytes bytes = 15;</code>
+     */
     com.google.protobuf.ByteString getBytes(int index);
-    
+
     // repeated .com.hubspot.jackson.test.util.Enum enum = 16;
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
     java.util.List<com.hubspot.jackson.test.util.TestProtobuf.Enum> getEnumList();
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
     int getEnumCount();
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
     com.hubspot.jackson.test.util.TestProtobuf.Enum getEnum(int index);
-    
+
     // repeated .com.hubspot.jackson.test.util.Nested nested = 17;
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
     java.util.List<com.hubspot.jackson.test.util.TestProtobuf.Nested> 
         getNestedList();
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
     com.hubspot.jackson.test.util.TestProtobuf.Nested getNested(int index);
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
     int getNestedCount();
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
     java.util.List<? extends com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder> 
         getNestedOrBuilderList();
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
     com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder getNestedOrBuilder(
         int index);
   }
+  /**
+   * Protobuf type {@code com.hubspot.jackson.test.util.RepeatedFields}
+   */
   public static final class RepeatedFields extends
       com.google.protobuf.GeneratedMessage
       implements RepeatedFieldsOrBuilder {
     // Use RepeatedFields.newBuilder() to construct.
-    private RepeatedFields(Builder builder) {
+    private RepeatedFields(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private RepeatedFields(boolean noInit) {}
-    
+    private RepeatedFields(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final RepeatedFields defaultInstance;
     public static RepeatedFields getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public RepeatedFields getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private RepeatedFields(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 9: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                double_ = new java.util.ArrayList<java.lang.Double>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              double_.add(input.readDouble());
+              break;
+            }
+            case 10: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001) && input.getBytesUntilLimit() > 0) {
+                double_ = new java.util.ArrayList<java.lang.Double>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                double_.add(input.readDouble());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 21: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                float_ = new java.util.ArrayList<java.lang.Float>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              float_.add(input.readFloat());
+              break;
+            }
+            case 18: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002) && input.getBytesUntilLimit() > 0) {
+                float_ = new java.util.ArrayList<java.lang.Float>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                float_.add(input.readFloat());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 24: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                int32_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              int32_.add(input.readInt32());
+              break;
+            }
+            case 26: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004) && input.getBytesUntilLimit() > 0) {
+                int32_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                int32_.add(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 32: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                int64_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              int64_.add(input.readInt64());
+              break;
+            }
+            case 34: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008) && input.getBytesUntilLimit() > 0) {
+                int64_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                int64_.add(input.readInt64());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 40: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                uint32_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              uint32_.add(input.readUInt32());
+              break;
+            }
+            case 42: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010) && input.getBytesUntilLimit() > 0) {
+                uint32_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                uint32_.add(input.readUInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 48: {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                uint64_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              uint64_.add(input.readUInt64());
+              break;
+            }
+            case 50: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020) && input.getBytesUntilLimit() > 0) {
+                uint64_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                uint64_.add(input.readUInt64());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 56: {
+              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+                sint32_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000040;
+              }
+              sint32_.add(input.readSInt32());
+              break;
+            }
+            case 58: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040) && input.getBytesUntilLimit() > 0) {
+                sint32_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000040;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                sint32_.add(input.readSInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 64: {
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+                sint64_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              sint64_.add(input.readSInt64());
+              break;
+            }
+            case 66: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080) && input.getBytesUntilLimit() > 0) {
+                sint64_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                sint64_.add(input.readSInt64());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 77: {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+                fixed32_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000100;
+              }
+              fixed32_.add(input.readFixed32());
+              break;
+            }
+            case 74: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100) && input.getBytesUntilLimit() > 0) {
+                fixed32_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000100;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                fixed32_.add(input.readFixed32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 81: {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+                fixed64_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000200;
+              }
+              fixed64_.add(input.readFixed64());
+              break;
+            }
+            case 82: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200) && input.getBytesUntilLimit() > 0) {
+                fixed64_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000200;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                fixed64_.add(input.readFixed64());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 93: {
+              if (!((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+                sfixed32_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000400;
+              }
+              sfixed32_.add(input.readSFixed32());
+              break;
+            }
+            case 90: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000400) == 0x00000400) && input.getBytesUntilLimit() > 0) {
+                sfixed32_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000400;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                sfixed32_.add(input.readSFixed32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 97: {
+              if (!((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+                sfixed64_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000800;
+              }
+              sfixed64_.add(input.readSFixed64());
+              break;
+            }
+            case 98: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000800) == 0x00000800) && input.getBytesUntilLimit() > 0) {
+                sfixed64_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000800;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                sfixed64_.add(input.readSFixed64());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 104: {
+              if (!((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
+                bool_ = new java.util.ArrayList<java.lang.Boolean>();
+                mutable_bitField0_ |= 0x00001000;
+              }
+              bool_.add(input.readBool());
+              break;
+            }
+            case 106: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00001000) == 0x00001000) && input.getBytesUntilLimit() > 0) {
+                bool_ = new java.util.ArrayList<java.lang.Boolean>();
+                mutable_bitField0_ |= 0x00001000;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                bool_.add(input.readBool());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 114: {
+              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
+                string_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00002000;
+              }
+              string_.add(input.readBytes());
+              break;
+            }
+            case 122: {
+              if (!((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
+                bytes_ = new java.util.ArrayList<com.google.protobuf.ByteString>();
+                mutable_bitField0_ |= 0x00004000;
+              }
+              bytes_.add(input.readBytes());
+              break;
+            }
+            case 128: {
+              int rawValue = input.readEnum();
+              com.hubspot.jackson.test.util.TestProtobuf.Enum value = com.hubspot.jackson.test.util.TestProtobuf.Enum.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(16, rawValue);
+              } else {
+                if (!((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
+                  enum_ = new java.util.ArrayList<com.hubspot.jackson.test.util.TestProtobuf.Enum>();
+                  mutable_bitField0_ |= 0x00008000;
+                }
+                enum_.add(value);
+              }
+              break;
+            }
+            case 130: {
+              int length = input.readRawVarint32();
+              int oldLimit = input.pushLimit(length);
+              while(input.getBytesUntilLimit() > 0) {
+                int rawValue = input.readEnum();
+                com.hubspot.jackson.test.util.TestProtobuf.Enum value = com.hubspot.jackson.test.util.TestProtobuf.Enum.valueOf(rawValue);
+                if (value == null) {
+                  unknownFields.mergeVarintField(16, rawValue);
+                } else {
+                  if (!((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
+                    enum_ = new java.util.ArrayList<com.hubspot.jackson.test.util.TestProtobuf.Enum>();
+                    mutable_bitField0_ |= 0x00008000;
+                  }
+                  enum_.add(value);
+                }
+              }
+              input.popLimit(oldLimit);
+              break;
+            }
+            case 138: {
+              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
+                nested_ = new java.util.ArrayList<com.hubspot.jackson.test.util.TestProtobuf.Nested>();
+                mutable_bitField0_ |= 0x00010000;
+              }
+              nested_.add(input.readMessage(com.hubspot.jackson.test.util.TestProtobuf.Nested.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          double_ = java.util.Collections.unmodifiableList(double_);
+        }
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          float_ = java.util.Collections.unmodifiableList(float_);
+        }
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          int32_ = java.util.Collections.unmodifiableList(int32_);
+        }
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          int64_ = java.util.Collections.unmodifiableList(int64_);
+        }
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          uint32_ = java.util.Collections.unmodifiableList(uint32_);
+        }
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          uint64_ = java.util.Collections.unmodifiableList(uint64_);
+        }
+        if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+          sint32_ = java.util.Collections.unmodifiableList(sint32_);
+        }
+        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+          sint64_ = java.util.Collections.unmodifiableList(sint64_);
+        }
+        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+          fixed32_ = java.util.Collections.unmodifiableList(fixed32_);
+        }
+        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+          fixed64_ = java.util.Collections.unmodifiableList(fixed64_);
+        }
+        if (((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+          sfixed32_ = java.util.Collections.unmodifiableList(sfixed32_);
+        }
+        if (((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+          sfixed64_ = java.util.Collections.unmodifiableList(sfixed64_);
+        }
+        if (((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
+          bool_ = java.util.Collections.unmodifiableList(bool_);
+        }
+        if (((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
+          string_ = new com.google.protobuf.UnmodifiableLazyStringList(string_);
+        }
+        if (((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
+          bytes_ = java.util.Collections.unmodifiableList(bytes_);
+        }
+        if (((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
+          enum_ = java.util.Collections.unmodifiableList(enum_);
+        }
+        if (((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
+          nested_ = java.util.Collections.unmodifiableList(nested_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_RepeatedFields_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_RepeatedFields_fieldAccessorTable;
+      return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_RepeatedFields_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields.class, com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<RepeatedFields> PARSER =
+        new com.google.protobuf.AbstractParser<RepeatedFields>() {
+      public RepeatedFields parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new RepeatedFields(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<RepeatedFields> getParserForType() {
+      return PARSER;
+    }
+
     // repeated double double = 1;
     public static final int DOUBLE_FIELD_NUMBER = 1;
     private java.util.List<java.lang.Double> double_;
+    /**
+     * <code>repeated double double = 1;</code>
+     */
     public java.util.List<java.lang.Double>
         getDoubleList() {
       return double_;
     }
+    /**
+     * <code>repeated double double = 1;</code>
+     */
     public int getDoubleCount() {
       return double_.size();
     }
+    /**
+     * <code>repeated double double = 1;</code>
+     */
     public double getDouble(int index) {
       return double_.get(index);
     }
-    
+
     // repeated float float = 2;
     public static final int FLOAT_FIELD_NUMBER = 2;
     private java.util.List<java.lang.Float> float_;
+    /**
+     * <code>repeated float float = 2;</code>
+     */
     public java.util.List<java.lang.Float>
         getFloatList() {
       return float_;
     }
+    /**
+     * <code>repeated float float = 2;</code>
+     */
     public int getFloatCount() {
       return float_.size();
     }
+    /**
+     * <code>repeated float float = 2;</code>
+     */
     public float getFloat(int index) {
       return float_.get(index);
     }
-    
+
     // repeated int32 int32 = 3;
     public static final int INT32_FIELD_NUMBER = 3;
     private java.util.List<java.lang.Integer> int32_;
+    /**
+     * <code>repeated int32 int32 = 3;</code>
+     */
     public java.util.List<java.lang.Integer>
         getInt32List() {
       return int32_;
     }
+    /**
+     * <code>repeated int32 int32 = 3;</code>
+     */
     public int getInt32Count() {
       return int32_.size();
     }
+    /**
+     * <code>repeated int32 int32 = 3;</code>
+     */
     public int getInt32(int index) {
       return int32_.get(index);
     }
-    
+
     // repeated int64 int64 = 4;
     public static final int INT64_FIELD_NUMBER = 4;
     private java.util.List<java.lang.Long> int64_;
+    /**
+     * <code>repeated int64 int64 = 4;</code>
+     */
     public java.util.List<java.lang.Long>
         getInt64List() {
       return int64_;
     }
+    /**
+     * <code>repeated int64 int64 = 4;</code>
+     */
     public int getInt64Count() {
       return int64_.size();
     }
+    /**
+     * <code>repeated int64 int64 = 4;</code>
+     */
     public long getInt64(int index) {
       return int64_.get(index);
     }
-    
+
     // repeated uint32 uint32 = 5;
     public static final int UINT32_FIELD_NUMBER = 5;
     private java.util.List<java.lang.Integer> uint32_;
+    /**
+     * <code>repeated uint32 uint32 = 5;</code>
+     */
     public java.util.List<java.lang.Integer>
         getUint32List() {
       return uint32_;
     }
+    /**
+     * <code>repeated uint32 uint32 = 5;</code>
+     */
     public int getUint32Count() {
       return uint32_.size();
     }
+    /**
+     * <code>repeated uint32 uint32 = 5;</code>
+     */
     public int getUint32(int index) {
       return uint32_.get(index);
     }
-    
+
     // repeated uint64 uint64 = 6;
     public static final int UINT64_FIELD_NUMBER = 6;
     private java.util.List<java.lang.Long> uint64_;
+    /**
+     * <code>repeated uint64 uint64 = 6;</code>
+     */
     public java.util.List<java.lang.Long>
         getUint64List() {
       return uint64_;
     }
+    /**
+     * <code>repeated uint64 uint64 = 6;</code>
+     */
     public int getUint64Count() {
       return uint64_.size();
     }
+    /**
+     * <code>repeated uint64 uint64 = 6;</code>
+     */
     public long getUint64(int index) {
       return uint64_.get(index);
     }
-    
+
     // repeated sint32 sint32 = 7;
     public static final int SINT32_FIELD_NUMBER = 7;
     private java.util.List<java.lang.Integer> sint32_;
+    /**
+     * <code>repeated sint32 sint32 = 7;</code>
+     */
     public java.util.List<java.lang.Integer>
         getSint32List() {
       return sint32_;
     }
+    /**
+     * <code>repeated sint32 sint32 = 7;</code>
+     */
     public int getSint32Count() {
       return sint32_.size();
     }
+    /**
+     * <code>repeated sint32 sint32 = 7;</code>
+     */
     public int getSint32(int index) {
       return sint32_.get(index);
     }
-    
+
     // repeated sint64 sint64 = 8;
     public static final int SINT64_FIELD_NUMBER = 8;
     private java.util.List<java.lang.Long> sint64_;
+    /**
+     * <code>repeated sint64 sint64 = 8;</code>
+     */
     public java.util.List<java.lang.Long>
         getSint64List() {
       return sint64_;
     }
+    /**
+     * <code>repeated sint64 sint64 = 8;</code>
+     */
     public int getSint64Count() {
       return sint64_.size();
     }
+    /**
+     * <code>repeated sint64 sint64 = 8;</code>
+     */
     public long getSint64(int index) {
       return sint64_.get(index);
     }
-    
+
     // repeated fixed32 fixed32 = 9;
     public static final int FIXED32_FIELD_NUMBER = 9;
     private java.util.List<java.lang.Integer> fixed32_;
+    /**
+     * <code>repeated fixed32 fixed32 = 9;</code>
+     */
     public java.util.List<java.lang.Integer>
         getFixed32List() {
       return fixed32_;
     }
+    /**
+     * <code>repeated fixed32 fixed32 = 9;</code>
+     */
     public int getFixed32Count() {
       return fixed32_.size();
     }
+    /**
+     * <code>repeated fixed32 fixed32 = 9;</code>
+     */
     public int getFixed32(int index) {
       return fixed32_.get(index);
     }
-    
+
     // repeated fixed64 fixed64 = 10;
     public static final int FIXED64_FIELD_NUMBER = 10;
     private java.util.List<java.lang.Long> fixed64_;
+    /**
+     * <code>repeated fixed64 fixed64 = 10;</code>
+     */
     public java.util.List<java.lang.Long>
         getFixed64List() {
       return fixed64_;
     }
+    /**
+     * <code>repeated fixed64 fixed64 = 10;</code>
+     */
     public int getFixed64Count() {
       return fixed64_.size();
     }
+    /**
+     * <code>repeated fixed64 fixed64 = 10;</code>
+     */
     public long getFixed64(int index) {
       return fixed64_.get(index);
     }
-    
+
     // repeated sfixed32 sfixed32 = 11;
     public static final int SFIXED32_FIELD_NUMBER = 11;
     private java.util.List<java.lang.Integer> sfixed32_;
+    /**
+     * <code>repeated sfixed32 sfixed32 = 11;</code>
+     */
     public java.util.List<java.lang.Integer>
         getSfixed32List() {
       return sfixed32_;
     }
+    /**
+     * <code>repeated sfixed32 sfixed32 = 11;</code>
+     */
     public int getSfixed32Count() {
       return sfixed32_.size();
     }
+    /**
+     * <code>repeated sfixed32 sfixed32 = 11;</code>
+     */
     public int getSfixed32(int index) {
       return sfixed32_.get(index);
     }
-    
+
     // repeated sfixed64 sfixed64 = 12;
     public static final int SFIXED64_FIELD_NUMBER = 12;
     private java.util.List<java.lang.Long> sfixed64_;
+    /**
+     * <code>repeated sfixed64 sfixed64 = 12;</code>
+     */
     public java.util.List<java.lang.Long>
         getSfixed64List() {
       return sfixed64_;
     }
+    /**
+     * <code>repeated sfixed64 sfixed64 = 12;</code>
+     */
     public int getSfixed64Count() {
       return sfixed64_.size();
     }
+    /**
+     * <code>repeated sfixed64 sfixed64 = 12;</code>
+     */
     public long getSfixed64(int index) {
       return sfixed64_.get(index);
     }
-    
+
     // repeated bool bool = 13;
     public static final int BOOL_FIELD_NUMBER = 13;
     private java.util.List<java.lang.Boolean> bool_;
+    /**
+     * <code>repeated bool bool = 13;</code>
+     */
     public java.util.List<java.lang.Boolean>
         getBoolList() {
       return bool_;
     }
+    /**
+     * <code>repeated bool bool = 13;</code>
+     */
     public int getBoolCount() {
       return bool_.size();
     }
+    /**
+     * <code>repeated bool bool = 13;</code>
+     */
     public boolean getBool(int index) {
       return bool_.get(index);
     }
-    
+
     // repeated string string = 14;
     public static final int STRING_FIELD_NUMBER = 14;
     private com.google.protobuf.LazyStringList string_;
-    public java.util.List<String>
+    /**
+     * <code>repeated string string = 14;</code>
+     */
+    public java.util.List<java.lang.String>
         getStringList() {
       return string_;
     }
+    /**
+     * <code>repeated string string = 14;</code>
+     */
     public int getStringCount() {
       return string_.size();
     }
-    public String getString(int index) {
+    /**
+     * <code>repeated string string = 14;</code>
+     */
+    public java.lang.String getString(int index) {
       return string_.get(index);
     }
-    
+    /**
+     * <code>repeated string string = 14;</code>
+     */
+    public com.google.protobuf.ByteString
+        getStringBytes(int index) {
+      return string_.getByteString(index);
+    }
+
     // repeated bytes bytes = 15;
     public static final int BYTES_FIELD_NUMBER = 15;
     private java.util.List<com.google.protobuf.ByteString> bytes_;
+    /**
+     * <code>repeated bytes bytes = 15;</code>
+     */
     public java.util.List<com.google.protobuf.ByteString>
         getBytesList() {
       return bytes_;
     }
+    /**
+     * <code>repeated bytes bytes = 15;</code>
+     */
     public int getBytesCount() {
       return bytes_.size();
     }
+    /**
+     * <code>repeated bytes bytes = 15;</code>
+     */
     public com.google.protobuf.ByteString getBytes(int index) {
       return bytes_.get(index);
     }
-    
+
     // repeated .com.hubspot.jackson.test.util.Enum enum = 16;
     public static final int ENUM_FIELD_NUMBER = 16;
     private java.util.List<com.hubspot.jackson.test.util.TestProtobuf.Enum> enum_;
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
     public java.util.List<com.hubspot.jackson.test.util.TestProtobuf.Enum> getEnumList() {
       return enum_;
     }
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
     public int getEnumCount() {
       return enum_.size();
     }
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
     public com.hubspot.jackson.test.util.TestProtobuf.Enum getEnum(int index) {
       return enum_.get(index);
     }
-    
+
     // repeated .com.hubspot.jackson.test.util.Nested nested = 17;
     public static final int NESTED_FIELD_NUMBER = 17;
     private java.util.List<com.hubspot.jackson.test.util.TestProtobuf.Nested> nested_;
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
     public java.util.List<com.hubspot.jackson.test.util.TestProtobuf.Nested> getNestedList() {
       return nested_;
     }
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
     public java.util.List<? extends com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder> 
         getNestedOrBuilderList() {
       return nested_;
     }
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
     public int getNestedCount() {
       return nested_.size();
     }
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
     public com.hubspot.jackson.test.util.TestProtobuf.Nested getNested(int index) {
       return nested_.get(index);
     }
+    /**
+     * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+     */
     public com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder getNestedOrBuilder(
         int index) {
       return nested_.get(index);
     }
-    
+
     private void initFields() {
-      double_ = java.util.Collections.emptyList();;
-      float_ = java.util.Collections.emptyList();;
-      int32_ = java.util.Collections.emptyList();;
-      int64_ = java.util.Collections.emptyList();;
-      uint32_ = java.util.Collections.emptyList();;
-      uint64_ = java.util.Collections.emptyList();;
-      sint32_ = java.util.Collections.emptyList();;
-      sint64_ = java.util.Collections.emptyList();;
-      fixed32_ = java.util.Collections.emptyList();;
-      fixed64_ = java.util.Collections.emptyList();;
-      sfixed32_ = java.util.Collections.emptyList();;
-      sfixed64_ = java.util.Collections.emptyList();;
-      bool_ = java.util.Collections.emptyList();;
+      double_ = java.util.Collections.emptyList();
+      float_ = java.util.Collections.emptyList();
+      int32_ = java.util.Collections.emptyList();
+      int64_ = java.util.Collections.emptyList();
+      uint32_ = java.util.Collections.emptyList();
+      uint64_ = java.util.Collections.emptyList();
+      sint32_ = java.util.Collections.emptyList();
+      sint64_ = java.util.Collections.emptyList();
+      fixed32_ = java.util.Collections.emptyList();
+      fixed64_ = java.util.Collections.emptyList();
+      sfixed32_ = java.util.Collections.emptyList();
+      sfixed64_ = java.util.Collections.emptyList();
+      bool_ = java.util.Collections.emptyList();
       string_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bytes_ = java.util.Collections.emptyList();;
+      bytes_ = java.util.Collections.emptyList();
       enum_ = java.util.Collections.emptyList();
       nested_ = java.util.Collections.emptyList();
     }
@@ -1850,11 +3142,11 @@ public final class TestProtobuf {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -1911,12 +3203,12 @@ public final class TestProtobuf {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       {
         int dataSize = 0;
@@ -2049,94 +3341,83 @@ public final class TestProtobuf {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code com.hubspot.jackson.test.util.RepeatedFields}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements com.hubspot.jackson.test.util.TestProtobuf.RepeatedFieldsOrBuilder {
@@ -2144,18 +3425,21 @@ public final class TestProtobuf {
           getDescriptor() {
         return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_RepeatedFields_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_RepeatedFields_fieldAccessorTable;
+        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_RepeatedFields_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields.class, com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields.Builder.class);
       }
-      
+
       // Construct using com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -2167,38 +3451,38 @@ public final class TestProtobuf {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
-        double_ = java.util.Collections.emptyList();;
+        double_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000001);
-        float_ = java.util.Collections.emptyList();;
+        float_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000002);
-        int32_ = java.util.Collections.emptyList();;
+        int32_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000004);
-        int64_ = java.util.Collections.emptyList();;
+        int64_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000008);
-        uint32_ = java.util.Collections.emptyList();;
+        uint32_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000010);
-        uint64_ = java.util.Collections.emptyList();;
+        uint64_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000020);
-        sint32_ = java.util.Collections.emptyList();;
+        sint32_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
-        sint64_ = java.util.Collections.emptyList();;
+        sint64_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000080);
-        fixed32_ = java.util.Collections.emptyList();;
+        fixed32_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000100);
-        fixed64_ = java.util.Collections.emptyList();;
+        fixed64_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000200);
-        sfixed32_ = java.util.Collections.emptyList();;
+        sfixed32_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000400);
-        sfixed64_ = java.util.Collections.emptyList();;
+        sfixed64_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000800);
-        bool_ = java.util.Collections.emptyList();;
+        bool_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00001000);
         string_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00002000);
-        bytes_ = java.util.Collections.emptyList();;
+        bytes_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00004000);
         enum_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00008000);
@@ -2210,20 +3494,20 @@ public final class TestProtobuf {
         }
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields.getDescriptor();
+        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_RepeatedFields_descriptor;
       }
-      
+
       public com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields getDefaultInstanceForType() {
         return com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields.getDefaultInstance();
       }
-      
+
       public com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields build() {
         com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields result = buildPartial();
         if (!result.isInitialized()) {
@@ -2231,17 +3515,7 @@ public final class TestProtobuf {
         }
         return result;
       }
-      
-      private com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields buildPartial() {
         com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields result = new com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields(this);
         int from_bitField0_ = bitField0_;
@@ -2338,7 +3612,7 @@ public final class TestProtobuf {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields) {
           return mergeFrom((com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields)other);
@@ -2347,7 +3621,7 @@ public final class TestProtobuf {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields other) {
         if (other == com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields.getDefaultInstance()) return this;
         if (!other.double_.isEmpty()) {
@@ -2539,281 +3813,60 @@ public final class TestProtobuf {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 9: {
-              ensureDoubleIsMutable();
-              double_.add(input.readDouble());
-              break;
-            }
-            case 10: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addDouble(input.readDouble());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 21: {
-              ensureFloatIsMutable();
-              float_.add(input.readFloat());
-              break;
-            }
-            case 18: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addFloat(input.readFloat());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 24: {
-              ensureInt32IsMutable();
-              int32_.add(input.readInt32());
-              break;
-            }
-            case 26: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addInt32(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 32: {
-              ensureInt64IsMutable();
-              int64_.add(input.readInt64());
-              break;
-            }
-            case 34: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addInt64(input.readInt64());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 40: {
-              ensureUint32IsMutable();
-              uint32_.add(input.readUInt32());
-              break;
-            }
-            case 42: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addUint32(input.readUInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 48: {
-              ensureUint64IsMutable();
-              uint64_.add(input.readUInt64());
-              break;
-            }
-            case 50: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addUint64(input.readUInt64());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 56: {
-              ensureSint32IsMutable();
-              sint32_.add(input.readSInt32());
-              break;
-            }
-            case 58: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addSint32(input.readSInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 64: {
-              ensureSint64IsMutable();
-              sint64_.add(input.readSInt64());
-              break;
-            }
-            case 66: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addSint64(input.readSInt64());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 77: {
-              ensureFixed32IsMutable();
-              fixed32_.add(input.readFixed32());
-              break;
-            }
-            case 74: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addFixed32(input.readFixed32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 81: {
-              ensureFixed64IsMutable();
-              fixed64_.add(input.readFixed64());
-              break;
-            }
-            case 82: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addFixed64(input.readFixed64());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 93: {
-              ensureSfixed32IsMutable();
-              sfixed32_.add(input.readSFixed32());
-              break;
-            }
-            case 90: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addSfixed32(input.readSFixed32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 97: {
-              ensureSfixed64IsMutable();
-              sfixed64_.add(input.readSFixed64());
-              break;
-            }
-            case 98: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addSfixed64(input.readSFixed64());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 104: {
-              ensureBoolIsMutable();
-              bool_.add(input.readBool());
-              break;
-            }
-            case 106: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addBool(input.readBool());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 114: {
-              ensureStringIsMutable();
-              string_.add(input.readBytes());
-              break;
-            }
-            case 122: {
-              ensureBytesIsMutable();
-              bytes_.add(input.readBytes());
-              break;
-            }
-            case 128: {
-              int rawValue = input.readEnum();
-              com.hubspot.jackson.test.util.TestProtobuf.Enum value = com.hubspot.jackson.test.util.TestProtobuf.Enum.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(16, rawValue);
-              } else {
-                addEnum(value);
-              }
-              break;
-            }
-            case 130: {
-              int length = input.readRawVarint32();
-              int oldLimit = input.pushLimit(length);
-              while(input.getBytesUntilLimit() > 0) {
-                int rawValue = input.readEnum();
-                com.hubspot.jackson.test.util.TestProtobuf.Enum value = com.hubspot.jackson.test.util.TestProtobuf.Enum.valueOf(rawValue);
-                if (value == null) {
-                  unknownFields.mergeVarintField(16, rawValue);
-                } else {
-                  addEnum(value);
-                }
-              }
-              input.popLimit(oldLimit);
-              break;
-            }
-            case 138: {
-              com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder subBuilder = com.hubspot.jackson.test.util.TestProtobuf.Nested.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addNested(subBuilder.buildPartial());
-              break;
-            }
+        com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // repeated double double = 1;
-      private java.util.List<java.lang.Double> double_ = java.util.Collections.emptyList();;
+      private java.util.List<java.lang.Double> double_ = java.util.Collections.emptyList();
       private void ensureDoubleIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
           double_ = new java.util.ArrayList<java.lang.Double>(double_);
           bitField0_ |= 0x00000001;
          }
       }
+      /**
+       * <code>repeated double double = 1;</code>
+       */
       public java.util.List<java.lang.Double>
           getDoubleList() {
         return java.util.Collections.unmodifiableList(double_);
       }
+      /**
+       * <code>repeated double double = 1;</code>
+       */
       public int getDoubleCount() {
         return double_.size();
       }
+      /**
+       * <code>repeated double double = 1;</code>
+       */
       public double getDouble(int index) {
         return double_.get(index);
       }
+      /**
+       * <code>repeated double double = 1;</code>
+       */
       public Builder setDouble(
           int index, double value) {
         ensureDoubleIsMutable();
@@ -2821,12 +3874,18 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated double double = 1;</code>
+       */
       public Builder addDouble(double value) {
         ensureDoubleIsMutable();
         double_.add(value);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated double double = 1;</code>
+       */
       public Builder addAllDouble(
           java.lang.Iterable<? extends java.lang.Double> values) {
         ensureDoubleIsMutable();
@@ -2834,31 +3893,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated double double = 1;</code>
+       */
       public Builder clearDouble() {
-        double_ = java.util.Collections.emptyList();;
+        double_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
-      
+
       // repeated float float = 2;
-      private java.util.List<java.lang.Float> float_ = java.util.Collections.emptyList();;
+      private java.util.List<java.lang.Float> float_ = java.util.Collections.emptyList();
       private void ensureFloatIsMutable() {
         if (!((bitField0_ & 0x00000002) == 0x00000002)) {
           float_ = new java.util.ArrayList<java.lang.Float>(float_);
           bitField0_ |= 0x00000002;
          }
       }
+      /**
+       * <code>repeated float float = 2;</code>
+       */
       public java.util.List<java.lang.Float>
           getFloatList() {
         return java.util.Collections.unmodifiableList(float_);
       }
+      /**
+       * <code>repeated float float = 2;</code>
+       */
       public int getFloatCount() {
         return float_.size();
       }
+      /**
+       * <code>repeated float float = 2;</code>
+       */
       public float getFloat(int index) {
         return float_.get(index);
       }
+      /**
+       * <code>repeated float float = 2;</code>
+       */
       public Builder setFloat(
           int index, float value) {
         ensureFloatIsMutable();
@@ -2866,12 +3940,18 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated float float = 2;</code>
+       */
       public Builder addFloat(float value) {
         ensureFloatIsMutable();
         float_.add(value);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated float float = 2;</code>
+       */
       public Builder addAllFloat(
           java.lang.Iterable<? extends java.lang.Float> values) {
         ensureFloatIsMutable();
@@ -2879,31 +3959,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated float float = 2;</code>
+       */
       public Builder clearFloat() {
-        float_ = java.util.Collections.emptyList();;
+        float_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
-      
+
       // repeated int32 int32 = 3;
-      private java.util.List<java.lang.Integer> int32_ = java.util.Collections.emptyList();;
+      private java.util.List<java.lang.Integer> int32_ = java.util.Collections.emptyList();
       private void ensureInt32IsMutable() {
         if (!((bitField0_ & 0x00000004) == 0x00000004)) {
           int32_ = new java.util.ArrayList<java.lang.Integer>(int32_);
           bitField0_ |= 0x00000004;
          }
       }
+      /**
+       * <code>repeated int32 int32 = 3;</code>
+       */
       public java.util.List<java.lang.Integer>
           getInt32List() {
         return java.util.Collections.unmodifiableList(int32_);
       }
+      /**
+       * <code>repeated int32 int32 = 3;</code>
+       */
       public int getInt32Count() {
         return int32_.size();
       }
+      /**
+       * <code>repeated int32 int32 = 3;</code>
+       */
       public int getInt32(int index) {
         return int32_.get(index);
       }
+      /**
+       * <code>repeated int32 int32 = 3;</code>
+       */
       public Builder setInt32(
           int index, int value) {
         ensureInt32IsMutable();
@@ -2911,12 +4006,18 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated int32 int32 = 3;</code>
+       */
       public Builder addInt32(int value) {
         ensureInt32IsMutable();
         int32_.add(value);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated int32 int32 = 3;</code>
+       */
       public Builder addAllInt32(
           java.lang.Iterable<? extends java.lang.Integer> values) {
         ensureInt32IsMutable();
@@ -2924,31 +4025,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated int32 int32 = 3;</code>
+       */
       public Builder clearInt32() {
-        int32_ = java.util.Collections.emptyList();;
+        int32_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
       }
-      
+
       // repeated int64 int64 = 4;
-      private java.util.List<java.lang.Long> int64_ = java.util.Collections.emptyList();;
+      private java.util.List<java.lang.Long> int64_ = java.util.Collections.emptyList();
       private void ensureInt64IsMutable() {
         if (!((bitField0_ & 0x00000008) == 0x00000008)) {
           int64_ = new java.util.ArrayList<java.lang.Long>(int64_);
           bitField0_ |= 0x00000008;
          }
       }
+      /**
+       * <code>repeated int64 int64 = 4;</code>
+       */
       public java.util.List<java.lang.Long>
           getInt64List() {
         return java.util.Collections.unmodifiableList(int64_);
       }
+      /**
+       * <code>repeated int64 int64 = 4;</code>
+       */
       public int getInt64Count() {
         return int64_.size();
       }
+      /**
+       * <code>repeated int64 int64 = 4;</code>
+       */
       public long getInt64(int index) {
         return int64_.get(index);
       }
+      /**
+       * <code>repeated int64 int64 = 4;</code>
+       */
       public Builder setInt64(
           int index, long value) {
         ensureInt64IsMutable();
@@ -2956,12 +4072,18 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated int64 int64 = 4;</code>
+       */
       public Builder addInt64(long value) {
         ensureInt64IsMutable();
         int64_.add(value);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated int64 int64 = 4;</code>
+       */
       public Builder addAllInt64(
           java.lang.Iterable<? extends java.lang.Long> values) {
         ensureInt64IsMutable();
@@ -2969,31 +4091,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated int64 int64 = 4;</code>
+       */
       public Builder clearInt64() {
-        int64_ = java.util.Collections.emptyList();;
+        int64_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
-      
+
       // repeated uint32 uint32 = 5;
-      private java.util.List<java.lang.Integer> uint32_ = java.util.Collections.emptyList();;
+      private java.util.List<java.lang.Integer> uint32_ = java.util.Collections.emptyList();
       private void ensureUint32IsMutable() {
         if (!((bitField0_ & 0x00000010) == 0x00000010)) {
           uint32_ = new java.util.ArrayList<java.lang.Integer>(uint32_);
           bitField0_ |= 0x00000010;
          }
       }
+      /**
+       * <code>repeated uint32 uint32 = 5;</code>
+       */
       public java.util.List<java.lang.Integer>
           getUint32List() {
         return java.util.Collections.unmodifiableList(uint32_);
       }
+      /**
+       * <code>repeated uint32 uint32 = 5;</code>
+       */
       public int getUint32Count() {
         return uint32_.size();
       }
+      /**
+       * <code>repeated uint32 uint32 = 5;</code>
+       */
       public int getUint32(int index) {
         return uint32_.get(index);
       }
+      /**
+       * <code>repeated uint32 uint32 = 5;</code>
+       */
       public Builder setUint32(
           int index, int value) {
         ensureUint32IsMutable();
@@ -3001,12 +4138,18 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated uint32 uint32 = 5;</code>
+       */
       public Builder addUint32(int value) {
         ensureUint32IsMutable();
         uint32_.add(value);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated uint32 uint32 = 5;</code>
+       */
       public Builder addAllUint32(
           java.lang.Iterable<? extends java.lang.Integer> values) {
         ensureUint32IsMutable();
@@ -3014,31 +4157,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated uint32 uint32 = 5;</code>
+       */
       public Builder clearUint32() {
-        uint32_ = java.util.Collections.emptyList();;
+        uint32_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000010);
         onChanged();
         return this;
       }
-      
+
       // repeated uint64 uint64 = 6;
-      private java.util.List<java.lang.Long> uint64_ = java.util.Collections.emptyList();;
+      private java.util.List<java.lang.Long> uint64_ = java.util.Collections.emptyList();
       private void ensureUint64IsMutable() {
         if (!((bitField0_ & 0x00000020) == 0x00000020)) {
           uint64_ = new java.util.ArrayList<java.lang.Long>(uint64_);
           bitField0_ |= 0x00000020;
          }
       }
+      /**
+       * <code>repeated uint64 uint64 = 6;</code>
+       */
       public java.util.List<java.lang.Long>
           getUint64List() {
         return java.util.Collections.unmodifiableList(uint64_);
       }
+      /**
+       * <code>repeated uint64 uint64 = 6;</code>
+       */
       public int getUint64Count() {
         return uint64_.size();
       }
+      /**
+       * <code>repeated uint64 uint64 = 6;</code>
+       */
       public long getUint64(int index) {
         return uint64_.get(index);
       }
+      /**
+       * <code>repeated uint64 uint64 = 6;</code>
+       */
       public Builder setUint64(
           int index, long value) {
         ensureUint64IsMutable();
@@ -3046,12 +4204,18 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated uint64 uint64 = 6;</code>
+       */
       public Builder addUint64(long value) {
         ensureUint64IsMutable();
         uint64_.add(value);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated uint64 uint64 = 6;</code>
+       */
       public Builder addAllUint64(
           java.lang.Iterable<? extends java.lang.Long> values) {
         ensureUint64IsMutable();
@@ -3059,31 +4223,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated uint64 uint64 = 6;</code>
+       */
       public Builder clearUint64() {
-        uint64_ = java.util.Collections.emptyList();;
+        uint64_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000020);
         onChanged();
         return this;
       }
-      
+
       // repeated sint32 sint32 = 7;
-      private java.util.List<java.lang.Integer> sint32_ = java.util.Collections.emptyList();;
+      private java.util.List<java.lang.Integer> sint32_ = java.util.Collections.emptyList();
       private void ensureSint32IsMutable() {
         if (!((bitField0_ & 0x00000040) == 0x00000040)) {
           sint32_ = new java.util.ArrayList<java.lang.Integer>(sint32_);
           bitField0_ |= 0x00000040;
          }
       }
+      /**
+       * <code>repeated sint32 sint32 = 7;</code>
+       */
       public java.util.List<java.lang.Integer>
           getSint32List() {
         return java.util.Collections.unmodifiableList(sint32_);
       }
+      /**
+       * <code>repeated sint32 sint32 = 7;</code>
+       */
       public int getSint32Count() {
         return sint32_.size();
       }
+      /**
+       * <code>repeated sint32 sint32 = 7;</code>
+       */
       public int getSint32(int index) {
         return sint32_.get(index);
       }
+      /**
+       * <code>repeated sint32 sint32 = 7;</code>
+       */
       public Builder setSint32(
           int index, int value) {
         ensureSint32IsMutable();
@@ -3091,12 +4270,18 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated sint32 sint32 = 7;</code>
+       */
       public Builder addSint32(int value) {
         ensureSint32IsMutable();
         sint32_.add(value);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated sint32 sint32 = 7;</code>
+       */
       public Builder addAllSint32(
           java.lang.Iterable<? extends java.lang.Integer> values) {
         ensureSint32IsMutable();
@@ -3104,31 +4289,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated sint32 sint32 = 7;</code>
+       */
       public Builder clearSint32() {
-        sint32_ = java.util.Collections.emptyList();;
+        sint32_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
         onChanged();
         return this;
       }
-      
+
       // repeated sint64 sint64 = 8;
-      private java.util.List<java.lang.Long> sint64_ = java.util.Collections.emptyList();;
+      private java.util.List<java.lang.Long> sint64_ = java.util.Collections.emptyList();
       private void ensureSint64IsMutable() {
         if (!((bitField0_ & 0x00000080) == 0x00000080)) {
           sint64_ = new java.util.ArrayList<java.lang.Long>(sint64_);
           bitField0_ |= 0x00000080;
          }
       }
+      /**
+       * <code>repeated sint64 sint64 = 8;</code>
+       */
       public java.util.List<java.lang.Long>
           getSint64List() {
         return java.util.Collections.unmodifiableList(sint64_);
       }
+      /**
+       * <code>repeated sint64 sint64 = 8;</code>
+       */
       public int getSint64Count() {
         return sint64_.size();
       }
+      /**
+       * <code>repeated sint64 sint64 = 8;</code>
+       */
       public long getSint64(int index) {
         return sint64_.get(index);
       }
+      /**
+       * <code>repeated sint64 sint64 = 8;</code>
+       */
       public Builder setSint64(
           int index, long value) {
         ensureSint64IsMutable();
@@ -3136,12 +4336,18 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated sint64 sint64 = 8;</code>
+       */
       public Builder addSint64(long value) {
         ensureSint64IsMutable();
         sint64_.add(value);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated sint64 sint64 = 8;</code>
+       */
       public Builder addAllSint64(
           java.lang.Iterable<? extends java.lang.Long> values) {
         ensureSint64IsMutable();
@@ -3149,31 +4355,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated sint64 sint64 = 8;</code>
+       */
       public Builder clearSint64() {
-        sint64_ = java.util.Collections.emptyList();;
+        sint64_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000080);
         onChanged();
         return this;
       }
-      
+
       // repeated fixed32 fixed32 = 9;
-      private java.util.List<java.lang.Integer> fixed32_ = java.util.Collections.emptyList();;
+      private java.util.List<java.lang.Integer> fixed32_ = java.util.Collections.emptyList();
       private void ensureFixed32IsMutable() {
         if (!((bitField0_ & 0x00000100) == 0x00000100)) {
           fixed32_ = new java.util.ArrayList<java.lang.Integer>(fixed32_);
           bitField0_ |= 0x00000100;
          }
       }
+      /**
+       * <code>repeated fixed32 fixed32 = 9;</code>
+       */
       public java.util.List<java.lang.Integer>
           getFixed32List() {
         return java.util.Collections.unmodifiableList(fixed32_);
       }
+      /**
+       * <code>repeated fixed32 fixed32 = 9;</code>
+       */
       public int getFixed32Count() {
         return fixed32_.size();
       }
+      /**
+       * <code>repeated fixed32 fixed32 = 9;</code>
+       */
       public int getFixed32(int index) {
         return fixed32_.get(index);
       }
+      /**
+       * <code>repeated fixed32 fixed32 = 9;</code>
+       */
       public Builder setFixed32(
           int index, int value) {
         ensureFixed32IsMutable();
@@ -3181,12 +4402,18 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated fixed32 fixed32 = 9;</code>
+       */
       public Builder addFixed32(int value) {
         ensureFixed32IsMutable();
         fixed32_.add(value);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated fixed32 fixed32 = 9;</code>
+       */
       public Builder addAllFixed32(
           java.lang.Iterable<? extends java.lang.Integer> values) {
         ensureFixed32IsMutable();
@@ -3194,31 +4421,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated fixed32 fixed32 = 9;</code>
+       */
       public Builder clearFixed32() {
-        fixed32_ = java.util.Collections.emptyList();;
+        fixed32_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000100);
         onChanged();
         return this;
       }
-      
+
       // repeated fixed64 fixed64 = 10;
-      private java.util.List<java.lang.Long> fixed64_ = java.util.Collections.emptyList();;
+      private java.util.List<java.lang.Long> fixed64_ = java.util.Collections.emptyList();
       private void ensureFixed64IsMutable() {
         if (!((bitField0_ & 0x00000200) == 0x00000200)) {
           fixed64_ = new java.util.ArrayList<java.lang.Long>(fixed64_);
           bitField0_ |= 0x00000200;
          }
       }
+      /**
+       * <code>repeated fixed64 fixed64 = 10;</code>
+       */
       public java.util.List<java.lang.Long>
           getFixed64List() {
         return java.util.Collections.unmodifiableList(fixed64_);
       }
+      /**
+       * <code>repeated fixed64 fixed64 = 10;</code>
+       */
       public int getFixed64Count() {
         return fixed64_.size();
       }
+      /**
+       * <code>repeated fixed64 fixed64 = 10;</code>
+       */
       public long getFixed64(int index) {
         return fixed64_.get(index);
       }
+      /**
+       * <code>repeated fixed64 fixed64 = 10;</code>
+       */
       public Builder setFixed64(
           int index, long value) {
         ensureFixed64IsMutable();
@@ -3226,12 +4468,18 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated fixed64 fixed64 = 10;</code>
+       */
       public Builder addFixed64(long value) {
         ensureFixed64IsMutable();
         fixed64_.add(value);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated fixed64 fixed64 = 10;</code>
+       */
       public Builder addAllFixed64(
           java.lang.Iterable<? extends java.lang.Long> values) {
         ensureFixed64IsMutable();
@@ -3239,31 +4487,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated fixed64 fixed64 = 10;</code>
+       */
       public Builder clearFixed64() {
-        fixed64_ = java.util.Collections.emptyList();;
+        fixed64_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000200);
         onChanged();
         return this;
       }
-      
+
       // repeated sfixed32 sfixed32 = 11;
-      private java.util.List<java.lang.Integer> sfixed32_ = java.util.Collections.emptyList();;
+      private java.util.List<java.lang.Integer> sfixed32_ = java.util.Collections.emptyList();
       private void ensureSfixed32IsMutable() {
         if (!((bitField0_ & 0x00000400) == 0x00000400)) {
           sfixed32_ = new java.util.ArrayList<java.lang.Integer>(sfixed32_);
           bitField0_ |= 0x00000400;
          }
       }
+      /**
+       * <code>repeated sfixed32 sfixed32 = 11;</code>
+       */
       public java.util.List<java.lang.Integer>
           getSfixed32List() {
         return java.util.Collections.unmodifiableList(sfixed32_);
       }
+      /**
+       * <code>repeated sfixed32 sfixed32 = 11;</code>
+       */
       public int getSfixed32Count() {
         return sfixed32_.size();
       }
+      /**
+       * <code>repeated sfixed32 sfixed32 = 11;</code>
+       */
       public int getSfixed32(int index) {
         return sfixed32_.get(index);
       }
+      /**
+       * <code>repeated sfixed32 sfixed32 = 11;</code>
+       */
       public Builder setSfixed32(
           int index, int value) {
         ensureSfixed32IsMutable();
@@ -3271,12 +4534,18 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated sfixed32 sfixed32 = 11;</code>
+       */
       public Builder addSfixed32(int value) {
         ensureSfixed32IsMutable();
         sfixed32_.add(value);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated sfixed32 sfixed32 = 11;</code>
+       */
       public Builder addAllSfixed32(
           java.lang.Iterable<? extends java.lang.Integer> values) {
         ensureSfixed32IsMutable();
@@ -3284,31 +4553,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated sfixed32 sfixed32 = 11;</code>
+       */
       public Builder clearSfixed32() {
-        sfixed32_ = java.util.Collections.emptyList();;
+        sfixed32_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000400);
         onChanged();
         return this;
       }
-      
+
       // repeated sfixed64 sfixed64 = 12;
-      private java.util.List<java.lang.Long> sfixed64_ = java.util.Collections.emptyList();;
+      private java.util.List<java.lang.Long> sfixed64_ = java.util.Collections.emptyList();
       private void ensureSfixed64IsMutable() {
         if (!((bitField0_ & 0x00000800) == 0x00000800)) {
           sfixed64_ = new java.util.ArrayList<java.lang.Long>(sfixed64_);
           bitField0_ |= 0x00000800;
          }
       }
+      /**
+       * <code>repeated sfixed64 sfixed64 = 12;</code>
+       */
       public java.util.List<java.lang.Long>
           getSfixed64List() {
         return java.util.Collections.unmodifiableList(sfixed64_);
       }
+      /**
+       * <code>repeated sfixed64 sfixed64 = 12;</code>
+       */
       public int getSfixed64Count() {
         return sfixed64_.size();
       }
+      /**
+       * <code>repeated sfixed64 sfixed64 = 12;</code>
+       */
       public long getSfixed64(int index) {
         return sfixed64_.get(index);
       }
+      /**
+       * <code>repeated sfixed64 sfixed64 = 12;</code>
+       */
       public Builder setSfixed64(
           int index, long value) {
         ensureSfixed64IsMutable();
@@ -3316,12 +4600,18 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated sfixed64 sfixed64 = 12;</code>
+       */
       public Builder addSfixed64(long value) {
         ensureSfixed64IsMutable();
         sfixed64_.add(value);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated sfixed64 sfixed64 = 12;</code>
+       */
       public Builder addAllSfixed64(
           java.lang.Iterable<? extends java.lang.Long> values) {
         ensureSfixed64IsMutable();
@@ -3329,31 +4619,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated sfixed64 sfixed64 = 12;</code>
+       */
       public Builder clearSfixed64() {
-        sfixed64_ = java.util.Collections.emptyList();;
+        sfixed64_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000800);
         onChanged();
         return this;
       }
-      
+
       // repeated bool bool = 13;
-      private java.util.List<java.lang.Boolean> bool_ = java.util.Collections.emptyList();;
+      private java.util.List<java.lang.Boolean> bool_ = java.util.Collections.emptyList();
       private void ensureBoolIsMutable() {
         if (!((bitField0_ & 0x00001000) == 0x00001000)) {
           bool_ = new java.util.ArrayList<java.lang.Boolean>(bool_);
           bitField0_ |= 0x00001000;
          }
       }
+      /**
+       * <code>repeated bool bool = 13;</code>
+       */
       public java.util.List<java.lang.Boolean>
           getBoolList() {
         return java.util.Collections.unmodifiableList(bool_);
       }
+      /**
+       * <code>repeated bool bool = 13;</code>
+       */
       public int getBoolCount() {
         return bool_.size();
       }
+      /**
+       * <code>repeated bool bool = 13;</code>
+       */
       public boolean getBool(int index) {
         return bool_.get(index);
       }
+      /**
+       * <code>repeated bool bool = 13;</code>
+       */
       public Builder setBool(
           int index, boolean value) {
         ensureBoolIsMutable();
@@ -3361,12 +4666,18 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated bool bool = 13;</code>
+       */
       public Builder addBool(boolean value) {
         ensureBoolIsMutable();
         bool_.add(value);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated bool bool = 13;</code>
+       */
       public Builder addAllBool(
           java.lang.Iterable<? extends java.lang.Boolean> values) {
         ensureBoolIsMutable();
@@ -3374,13 +4685,16 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated bool bool = 13;</code>
+       */
       public Builder clearBool() {
-        bool_ = java.util.Collections.emptyList();;
+        bool_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00001000);
         onChanged();
         return this;
       }
-      
+
       // repeated string string = 14;
       private com.google.protobuf.LazyStringList string_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureStringIsMutable() {
@@ -3389,18 +4703,37 @@ public final class TestProtobuf {
           bitField0_ |= 0x00002000;
          }
       }
-      public java.util.List<String>
+      /**
+       * <code>repeated string string = 14;</code>
+       */
+      public java.util.List<java.lang.String>
           getStringList() {
         return java.util.Collections.unmodifiableList(string_);
       }
+      /**
+       * <code>repeated string string = 14;</code>
+       */
       public int getStringCount() {
         return string_.size();
       }
-      public String getString(int index) {
+      /**
+       * <code>repeated string string = 14;</code>
+       */
+      public java.lang.String getString(int index) {
         return string_.get(index);
       }
+      /**
+       * <code>repeated string string = 14;</code>
+       */
+      public com.google.protobuf.ByteString
+          getStringBytes(int index) {
+        return string_.getByteString(index);
+      }
+      /**
+       * <code>repeated string string = 14;</code>
+       */
       public Builder setString(
-          int index, String value) {
+          int index, java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -3409,7 +4742,11 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
-      public Builder addString(String value) {
+      /**
+       * <code>repeated string string = 14;</code>
+       */
+      public Builder addString(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -3418,43 +4755,69 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated string string = 14;</code>
+       */
       public Builder addAllString(
-          java.lang.Iterable<String> values) {
+          java.lang.Iterable<java.lang.String> values) {
         ensureStringIsMutable();
         super.addAll(values, string_);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated string string = 14;</code>
+       */
       public Builder clearString() {
         string_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00002000);
         onChanged();
         return this;
       }
-      void addString(com.google.protobuf.ByteString value) {
-        ensureStringIsMutable();
+      /**
+       * <code>repeated string string = 14;</code>
+       */
+      public Builder addStringBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureStringIsMutable();
         string_.add(value);
         onChanged();
+        return this;
       }
-      
+
       // repeated bytes bytes = 15;
-      private java.util.List<com.google.protobuf.ByteString> bytes_ = java.util.Collections.emptyList();;
+      private java.util.List<com.google.protobuf.ByteString> bytes_ = java.util.Collections.emptyList();
       private void ensureBytesIsMutable() {
         if (!((bitField0_ & 0x00004000) == 0x00004000)) {
           bytes_ = new java.util.ArrayList<com.google.protobuf.ByteString>(bytes_);
           bitField0_ |= 0x00004000;
          }
       }
+      /**
+       * <code>repeated bytes bytes = 15;</code>
+       */
       public java.util.List<com.google.protobuf.ByteString>
           getBytesList() {
         return java.util.Collections.unmodifiableList(bytes_);
       }
+      /**
+       * <code>repeated bytes bytes = 15;</code>
+       */
       public int getBytesCount() {
         return bytes_.size();
       }
+      /**
+       * <code>repeated bytes bytes = 15;</code>
+       */
       public com.google.protobuf.ByteString getBytes(int index) {
         return bytes_.get(index);
       }
+      /**
+       * <code>repeated bytes bytes = 15;</code>
+       */
       public Builder setBytes(
           int index, com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -3465,6 +4828,9 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated bytes bytes = 15;</code>
+       */
       public Builder addBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
@@ -3474,6 +4840,9 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated bytes bytes = 15;</code>
+       */
       public Builder addAllBytes(
           java.lang.Iterable<? extends com.google.protobuf.ByteString> values) {
         ensureBytesIsMutable();
@@ -3481,13 +4850,16 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated bytes bytes = 15;</code>
+       */
       public Builder clearBytes() {
-        bytes_ = java.util.Collections.emptyList();;
+        bytes_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00004000);
         onChanged();
         return this;
       }
-      
+
       // repeated .com.hubspot.jackson.test.util.Enum enum = 16;
       private java.util.List<com.hubspot.jackson.test.util.TestProtobuf.Enum> enum_ =
         java.util.Collections.emptyList();
@@ -3497,15 +4869,27 @@ public final class TestProtobuf {
           bitField0_ |= 0x00008000;
         }
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public java.util.List<com.hubspot.jackson.test.util.TestProtobuf.Enum> getEnumList() {
         return java.util.Collections.unmodifiableList(enum_);
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public int getEnumCount() {
         return enum_.size();
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public com.hubspot.jackson.test.util.TestProtobuf.Enum getEnum(int index) {
         return enum_.get(index);
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public Builder setEnum(
           int index, com.hubspot.jackson.test.util.TestProtobuf.Enum value) {
         if (value == null) {
@@ -3516,6 +4900,9 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public Builder addEnum(com.hubspot.jackson.test.util.TestProtobuf.Enum value) {
         if (value == null) {
           throw new NullPointerException();
@@ -3525,6 +4912,9 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public Builder addAllEnum(
           java.lang.Iterable<? extends com.hubspot.jackson.test.util.TestProtobuf.Enum> values) {
         ensureEnumIsMutable();
@@ -3532,13 +4922,16 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public Builder clearEnum() {
         enum_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00008000);
         onChanged();
         return this;
       }
-      
+
       // repeated .com.hubspot.jackson.test.util.Nested nested = 17;
       private java.util.List<com.hubspot.jackson.test.util.TestProtobuf.Nested> nested_ =
         java.util.Collections.emptyList();
@@ -3548,10 +4941,13 @@ public final class TestProtobuf {
           bitField0_ |= 0x00010000;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           com.hubspot.jackson.test.util.TestProtobuf.Nested, com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder, com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder> nestedBuilder_;
-      
+
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public java.util.List<com.hubspot.jackson.test.util.TestProtobuf.Nested> getNestedList() {
         if (nestedBuilder_ == null) {
           return java.util.Collections.unmodifiableList(nested_);
@@ -3559,6 +4955,9 @@ public final class TestProtobuf {
           return nestedBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public int getNestedCount() {
         if (nestedBuilder_ == null) {
           return nested_.size();
@@ -3566,6 +4965,9 @@ public final class TestProtobuf {
           return nestedBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public com.hubspot.jackson.test.util.TestProtobuf.Nested getNested(int index) {
         if (nestedBuilder_ == null) {
           return nested_.get(index);
@@ -3573,6 +4975,9 @@ public final class TestProtobuf {
           return nestedBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public Builder setNested(
           int index, com.hubspot.jackson.test.util.TestProtobuf.Nested value) {
         if (nestedBuilder_ == null) {
@@ -3587,6 +4992,9 @@ public final class TestProtobuf {
         }
         return this;
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public Builder setNested(
           int index, com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder builderForValue) {
         if (nestedBuilder_ == null) {
@@ -3598,6 +5006,9 @@ public final class TestProtobuf {
         }
         return this;
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public Builder addNested(com.hubspot.jackson.test.util.TestProtobuf.Nested value) {
         if (nestedBuilder_ == null) {
           if (value == null) {
@@ -3611,6 +5022,9 @@ public final class TestProtobuf {
         }
         return this;
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public Builder addNested(
           int index, com.hubspot.jackson.test.util.TestProtobuf.Nested value) {
         if (nestedBuilder_ == null) {
@@ -3625,6 +5039,9 @@ public final class TestProtobuf {
         }
         return this;
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public Builder addNested(
           com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder builderForValue) {
         if (nestedBuilder_ == null) {
@@ -3636,6 +5053,9 @@ public final class TestProtobuf {
         }
         return this;
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public Builder addNested(
           int index, com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder builderForValue) {
         if (nestedBuilder_ == null) {
@@ -3647,6 +5067,9 @@ public final class TestProtobuf {
         }
         return this;
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public Builder addAllNested(
           java.lang.Iterable<? extends com.hubspot.jackson.test.util.TestProtobuf.Nested> values) {
         if (nestedBuilder_ == null) {
@@ -3658,6 +5081,9 @@ public final class TestProtobuf {
         }
         return this;
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public Builder clearNested() {
         if (nestedBuilder_ == null) {
           nested_ = java.util.Collections.emptyList();
@@ -3668,6 +5094,9 @@ public final class TestProtobuf {
         }
         return this;
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public Builder removeNested(int index) {
         if (nestedBuilder_ == null) {
           ensureNestedIsMutable();
@@ -3678,10 +5107,16 @@ public final class TestProtobuf {
         }
         return this;
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder getNestedBuilder(
           int index) {
         return getNestedFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder getNestedOrBuilder(
           int index) {
         if (nestedBuilder_ == null) {
@@ -3689,6 +5124,9 @@ public final class TestProtobuf {
           return nestedBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public java.util.List<? extends com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder> 
            getNestedOrBuilderList() {
         if (nestedBuilder_ != null) {
@@ -3697,15 +5135,24 @@ public final class TestProtobuf {
           return java.util.Collections.unmodifiableList(nested_);
         }
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder addNestedBuilder() {
         return getNestedFieldBuilder().addBuilder(
             com.hubspot.jackson.test.util.TestProtobuf.Nested.getDefaultInstance());
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder addNestedBuilder(
           int index) {
         return getNestedFieldBuilder().addBuilder(
             index, com.hubspot.jackson.test.util.TestProtobuf.Nested.getDefaultInstance());
       }
+      /**
+       * <code>repeated .com.hubspot.jackson.test.util.Nested nested = 17;</code>
+       */
       public java.util.List<com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder> 
            getNestedBuilderList() {
         return getNestedFieldBuilder().getBuilderList();
@@ -3724,86 +5171,175 @@ public final class TestProtobuf {
         }
         return nestedBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:com.hubspot.jackson.test.util.RepeatedFields)
     }
-    
+
     static {
       defaultInstance = new RepeatedFields(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:com.hubspot.jackson.test.util.RepeatedFields)
   }
-  
+
   public interface PropertyNamingOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // optional string string_attribute = 1;
+    /**
+     * <code>optional string string_attribute = 1;</code>
+     */
     boolean hasStringAttribute();
-    String getStringAttribute();
+    /**
+     * <code>optional string string_attribute = 1;</code>
+     */
+    java.lang.String getStringAttribute();
+    /**
+     * <code>optional string string_attribute = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getStringAttributeBytes();
   }
+  /**
+   * Protobuf type {@code com.hubspot.jackson.test.util.PropertyNaming}
+   */
   public static final class PropertyNaming extends
       com.google.protobuf.GeneratedMessage
       implements PropertyNamingOrBuilder {
     // Use PropertyNaming.newBuilder() to construct.
-    private PropertyNaming(Builder builder) {
+    private PropertyNaming(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private PropertyNaming(boolean noInit) {}
-    
+    private PropertyNaming(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final PropertyNaming defaultInstance;
     public static PropertyNaming getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public PropertyNaming getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private PropertyNaming(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              stringAttribute_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_PropertyNaming_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_PropertyNaming_fieldAccessorTable;
+      return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_PropertyNaming_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming.class, com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<PropertyNaming> PARSER =
+        new com.google.protobuf.AbstractParser<PropertyNaming>() {
+      public PropertyNaming parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new PropertyNaming(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<PropertyNaming> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // optional string string_attribute = 1;
     public static final int STRING_ATTRIBUTE_FIELD_NUMBER = 1;
     private java.lang.Object stringAttribute_;
+    /**
+     * <code>optional string string_attribute = 1;</code>
+     */
     public boolean hasStringAttribute() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public String getStringAttribute() {
+    /**
+     * <code>optional string string_attribute = 1;</code>
+     */
+    public java.lang.String getStringAttribute() {
       java.lang.Object ref = stringAttribute_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           stringAttribute_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getStringAttributeBytes() {
+    /**
+     * <code>optional string string_attribute = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getStringAttributeBytes() {
       java.lang.Object ref = stringAttribute_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         stringAttribute_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     private void initFields() {
       stringAttribute_ = "";
     }
@@ -3811,11 +5347,11 @@ public final class TestProtobuf {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -3824,12 +5360,12 @@ public final class TestProtobuf {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -3839,94 +5375,83 @@ public final class TestProtobuf {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code com.hubspot.jackson.test.util.PropertyNaming}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements com.hubspot.jackson.test.util.TestProtobuf.PropertyNamingOrBuilder {
@@ -3934,18 +5459,21 @@ public final class TestProtobuf {
           getDescriptor() {
         return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_PropertyNaming_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_PropertyNaming_fieldAccessorTable;
+        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_PropertyNaming_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming.class, com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming.Builder.class);
       }
-      
+
       // Construct using com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -3956,27 +5484,27 @@ public final class TestProtobuf {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         stringAttribute_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming.getDescriptor();
+        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_PropertyNaming_descriptor;
       }
-      
+
       public com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming getDefaultInstanceForType() {
         return com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming.getDefaultInstance();
       }
-      
+
       public com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming build() {
         com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming result = buildPartial();
         if (!result.isInitialized()) {
@@ -3984,17 +5512,7 @@ public final class TestProtobuf {
         }
         return result;
       }
-      
-      private com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming buildPartial() {
         com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming result = new com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming(this);
         int from_bitField0_ = bitField0_;
@@ -4007,7 +5525,7 @@ public final class TestProtobuf {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming) {
           return mergeFrom((com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming)other);
@@ -4016,70 +5534,84 @@ public final class TestProtobuf {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming other) {
         if (other == com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming.getDefaultInstance()) return this;
         if (other.hasStringAttribute()) {
-          setStringAttribute(other.getStringAttribute());
+          bitField0_ |= 0x00000001;
+          stringAttribute_ = other.stringAttribute_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              stringAttribute_ = input.readBytes();
-              break;
-            }
+        com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // optional string string_attribute = 1;
       private java.lang.Object stringAttribute_ = "";
+      /**
+       * <code>optional string string_attribute = 1;</code>
+       */
       public boolean hasStringAttribute() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getStringAttribute() {
+      /**
+       * <code>optional string string_attribute = 1;</code>
+       */
+      public java.lang.String getStringAttribute() {
         java.lang.Object ref = stringAttribute_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           stringAttribute_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setStringAttribute(String value) {
+      /**
+       * <code>optional string string_attribute = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getStringAttributeBytes() {
+        java.lang.Object ref = stringAttribute_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          stringAttribute_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string string_attribute = 1;</code>
+       */
+      public Builder setStringAttribute(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -4088,808 +5620,256 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string string_attribute = 1;</code>
+       */
       public Builder clearStringAttribute() {
         bitField0_ = (bitField0_ & ~0x00000001);
         stringAttribute_ = getDefaultInstance().getStringAttribute();
         onChanged();
         return this;
       }
-      void setStringAttribute(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000001;
+      /**
+       * <code>optional string string_attribute = 1;</code>
+       */
+      public Builder setStringAttributeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
         stringAttribute_ = value;
         onChanged();
+        return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:com.hubspot.jackson.test.util.PropertyNaming)
     }
-    
+
     static {
       defaultInstance = new PropertyNaming(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:com.hubspot.jackson.test.util.PropertyNaming)
   }
-  
+
   public interface NestedOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // optional double double = 1;
+    /**
+     * <code>optional double double = 1;</code>
+     */
     boolean hasDouble();
+    /**
+     * <code>optional double double = 1;</code>
+     */
     double getDouble();
-    
+
     // optional float float = 2;
+    /**
+     * <code>optional float float = 2;</code>
+     */
     boolean hasFloat();
+    /**
+     * <code>optional float float = 2;</code>
+     */
     float getFloat();
-    
+
     // optional int32 int32 = 3;
+    /**
+     * <code>optional int32 int32 = 3;</code>
+     */
     boolean hasInt32();
+    /**
+     * <code>optional int32 int32 = 3;</code>
+     */
     int getInt32();
-    
+
     // optional int64 int64 = 4;
+    /**
+     * <code>optional int64 int64 = 4;</code>
+     */
     boolean hasInt64();
+    /**
+     * <code>optional int64 int64 = 4;</code>
+     */
     long getInt64();
-    
+
     // optional uint32 uint32 = 5;
+    /**
+     * <code>optional uint32 uint32 = 5;</code>
+     */
     boolean hasUint32();
+    /**
+     * <code>optional uint32 uint32 = 5;</code>
+     */
     int getUint32();
-    
+
     // optional uint64 uint64 = 6;
+    /**
+     * <code>optional uint64 uint64 = 6;</code>
+     */
     boolean hasUint64();
+    /**
+     * <code>optional uint64 uint64 = 6;</code>
+     */
     long getUint64();
-    
+
     // optional sint32 sint32 = 7;
+    /**
+     * <code>optional sint32 sint32 = 7;</code>
+     */
     boolean hasSint32();
+    /**
+     * <code>optional sint32 sint32 = 7;</code>
+     */
     int getSint32();
-    
+
     // optional sint64 sint64 = 8;
+    /**
+     * <code>optional sint64 sint64 = 8;</code>
+     */
     boolean hasSint64();
+    /**
+     * <code>optional sint64 sint64 = 8;</code>
+     */
     long getSint64();
-    
+
     // optional fixed32 fixed32 = 9;
+    /**
+     * <code>optional fixed32 fixed32 = 9;</code>
+     */
     boolean hasFixed32();
+    /**
+     * <code>optional fixed32 fixed32 = 9;</code>
+     */
     int getFixed32();
-    
+
     // optional fixed64 fixed64 = 10;
+    /**
+     * <code>optional fixed64 fixed64 = 10;</code>
+     */
     boolean hasFixed64();
+    /**
+     * <code>optional fixed64 fixed64 = 10;</code>
+     */
     long getFixed64();
-    
+
     // optional sfixed32 sfixed32 = 11;
+    /**
+     * <code>optional sfixed32 sfixed32 = 11;</code>
+     */
     boolean hasSfixed32();
+    /**
+     * <code>optional sfixed32 sfixed32 = 11;</code>
+     */
     int getSfixed32();
-    
+
     // optional sfixed64 sfixed64 = 12;
+    /**
+     * <code>optional sfixed64 sfixed64 = 12;</code>
+     */
     boolean hasSfixed64();
+    /**
+     * <code>optional sfixed64 sfixed64 = 12;</code>
+     */
     long getSfixed64();
-    
+
     // optional bool bool = 13;
+    /**
+     * <code>optional bool bool = 13;</code>
+     */
     boolean hasBool();
+    /**
+     * <code>optional bool bool = 13;</code>
+     */
     boolean getBool();
-    
+
     // optional string string = 14;
+    /**
+     * <code>optional string string = 14;</code>
+     */
     boolean hasString();
-    String getString();
-    
+    /**
+     * <code>optional string string = 14;</code>
+     */
+    java.lang.String getString();
+    /**
+     * <code>optional string string = 14;</code>
+     */
+    com.google.protobuf.ByteString
+        getStringBytes();
+
     // optional bytes bytes = 15;
+    /**
+     * <code>optional bytes bytes = 15;</code>
+     */
     boolean hasBytes();
+    /**
+     * <code>optional bytes bytes = 15;</code>
+     */
     com.google.protobuf.ByteString getBytes();
-    
+
     // optional .com.hubspot.jackson.test.util.Enum enum = 16;
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
     boolean hasEnum();
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
     com.hubspot.jackson.test.util.TestProtobuf.Enum getEnum();
   }
+  /**
+   * Protobuf type {@code com.hubspot.jackson.test.util.Nested}
+   */
   public static final class Nested extends
       com.google.protobuf.GeneratedMessage
       implements NestedOrBuilder {
     // Use Nested.newBuilder() to construct.
-    private Nested(Builder builder) {
+    private Nested(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private Nested(boolean noInit) {}
-    
+    private Nested(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final Nested defaultInstance;
     public static Nested getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public Nested getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_Nested_descriptor;
-    }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_Nested_fieldAccessorTable;
-    }
-    
-    private int bitField0_;
-    // optional double double = 1;
-    public static final int DOUBLE_FIELD_NUMBER = 1;
-    private double double_;
-    public boolean hasDouble() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    public double getDouble() {
-      return double_;
-    }
-    
-    // optional float float = 2;
-    public static final int FLOAT_FIELD_NUMBER = 2;
-    private float float_;
-    public boolean hasFloat() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    public float getFloat() {
-      return float_;
-    }
-    
-    // optional int32 int32 = 3;
-    public static final int INT32_FIELD_NUMBER = 3;
-    private int int32_;
-    public boolean hasInt32() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    public int getInt32() {
-      return int32_;
-    }
-    
-    // optional int64 int64 = 4;
-    public static final int INT64_FIELD_NUMBER = 4;
-    private long int64_;
-    public boolean hasInt64() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    public long getInt64() {
-      return int64_;
-    }
-    
-    // optional uint32 uint32 = 5;
-    public static final int UINT32_FIELD_NUMBER = 5;
-    private int uint32_;
-    public boolean hasUint32() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    public int getUint32() {
-      return uint32_;
-    }
-    
-    // optional uint64 uint64 = 6;
-    public static final int UINT64_FIELD_NUMBER = 6;
-    private long uint64_;
-    public boolean hasUint64() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    public long getUint64() {
-      return uint64_;
-    }
-    
-    // optional sint32 sint32 = 7;
-    public static final int SINT32_FIELD_NUMBER = 7;
-    private int sint32_;
-    public boolean hasSint32() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    public int getSint32() {
-      return sint32_;
-    }
-    
-    // optional sint64 sint64 = 8;
-    public static final int SINT64_FIELD_NUMBER = 8;
-    private long sint64_;
-    public boolean hasSint64() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
-    }
-    public long getSint64() {
-      return sint64_;
-    }
-    
-    // optional fixed32 fixed32 = 9;
-    public static final int FIXED32_FIELD_NUMBER = 9;
-    private int fixed32_;
-    public boolean hasFixed32() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
-    }
-    public int getFixed32() {
-      return fixed32_;
-    }
-    
-    // optional fixed64 fixed64 = 10;
-    public static final int FIXED64_FIELD_NUMBER = 10;
-    private long fixed64_;
-    public boolean hasFixed64() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
-    }
-    public long getFixed64() {
-      return fixed64_;
-    }
-    
-    // optional sfixed32 sfixed32 = 11;
-    public static final int SFIXED32_FIELD_NUMBER = 11;
-    private int sfixed32_;
-    public boolean hasSfixed32() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
-    }
-    public int getSfixed32() {
-      return sfixed32_;
-    }
-    
-    // optional sfixed64 sfixed64 = 12;
-    public static final int SFIXED64_FIELD_NUMBER = 12;
-    private long sfixed64_;
-    public boolean hasSfixed64() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
-    }
-    public long getSfixed64() {
-      return sfixed64_;
-    }
-    
-    // optional bool bool = 13;
-    public static final int BOOL_FIELD_NUMBER = 13;
-    private boolean bool_;
-    public boolean hasBool() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
-    }
-    public boolean getBool() {
-      return bool_;
-    }
-    
-    // optional string string = 14;
-    public static final int STRING_FIELD_NUMBER = 14;
-    private java.lang.Object string_;
-    public boolean hasString() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
-    }
-    public String getString() {
-      java.lang.Object ref = string_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          string_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getStringBytes() {
-      java.lang.Object ref = string_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        string_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    // optional bytes bytes = 15;
-    public static final int BYTES_FIELD_NUMBER = 15;
-    private com.google.protobuf.ByteString bytes_;
-    public boolean hasBytes() {
-      return ((bitField0_ & 0x00004000) == 0x00004000);
-    }
-    public com.google.protobuf.ByteString getBytes() {
-      return bytes_;
-    }
-    
-    // optional .com.hubspot.jackson.test.util.Enum enum = 16;
-    public static final int ENUM_FIELD_NUMBER = 16;
-    private com.hubspot.jackson.test.util.TestProtobuf.Enum enum_;
-    public boolean hasEnum() {
-      return ((bitField0_ & 0x00008000) == 0x00008000);
-    }
-    public com.hubspot.jackson.test.util.TestProtobuf.Enum getEnum() {
-      return enum_;
-    }
-    
-    private void initFields() {
-      double_ = 0D;
-      float_ = 0F;
-      int32_ = 0;
-      int64_ = 0L;
-      uint32_ = 0;
-      uint64_ = 0L;
-      sint32_ = 0;
-      sint64_ = 0L;
-      fixed32_ = 0;
-      fixed64_ = 0L;
-      sfixed32_ = 0;
-      sfixed64_ = 0L;
-      bool_ = false;
-      string_ = "";
-      bytes_ = com.google.protobuf.ByteString.EMPTY;
-      enum_ = com.hubspot.jackson.test.util.TestProtobuf.Enum.ONE;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-      
-      memoizedIsInitialized = 1;
-      return true;
-    }
-    
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeDouble(1, double_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeFloat(2, float_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, int32_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt64(4, int64_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeUInt32(5, uint32_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeUInt64(6, uint64_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeSInt32(7, sint32_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeSInt64(8, sint64_);
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeFixed32(9, fixed32_);
-      }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeFixed64(10, fixed64_);
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeSFixed32(11, sfixed32_);
-      }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        output.writeSFixed64(12, sfixed64_);
-      }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        output.writeBool(13, bool_);
-      }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
-        output.writeBytes(14, getStringBytes());
-      }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
-        output.writeBytes(15, bytes_);
-      }
-      if (((bitField0_ & 0x00008000) == 0x00008000)) {
-        output.writeEnum(16, enum_.getNumber());
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeDoubleSize(1, double_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(2, float_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, int32_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(4, int64_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(5, uint32_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(6, uint64_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeSInt32Size(7, sint32_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeSInt64Size(8, sint64_);
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFixed32Size(9, fixed32_);
-      }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFixed64Size(10, fixed64_);
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeSFixed32Size(11, sfixed32_);
-      }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeSFixed64Size(12, sfixed64_);
-      }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(13, bool_);
-      }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(14, getStringBytes());
-      }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(15, bytes_);
-      }
-      if (((bitField0_ & 0x00008000) == 0x00008000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(16, enum_.getNumber());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    private static final long serialVersionUID = 0L;
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
     }
-    
-    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(
+    private Nested(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.hubspot.jackson.test.util.TestProtobuf.Nested prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-    
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_Nested_descriptor;
-      }
-      
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_Nested_fieldAccessorTable;
-      }
-      
-      // Construct using com.hubspot.jackson.test.util.TestProtobuf.Nested.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-      
-      private Builder(BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-      
-      public Builder clear() {
-        super.clear();
-        double_ = 0D;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        float_ = 0F;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        int32_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        int64_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        uint32_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        uint64_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        sint32_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000040);
-        sint64_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000080);
-        fixed32_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000100);
-        fixed64_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000200);
-        sfixed32_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000400);
-        sfixed64_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000800);
-        bool_ = false;
-        bitField0_ = (bitField0_ & ~0x00001000);
-        string_ = "";
-        bitField0_ = (bitField0_ & ~0x00002000);
-        bytes_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00004000);
-        enum_ = com.hubspot.jackson.test.util.TestProtobuf.Enum.ONE;
-        bitField0_ = (bitField0_ & ~0x00008000);
-        return this;
-      }
-      
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.hubspot.jackson.test.util.TestProtobuf.Nested.getDescriptor();
-      }
-      
-      public com.hubspot.jackson.test.util.TestProtobuf.Nested getDefaultInstanceForType() {
-        return com.hubspot.jackson.test.util.TestProtobuf.Nested.getDefaultInstance();
-      }
-      
-      public com.hubspot.jackson.test.util.TestProtobuf.Nested build() {
-        com.hubspot.jackson.test.util.TestProtobuf.Nested result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-      
-      private com.hubspot.jackson.test.util.TestProtobuf.Nested buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        com.hubspot.jackson.test.util.TestProtobuf.Nested result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
-      public com.hubspot.jackson.test.util.TestProtobuf.Nested buildPartial() {
-        com.hubspot.jackson.test.util.TestProtobuf.Nested result = new com.hubspot.jackson.test.util.TestProtobuf.Nested(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.double_ = double_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.float_ = float_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.int32_ = int32_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.int64_ = int64_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.uint32_ = uint32_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.uint64_ = uint64_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        result.sint32_ = sint32_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000080;
-        }
-        result.sint64_ = sint64_;
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000100;
-        }
-        result.fixed32_ = fixed32_;
-        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
-          to_bitField0_ |= 0x00000200;
-        }
-        result.fixed64_ = fixed64_;
-        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
-          to_bitField0_ |= 0x00000400;
-        }
-        result.sfixed32_ = sfixed32_;
-        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
-          to_bitField0_ |= 0x00000800;
-        }
-        result.sfixed64_ = sfixed64_;
-        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
-          to_bitField0_ |= 0x00001000;
-        }
-        result.bool_ = bool_;
-        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
-          to_bitField0_ |= 0x00002000;
-        }
-        result.string_ = string_;
-        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
-          to_bitField0_ |= 0x00004000;
-        }
-        result.bytes_ = bytes_;
-        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
-          to_bitField0_ |= 0x00008000;
-        }
-        result.enum_ = enum_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-      
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.hubspot.jackson.test.util.TestProtobuf.Nested) {
-          return mergeFrom((com.hubspot.jackson.test.util.TestProtobuf.Nested)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(com.hubspot.jackson.test.util.TestProtobuf.Nested other) {
-        if (other == com.hubspot.jackson.test.util.TestProtobuf.Nested.getDefaultInstance()) return this;
-        if (other.hasDouble()) {
-          setDouble(other.getDouble());
-        }
-        if (other.hasFloat()) {
-          setFloat(other.getFloat());
-        }
-        if (other.hasInt32()) {
-          setInt32(other.getInt32());
-        }
-        if (other.hasInt64()) {
-          setInt64(other.getInt64());
-        }
-        if (other.hasUint32()) {
-          setUint32(other.getUint32());
-        }
-        if (other.hasUint64()) {
-          setUint64(other.getUint64());
-        }
-        if (other.hasSint32()) {
-          setSint32(other.getSint32());
-        }
-        if (other.hasSint64()) {
-          setSint64(other.getSint64());
-        }
-        if (other.hasFixed32()) {
-          setFixed32(other.getFixed32());
-        }
-        if (other.hasFixed64()) {
-          setFixed64(other.getFixed64());
-        }
-        if (other.hasSfixed32()) {
-          setSfixed32(other.getSfixed32());
-        }
-        if (other.hasSfixed64()) {
-          setSfixed64(other.getSfixed64());
-        }
-        if (other.hasBool()) {
-          setBool(other.getBool());
-        }
-        if (other.hasString()) {
-          setString(other.getString());
-        }
-        if (other.hasBytes()) {
-          setBytes(other.getBytes());
-        }
-        if (other.hasEnum()) {
-          setEnum(other.getEnum());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      public final boolean isInitialized() {
-        return true;
-      }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
           int tag = input.readTag();
           switch (tag) {
             case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
+              done = true;
+              break;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
+                done = true;
               }
               break;
             }
@@ -4981,299 +5961,1283 @@ public final class TestProtobuf {
             }
           }
         }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
       }
-      
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_Nested_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_Nested_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.hubspot.jackson.test.util.TestProtobuf.Nested.class, com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<Nested> PARSER =
+        new com.google.protobuf.AbstractParser<Nested>() {
+      public Nested parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Nested(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Nested> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // optional double double = 1;
+    public static final int DOUBLE_FIELD_NUMBER = 1;
+    private double double_;
+    /**
+     * <code>optional double double = 1;</code>
+     */
+    public boolean hasDouble() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional double double = 1;</code>
+     */
+    public double getDouble() {
+      return double_;
+    }
+
+    // optional float float = 2;
+    public static final int FLOAT_FIELD_NUMBER = 2;
+    private float float_;
+    /**
+     * <code>optional float float = 2;</code>
+     */
+    public boolean hasFloat() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional float float = 2;</code>
+     */
+    public float getFloat() {
+      return float_;
+    }
+
+    // optional int32 int32 = 3;
+    public static final int INT32_FIELD_NUMBER = 3;
+    private int int32_;
+    /**
+     * <code>optional int32 int32 = 3;</code>
+     */
+    public boolean hasInt32() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional int32 int32 = 3;</code>
+     */
+    public int getInt32() {
+      return int32_;
+    }
+
+    // optional int64 int64 = 4;
+    public static final int INT64_FIELD_NUMBER = 4;
+    private long int64_;
+    /**
+     * <code>optional int64 int64 = 4;</code>
+     */
+    public boolean hasInt64() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional int64 int64 = 4;</code>
+     */
+    public long getInt64() {
+      return int64_;
+    }
+
+    // optional uint32 uint32 = 5;
+    public static final int UINT32_FIELD_NUMBER = 5;
+    private int uint32_;
+    /**
+     * <code>optional uint32 uint32 = 5;</code>
+     */
+    public boolean hasUint32() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional uint32 uint32 = 5;</code>
+     */
+    public int getUint32() {
+      return uint32_;
+    }
+
+    // optional uint64 uint64 = 6;
+    public static final int UINT64_FIELD_NUMBER = 6;
+    private long uint64_;
+    /**
+     * <code>optional uint64 uint64 = 6;</code>
+     */
+    public boolean hasUint64() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional uint64 uint64 = 6;</code>
+     */
+    public long getUint64() {
+      return uint64_;
+    }
+
+    // optional sint32 sint32 = 7;
+    public static final int SINT32_FIELD_NUMBER = 7;
+    private int sint32_;
+    /**
+     * <code>optional sint32 sint32 = 7;</code>
+     */
+    public boolean hasSint32() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional sint32 sint32 = 7;</code>
+     */
+    public int getSint32() {
+      return sint32_;
+    }
+
+    // optional sint64 sint64 = 8;
+    public static final int SINT64_FIELD_NUMBER = 8;
+    private long sint64_;
+    /**
+     * <code>optional sint64 sint64 = 8;</code>
+     */
+    public boolean hasSint64() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional sint64 sint64 = 8;</code>
+     */
+    public long getSint64() {
+      return sint64_;
+    }
+
+    // optional fixed32 fixed32 = 9;
+    public static final int FIXED32_FIELD_NUMBER = 9;
+    private int fixed32_;
+    /**
+     * <code>optional fixed32 fixed32 = 9;</code>
+     */
+    public boolean hasFixed32() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional fixed32 fixed32 = 9;</code>
+     */
+    public int getFixed32() {
+      return fixed32_;
+    }
+
+    // optional fixed64 fixed64 = 10;
+    public static final int FIXED64_FIELD_NUMBER = 10;
+    private long fixed64_;
+    /**
+     * <code>optional fixed64 fixed64 = 10;</code>
+     */
+    public boolean hasFixed64() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional fixed64 fixed64 = 10;</code>
+     */
+    public long getFixed64() {
+      return fixed64_;
+    }
+
+    // optional sfixed32 sfixed32 = 11;
+    public static final int SFIXED32_FIELD_NUMBER = 11;
+    private int sfixed32_;
+    /**
+     * <code>optional sfixed32 sfixed32 = 11;</code>
+     */
+    public boolean hasSfixed32() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>optional sfixed32 sfixed32 = 11;</code>
+     */
+    public int getSfixed32() {
+      return sfixed32_;
+    }
+
+    // optional sfixed64 sfixed64 = 12;
+    public static final int SFIXED64_FIELD_NUMBER = 12;
+    private long sfixed64_;
+    /**
+     * <code>optional sfixed64 sfixed64 = 12;</code>
+     */
+    public boolean hasSfixed64() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>optional sfixed64 sfixed64 = 12;</code>
+     */
+    public long getSfixed64() {
+      return sfixed64_;
+    }
+
+    // optional bool bool = 13;
+    public static final int BOOL_FIELD_NUMBER = 13;
+    private boolean bool_;
+    /**
+     * <code>optional bool bool = 13;</code>
+     */
+    public boolean hasBool() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>optional bool bool = 13;</code>
+     */
+    public boolean getBool() {
+      return bool_;
+    }
+
+    // optional string string = 14;
+    public static final int STRING_FIELD_NUMBER = 14;
+    private java.lang.Object string_;
+    /**
+     * <code>optional string string = 14;</code>
+     */
+    public boolean hasString() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    /**
+     * <code>optional string string = 14;</code>
+     */
+    public java.lang.String getString() {
+      java.lang.Object ref = string_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          string_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string string = 14;</code>
+     */
+    public com.google.protobuf.ByteString
+        getStringBytes() {
+      java.lang.Object ref = string_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        string_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional bytes bytes = 15;
+    public static final int BYTES_FIELD_NUMBER = 15;
+    private com.google.protobuf.ByteString bytes_;
+    /**
+     * <code>optional bytes bytes = 15;</code>
+     */
+    public boolean hasBytes() {
+      return ((bitField0_ & 0x00004000) == 0x00004000);
+    }
+    /**
+     * <code>optional bytes bytes = 15;</code>
+     */
+    public com.google.protobuf.ByteString getBytes() {
+      return bytes_;
+    }
+
+    // optional .com.hubspot.jackson.test.util.Enum enum = 16;
+    public static final int ENUM_FIELD_NUMBER = 16;
+    private com.hubspot.jackson.test.util.TestProtobuf.Enum enum_;
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
+    public boolean hasEnum() {
+      return ((bitField0_ & 0x00008000) == 0x00008000);
+    }
+    /**
+     * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+     */
+    public com.hubspot.jackson.test.util.TestProtobuf.Enum getEnum() {
+      return enum_;
+    }
+
+    private void initFields() {
+      double_ = 0D;
+      float_ = 0F;
+      int32_ = 0;
+      int64_ = 0L;
+      uint32_ = 0;
+      uint64_ = 0L;
+      sint32_ = 0;
+      sint64_ = 0L;
+      fixed32_ = 0;
+      fixed64_ = 0L;
+      sfixed32_ = 0;
+      sfixed64_ = 0L;
+      bool_ = false;
+      string_ = "";
+      bytes_ = com.google.protobuf.ByteString.EMPTY;
+      enum_ = com.hubspot.jackson.test.util.TestProtobuf.Enum.ONE;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeDouble(1, double_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeFloat(2, float_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, int32_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt64(4, int64_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeUInt32(5, uint32_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeUInt64(6, uint64_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeSInt32(7, sint32_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeSInt64(8, sint64_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeFixed32(9, fixed32_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeFixed64(10, fixed64_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeSFixed32(11, sfixed32_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeSFixed64(12, sfixed64_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeBool(13, bool_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeBytes(14, getStringBytes());
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        output.writeBytes(15, bytes_);
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        output.writeEnum(16, enum_.getNumber());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeDoubleSize(1, double_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(2, float_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, int32_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(4, int64_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(5, uint32_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(6, uint64_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeSInt32Size(7, sint32_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeSInt64Size(8, sint64_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFixed32Size(9, fixed32_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFixed64Size(10, fixed64_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeSFixed32Size(11, sfixed32_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeSFixed64Size(12, sfixed64_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(13, bool_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(14, getStringBytes());
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(15, bytes_);
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(16, enum_.getNumber());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.hubspot.jackson.test.util.TestProtobuf.Nested parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.hubspot.jackson.test.util.TestProtobuf.Nested prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code com.hubspot.jackson.test.util.Nested}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.hubspot.jackson.test.util.TestProtobuf.NestedOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_Nested_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_Nested_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.hubspot.jackson.test.util.TestProtobuf.Nested.class, com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder.class);
+      }
+
+      // Construct using com.hubspot.jackson.test.util.TestProtobuf.Nested.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        double_ = 0D;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        float_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        int32_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        int64_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        uint32_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        uint64_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        sint32_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        sint64_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        fixed32_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        fixed64_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000200);
+        sfixed32_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000400);
+        sfixed64_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000800);
+        bool_ = false;
+        bitField0_ = (bitField0_ & ~0x00001000);
+        string_ = "";
+        bitField0_ = (bitField0_ & ~0x00002000);
+        bytes_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00004000);
+        enum_ = com.hubspot.jackson.test.util.TestProtobuf.Enum.ONE;
+        bitField0_ = (bitField0_ & ~0x00008000);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.hubspot.jackson.test.util.TestProtobuf.internal_static_com_hubspot_jackson_test_util_Nested_descriptor;
+      }
+
+      public com.hubspot.jackson.test.util.TestProtobuf.Nested getDefaultInstanceForType() {
+        return com.hubspot.jackson.test.util.TestProtobuf.Nested.getDefaultInstance();
+      }
+
+      public com.hubspot.jackson.test.util.TestProtobuf.Nested build() {
+        com.hubspot.jackson.test.util.TestProtobuf.Nested result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.hubspot.jackson.test.util.TestProtobuf.Nested buildPartial() {
+        com.hubspot.jackson.test.util.TestProtobuf.Nested result = new com.hubspot.jackson.test.util.TestProtobuf.Nested(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.double_ = double_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.float_ = float_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.int32_ = int32_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.int64_ = int64_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.uint32_ = uint32_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.uint64_ = uint64_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.sint32_ = sint32_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.sint64_ = sint64_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.fixed32_ = fixed32_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.fixed64_ = fixed64_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.sfixed32_ = sfixed32_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.sfixed64_ = sfixed64_;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.bool_ = bool_;
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        result.string_ = string_;
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00004000;
+        }
+        result.bytes_ = bytes_;
+        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
+          to_bitField0_ |= 0x00008000;
+        }
+        result.enum_ = enum_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.hubspot.jackson.test.util.TestProtobuf.Nested) {
+          return mergeFrom((com.hubspot.jackson.test.util.TestProtobuf.Nested)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.hubspot.jackson.test.util.TestProtobuf.Nested other) {
+        if (other == com.hubspot.jackson.test.util.TestProtobuf.Nested.getDefaultInstance()) return this;
+        if (other.hasDouble()) {
+          setDouble(other.getDouble());
+        }
+        if (other.hasFloat()) {
+          setFloat(other.getFloat());
+        }
+        if (other.hasInt32()) {
+          setInt32(other.getInt32());
+        }
+        if (other.hasInt64()) {
+          setInt64(other.getInt64());
+        }
+        if (other.hasUint32()) {
+          setUint32(other.getUint32());
+        }
+        if (other.hasUint64()) {
+          setUint64(other.getUint64());
+        }
+        if (other.hasSint32()) {
+          setSint32(other.getSint32());
+        }
+        if (other.hasSint64()) {
+          setSint64(other.getSint64());
+        }
+        if (other.hasFixed32()) {
+          setFixed32(other.getFixed32());
+        }
+        if (other.hasFixed64()) {
+          setFixed64(other.getFixed64());
+        }
+        if (other.hasSfixed32()) {
+          setSfixed32(other.getSfixed32());
+        }
+        if (other.hasSfixed64()) {
+          setSfixed64(other.getSfixed64());
+        }
+        if (other.hasBool()) {
+          setBool(other.getBool());
+        }
+        if (other.hasString()) {
+          bitField0_ |= 0x00002000;
+          string_ = other.string_;
+          onChanged();
+        }
+        if (other.hasBytes()) {
+          setBytes(other.getBytes());
+        }
+        if (other.hasEnum()) {
+          setEnum(other.getEnum());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.hubspot.jackson.test.util.TestProtobuf.Nested parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.hubspot.jackson.test.util.TestProtobuf.Nested) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
       private int bitField0_;
-      
+
       // optional double double = 1;
       private double double_ ;
+      /**
+       * <code>optional double double = 1;</code>
+       */
       public boolean hasDouble() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>optional double double = 1;</code>
+       */
       public double getDouble() {
         return double_;
       }
+      /**
+       * <code>optional double double = 1;</code>
+       */
       public Builder setDouble(double value) {
         bitField0_ |= 0x00000001;
         double_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional double double = 1;</code>
+       */
       public Builder clearDouble() {
         bitField0_ = (bitField0_ & ~0x00000001);
         double_ = 0D;
         onChanged();
         return this;
       }
-      
+
       // optional float float = 2;
       private float float_ ;
+      /**
+       * <code>optional float float = 2;</code>
+       */
       public boolean hasFloat() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>optional float float = 2;</code>
+       */
       public float getFloat() {
         return float_;
       }
+      /**
+       * <code>optional float float = 2;</code>
+       */
       public Builder setFloat(float value) {
         bitField0_ |= 0x00000002;
         float_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional float float = 2;</code>
+       */
       public Builder clearFloat() {
         bitField0_ = (bitField0_ & ~0x00000002);
         float_ = 0F;
         onChanged();
         return this;
       }
-      
+
       // optional int32 int32 = 3;
       private int int32_ ;
+      /**
+       * <code>optional int32 int32 = 3;</code>
+       */
       public boolean hasInt32() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
+      /**
+       * <code>optional int32 int32 = 3;</code>
+       */
       public int getInt32() {
         return int32_;
       }
+      /**
+       * <code>optional int32 int32 = 3;</code>
+       */
       public Builder setInt32(int value) {
         bitField0_ |= 0x00000004;
         int32_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional int32 int32 = 3;</code>
+       */
       public Builder clearInt32() {
         bitField0_ = (bitField0_ & ~0x00000004);
         int32_ = 0;
         onChanged();
         return this;
       }
-      
+
       // optional int64 int64 = 4;
       private long int64_ ;
+      /**
+       * <code>optional int64 int64 = 4;</code>
+       */
       public boolean hasInt64() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
+      /**
+       * <code>optional int64 int64 = 4;</code>
+       */
       public long getInt64() {
         return int64_;
       }
+      /**
+       * <code>optional int64 int64 = 4;</code>
+       */
       public Builder setInt64(long value) {
         bitField0_ |= 0x00000008;
         int64_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional int64 int64 = 4;</code>
+       */
       public Builder clearInt64() {
         bitField0_ = (bitField0_ & ~0x00000008);
         int64_ = 0L;
         onChanged();
         return this;
       }
-      
+
       // optional uint32 uint32 = 5;
       private int uint32_ ;
+      /**
+       * <code>optional uint32 uint32 = 5;</code>
+       */
       public boolean hasUint32() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
+      /**
+       * <code>optional uint32 uint32 = 5;</code>
+       */
       public int getUint32() {
         return uint32_;
       }
+      /**
+       * <code>optional uint32 uint32 = 5;</code>
+       */
       public Builder setUint32(int value) {
         bitField0_ |= 0x00000010;
         uint32_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional uint32 uint32 = 5;</code>
+       */
       public Builder clearUint32() {
         bitField0_ = (bitField0_ & ~0x00000010);
         uint32_ = 0;
         onChanged();
         return this;
       }
-      
+
       // optional uint64 uint64 = 6;
       private long uint64_ ;
+      /**
+       * <code>optional uint64 uint64 = 6;</code>
+       */
       public boolean hasUint64() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
+      /**
+       * <code>optional uint64 uint64 = 6;</code>
+       */
       public long getUint64() {
         return uint64_;
       }
+      /**
+       * <code>optional uint64 uint64 = 6;</code>
+       */
       public Builder setUint64(long value) {
         bitField0_ |= 0x00000020;
         uint64_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional uint64 uint64 = 6;</code>
+       */
       public Builder clearUint64() {
         bitField0_ = (bitField0_ & ~0x00000020);
         uint64_ = 0L;
         onChanged();
         return this;
       }
-      
+
       // optional sint32 sint32 = 7;
       private int sint32_ ;
+      /**
+       * <code>optional sint32 sint32 = 7;</code>
+       */
       public boolean hasSint32() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
+      /**
+       * <code>optional sint32 sint32 = 7;</code>
+       */
       public int getSint32() {
         return sint32_;
       }
+      /**
+       * <code>optional sint32 sint32 = 7;</code>
+       */
       public Builder setSint32(int value) {
         bitField0_ |= 0x00000040;
         sint32_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional sint32 sint32 = 7;</code>
+       */
       public Builder clearSint32() {
         bitField0_ = (bitField0_ & ~0x00000040);
         sint32_ = 0;
         onChanged();
         return this;
       }
-      
+
       // optional sint64 sint64 = 8;
       private long sint64_ ;
+      /**
+       * <code>optional sint64 sint64 = 8;</code>
+       */
       public boolean hasSint64() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
+      /**
+       * <code>optional sint64 sint64 = 8;</code>
+       */
       public long getSint64() {
         return sint64_;
       }
+      /**
+       * <code>optional sint64 sint64 = 8;</code>
+       */
       public Builder setSint64(long value) {
         bitField0_ |= 0x00000080;
         sint64_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional sint64 sint64 = 8;</code>
+       */
       public Builder clearSint64() {
         bitField0_ = (bitField0_ & ~0x00000080);
         sint64_ = 0L;
         onChanged();
         return this;
       }
-      
+
       // optional fixed32 fixed32 = 9;
       private int fixed32_ ;
+      /**
+       * <code>optional fixed32 fixed32 = 9;</code>
+       */
       public boolean hasFixed32() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
+      /**
+       * <code>optional fixed32 fixed32 = 9;</code>
+       */
       public int getFixed32() {
         return fixed32_;
       }
+      /**
+       * <code>optional fixed32 fixed32 = 9;</code>
+       */
       public Builder setFixed32(int value) {
         bitField0_ |= 0x00000100;
         fixed32_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional fixed32 fixed32 = 9;</code>
+       */
       public Builder clearFixed32() {
         bitField0_ = (bitField0_ & ~0x00000100);
         fixed32_ = 0;
         onChanged();
         return this;
       }
-      
+
       // optional fixed64 fixed64 = 10;
       private long fixed64_ ;
+      /**
+       * <code>optional fixed64 fixed64 = 10;</code>
+       */
       public boolean hasFixed64() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
+      /**
+       * <code>optional fixed64 fixed64 = 10;</code>
+       */
       public long getFixed64() {
         return fixed64_;
       }
+      /**
+       * <code>optional fixed64 fixed64 = 10;</code>
+       */
       public Builder setFixed64(long value) {
         bitField0_ |= 0x00000200;
         fixed64_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional fixed64 fixed64 = 10;</code>
+       */
       public Builder clearFixed64() {
         bitField0_ = (bitField0_ & ~0x00000200);
         fixed64_ = 0L;
         onChanged();
         return this;
       }
-      
+
       // optional sfixed32 sfixed32 = 11;
       private int sfixed32_ ;
+      /**
+       * <code>optional sfixed32 sfixed32 = 11;</code>
+       */
       public boolean hasSfixed32() {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
+      /**
+       * <code>optional sfixed32 sfixed32 = 11;</code>
+       */
       public int getSfixed32() {
         return sfixed32_;
       }
+      /**
+       * <code>optional sfixed32 sfixed32 = 11;</code>
+       */
       public Builder setSfixed32(int value) {
         bitField0_ |= 0x00000400;
         sfixed32_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional sfixed32 sfixed32 = 11;</code>
+       */
       public Builder clearSfixed32() {
         bitField0_ = (bitField0_ & ~0x00000400);
         sfixed32_ = 0;
         onChanged();
         return this;
       }
-      
+
       // optional sfixed64 sfixed64 = 12;
       private long sfixed64_ ;
+      /**
+       * <code>optional sfixed64 sfixed64 = 12;</code>
+       */
       public boolean hasSfixed64() {
         return ((bitField0_ & 0x00000800) == 0x00000800);
       }
+      /**
+       * <code>optional sfixed64 sfixed64 = 12;</code>
+       */
       public long getSfixed64() {
         return sfixed64_;
       }
+      /**
+       * <code>optional sfixed64 sfixed64 = 12;</code>
+       */
       public Builder setSfixed64(long value) {
         bitField0_ |= 0x00000800;
         sfixed64_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional sfixed64 sfixed64 = 12;</code>
+       */
       public Builder clearSfixed64() {
         bitField0_ = (bitField0_ & ~0x00000800);
         sfixed64_ = 0L;
         onChanged();
         return this;
       }
-      
+
       // optional bool bool = 13;
       private boolean bool_ ;
+      /**
+       * <code>optional bool bool = 13;</code>
+       */
       public boolean hasBool() {
         return ((bitField0_ & 0x00001000) == 0x00001000);
       }
+      /**
+       * <code>optional bool bool = 13;</code>
+       */
       public boolean getBool() {
         return bool_;
       }
+      /**
+       * <code>optional bool bool = 13;</code>
+       */
       public Builder setBool(boolean value) {
         bitField0_ |= 0x00001000;
         bool_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional bool bool = 13;</code>
+       */
       public Builder clearBool() {
         bitField0_ = (bitField0_ & ~0x00001000);
         bool_ = false;
         onChanged();
         return this;
       }
-      
+
       // optional string string = 14;
       private java.lang.Object string_ = "";
+      /**
+       * <code>optional string string = 14;</code>
+       */
       public boolean hasString() {
         return ((bitField0_ & 0x00002000) == 0x00002000);
       }
-      public String getString() {
+      /**
+       * <code>optional string string = 14;</code>
+       */
+      public java.lang.String getString() {
         java.lang.Object ref = string_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           string_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setString(String value) {
+      /**
+       * <code>optional string string = 14;</code>
+       */
+      public com.google.protobuf.ByteString
+          getStringBytes() {
+        java.lang.Object ref = string_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          string_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string string = 14;</code>
+       */
+      public Builder setString(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -5282,26 +7246,46 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string string = 14;</code>
+       */
       public Builder clearString() {
         bitField0_ = (bitField0_ & ~0x00002000);
         string_ = getDefaultInstance().getString();
         onChanged();
         return this;
       }
-      void setString(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00002000;
+      /**
+       * <code>optional string string = 14;</code>
+       */
+      public Builder setStringBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00002000;
         string_ = value;
         onChanged();
+        return this;
       }
-      
+
       // optional bytes bytes = 15;
       private com.google.protobuf.ByteString bytes_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes bytes = 15;</code>
+       */
       public boolean hasBytes() {
         return ((bitField0_ & 0x00004000) == 0x00004000);
       }
+      /**
+       * <code>optional bytes bytes = 15;</code>
+       */
       public com.google.protobuf.ByteString getBytes() {
         return bytes_;
       }
+      /**
+       * <code>optional bytes bytes = 15;</code>
+       */
       public Builder setBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
@@ -5311,21 +7295,33 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional bytes bytes = 15;</code>
+       */
       public Builder clearBytes() {
         bitField0_ = (bitField0_ & ~0x00004000);
         bytes_ = getDefaultInstance().getBytes();
         onChanged();
         return this;
       }
-      
+
       // optional .com.hubspot.jackson.test.util.Enum enum = 16;
       private com.hubspot.jackson.test.util.TestProtobuf.Enum enum_ = com.hubspot.jackson.test.util.TestProtobuf.Enum.ONE;
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public boolean hasEnum() {
         return ((bitField0_ & 0x00008000) == 0x00008000);
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public com.hubspot.jackson.test.util.TestProtobuf.Enum getEnum() {
         return enum_;
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public Builder setEnum(com.hubspot.jackson.test.util.TestProtobuf.Enum value) {
         if (value == null) {
           throw new NullPointerException();
@@ -5335,24 +7331,27 @@ public final class TestProtobuf {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional .com.hubspot.jackson.test.util.Enum enum = 16;</code>
+       */
       public Builder clearEnum() {
         bitField0_ = (bitField0_ & ~0x00008000);
         enum_ = com.hubspot.jackson.test.util.TestProtobuf.Enum.ONE;
         onChanged();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:com.hubspot.jackson.test.util.Nested)
     }
-    
+
     static {
       defaultInstance = new Nested(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:com.hubspot.jackson.test.util.Nested)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_com_hubspot_jackson_test_util_AllFields_descriptor;
   private static
@@ -5373,7 +7372,7 @@ public final class TestProtobuf {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_hubspot_jackson_test_util_Nested_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
@@ -5422,33 +7421,25 @@ public final class TestProtobuf {
           internal_static_com_hubspot_jackson_test_util_AllFields_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_hubspot_jackson_test_util_AllFields_descriptor,
-              new java.lang.String[] { "Double", "Float", "Int32", "Int64", "Uint32", "Uint64", "Sint32", "Sint64", "Fixed32", "Fixed64", "Sfixed32", "Sfixed64", "Bool", "String", "Bytes", "Enum", "Nested", },
-              com.hubspot.jackson.test.util.TestProtobuf.AllFields.class,
-              com.hubspot.jackson.test.util.TestProtobuf.AllFields.Builder.class);
+              new java.lang.String[] { "Double", "Float", "Int32", "Int64", "Uint32", "Uint64", "Sint32", "Sint64", "Fixed32", "Fixed64", "Sfixed32", "Sfixed64", "Bool", "String", "Bytes", "Enum", "Nested", });
           internal_static_com_hubspot_jackson_test_util_RepeatedFields_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_com_hubspot_jackson_test_util_RepeatedFields_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_hubspot_jackson_test_util_RepeatedFields_descriptor,
-              new java.lang.String[] { "Double", "Float", "Int32", "Int64", "Uint32", "Uint64", "Sint32", "Sint64", "Fixed32", "Fixed64", "Sfixed32", "Sfixed64", "Bool", "String", "Bytes", "Enum", "Nested", },
-              com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields.class,
-              com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields.Builder.class);
+              new java.lang.String[] { "Double", "Float", "Int32", "Int64", "Uint32", "Uint64", "Sint32", "Sint64", "Fixed32", "Fixed64", "Sfixed32", "Sfixed64", "Bool", "String", "Bytes", "Enum", "Nested", });
           internal_static_com_hubspot_jackson_test_util_PropertyNaming_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_com_hubspot_jackson_test_util_PropertyNaming_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_hubspot_jackson_test_util_PropertyNaming_descriptor,
-              new java.lang.String[] { "StringAttribute", },
-              com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming.class,
-              com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming.Builder.class);
+              new java.lang.String[] { "StringAttribute", });
           internal_static_com_hubspot_jackson_test_util_Nested_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_com_hubspot_jackson_test_util_Nested_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_hubspot_jackson_test_util_Nested_descriptor,
-              new java.lang.String[] { "Double", "Float", "Int32", "Int64", "Uint32", "Uint64", "Sint32", "Sint64", "Fixed32", "Fixed64", "Sfixed32", "Sfixed64", "Bool", "String", "Bytes", "Enum", },
-              com.hubspot.jackson.test.util.TestProtobuf.Nested.class,
-              com.hubspot.jackson.test.util.TestProtobuf.Nested.Builder.class);
+              new java.lang.String[] { "Double", "Float", "Int32", "Int64", "Uint32", "Uint64", "Sint32", "Sint64", "Fixed32", "Fixed64", "Sfixed32", "Sfixed64", "Bool", "String", "Bytes", "Enum", });
           return null;
         }
       };
@@ -5457,6 +7448,6 @@ public final class TestProtobuf {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
   }
-  
+
   // @@protoc_insertion_point(outer_class_scope)
 }
