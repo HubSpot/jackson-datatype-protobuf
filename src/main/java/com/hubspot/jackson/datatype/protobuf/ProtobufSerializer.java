@@ -1,10 +1,9 @@
 package com.hubspot.jackson.datatype.protobuf;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.ResolvableSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
@@ -17,7 +16,7 @@ import java.util.Map.Entry;
 
 import static java.lang.String.format;
 
-public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
+public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> implements ResolvableSerializer {
 
   public ProtobufSerializer() {
     super(MessageOrBuilder.class);
@@ -103,7 +102,16 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
         generator.writeString(serializerProvider.getConfig().getBase64Variant().encode(((ByteString) value).toByteArray()));
         break;
       case MESSAGE:
-        serialize((MessageOrBuilder) value, generator, serializerProvider);
+//        System.out.println("Message class type: " + value.getClass());
+        JsonSerializer serializer = serializerProvider.findValueSerializer(value.getClass(), null);
+//        System.out.println("Serializer found : " + serializer.handledType());
+        if (!serializer.equals(serializerProvider.getUnknownTypeSerializer(value.getClass()))){
+          serializer.serialize(value, generator, serializerProvider);
+        }
+        else {
+          serialize((MessageOrBuilder) value, generator, serializerProvider);
+        }
+
         break;
       default:
         throw unrecognizedType(field);
@@ -126,4 +134,19 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
     String error = format("Unrecognized java type '%s' for field %s", field.getJavaType(), field.getFullName());
     throw new JsonMappingException(error);
   }
+
+  /**
+   * Method called after {@link com.fasterxml.jackson.databind.SerializerProvider} has registered
+   * the serializer, but before it has returned it to the caller.
+   * Called object can then resolve its dependencies to other types,
+   * including self-references (direct or indirect).
+   * <p>
+   * Note that this method does NOT return serializer, since resolution
+   * is not allowed to change actual serializer to use.
+   *
+   * @param provider Provider that has constructed serializer this method
+   *                 is called on.
+   */
+  @Override
+  public void resolve(SerializerProvider provider) throws JsonMappingException {}
 }
