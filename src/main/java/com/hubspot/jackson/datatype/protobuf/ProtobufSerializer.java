@@ -149,4 +149,5 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> implemen
    */
   @Override
   public void resolve(SerializerProvider provider) throws JsonMappingException {}
+
 }
