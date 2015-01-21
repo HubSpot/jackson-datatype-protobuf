@@ -46,6 +46,10 @@ message PropertyNamingSnakeCased {
     optional string string_attribute = 1;
 }
 
+message PropertyNamingCamelCased {
+    optional string stringAttribute = 1;
+}
+
 message Nested {
     optional double double = 1;
     optional float float = 2;
