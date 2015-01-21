@@ -42,7 +42,7 @@ message RepeatedFields {
     repeated Nested nested = 17;
 }
 
-message PropertyNaming {
+message PropertyNamingSnakeCased {
     optional string string_attribute = 1;
 }
 

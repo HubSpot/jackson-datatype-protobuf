@@ -3,7 +3,8 @@ package com.hubspot.jackson.test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.hubspot.jackson.test.util.ProtobufCreator;
-import com.hubspot.jackson.test.util.TestProtobuf.PropertyNaming;
+import com.hubspot.jackson.test.util.TestProtobuf.PropertyNamingSnakeCased;
+
 import org.junit.Test;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class PropertyNamingTest {
 
   @Test
   public void testSingleCamelCase() {
-    PropertyNaming message = ProtobufCreator.create(PropertyNaming.class);
+    PropertyNamingSnakeCased message = ProtobufCreator.create(PropertyNamingSnakeCased.class);
 
     JsonNode tree = toTree(camelCase(), message);
 
@@ -29,7 +30,7 @@ public class PropertyNamingTest {
 
   @Test
   public void testMultipleCamelCase() {
-    List<PropertyNaming> messages = ProtobufCreator.create(PropertyNaming.class, 10);
+    List<PropertyNamingSnakeCased> messages = ProtobufCreator.create(PropertyNamingSnakeCased.class, 10);
 
     JsonNode tree = toTree(camelCase(), messages);
 
@@ -48,7 +49,7 @@ public class PropertyNamingTest {
 
   @Test
   public void testSingleUnderscore() {
-    PropertyNaming message = ProtobufCreator.create(PropertyNaming.class);
+    PropertyNamingSnakeCased message = ProtobufCreator.create(PropertyNamingSnakeCased.class);
 
     JsonNode tree = toTree(underscore(), message);
 
@@ -60,7 +61,7 @@ public class PropertyNamingTest {
 
   @Test
   public void testMultipleUnderscore() {
-    List<PropertyNaming> messages = ProtobufCreator.create(PropertyNaming.class, 10);
+    List<PropertyNamingSnakeCased> messages = ProtobufCreator.create(PropertyNamingSnakeCased.class, 10);
 
     JsonNode tree = toTree(underscore(), messages);
 
