@@ -18,7 +18,7 @@
 
     <groupId>com.hubspot.jackson</groupId>
     <artifactId>jackson-datatype-protobuf</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1-SNAPSHOT</version>
     <name>Jackson Protobuf Support</name>
     <description>Jackson Module that adds support for reading/writing protobufs</description>
     <url>https://github.com/HubSpot/jackson-datatype-protobuf</url>
