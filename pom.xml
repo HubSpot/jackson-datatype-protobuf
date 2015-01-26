@@ -172,7 +172,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>protoc-plugin</id>
-            <url>http://sergei-ivanov.github.com/maven-protoc-plugin/repo/releases/</url>
+            <url>http://sergei-ivanov.github.io/maven-protoc-plugin/repo/releases/</url>
         </pluginRepository>
     </pluginRepositories>
 </project>
