@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.fasterxml.jackson.databind.deser.impl.NullProvider;
@@ -228,8 +230,10 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
         switch (parser.getCurrentToken()) {
           case START_OBJECT:
             Message.Builder subBuilder = builder.newBuilderForField(field);
-            populate(subBuilder, parser, context);
-            value = subBuilder.build();
+            JavaType type = context.constructType(subBuilder.getDefaultInstanceForType().getClass());
+
+            JsonDeserializer<Object> deserializer = context.findContextualValueDeserializer(type, null);
+            value = deserializer.deserialize(parser, context);
             break;
           case VALUE_NULL:
             value = null;

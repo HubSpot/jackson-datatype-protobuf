@@ -2,6 +2,7 @@ package com.hubspot.jackson.datatype.protobuf;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -103,7 +104,9 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
         generator.writeString(serializerProvider.getConfig().getBase64Variant().encode(((ByteString) value).toByteArray()));
         break;
       case MESSAGE:
-        serialize((MessageOrBuilder) value, generator, serializerProvider);
+        JsonSerializer<Object> serializer = serializerProvider.findValueSerializer(value.getClass(), null);
+
+        serializer.serialize(value, generator, serializerProvider);
         break;
       default:
         throw unrecognizedType(field);
