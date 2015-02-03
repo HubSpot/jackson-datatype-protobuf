@@ -3,6 +3,9 @@
 Jackson module that adds support for serializing and deserializing Google's 
 [Protocol Buffers](https://code.google.com/p/protobuf/) to and from JSON.
 
+### Instantly Code
+[![alt](https://codenvy.com/factory/resources/factory.png)](https://codenvy.com/factory?v=1.0&pname=hubspot-jackson&wname=ecavazos&vcs=git&vcsurl=http%3A%2F%2Fcodenvy.com%2Fgit%2F48%2Fe7%2Fdc%2Fworkspaceu909ru5xicwtsrnx%2Fhubspot-jackson&idcommit=b4b5df915c37a26380aef0775fa5aef91f9b8eee&action=openproject&ptype=Servlet%2FJSP)
+
 ## Usage
 
 ### Maven dependency
