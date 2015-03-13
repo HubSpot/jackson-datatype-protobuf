@@ -28,6 +28,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 public class ProtobufDeserializer<T extends Message> extends StdDeserializer<MessageOrBuilder> {
   private final T defaultInstance;
   private final boolean build;
@@ -281,7 +283,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
   private static String indexRange(EnumDescriptor field) {
     List<Integer> indices = Lists.transform(field.getValues(), new Function<EnumValueDescriptor, Integer>() {
       @Override
-      public Integer apply(EnumValueDescriptor value) {
+      public Integer apply(@Nonnull EnumValueDescriptor value) {
         return value.getIndex();
       }
     });
