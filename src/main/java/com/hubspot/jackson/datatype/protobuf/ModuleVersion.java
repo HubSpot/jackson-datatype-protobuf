@@ -7,5 +7,5 @@ import com.fasterxml.jackson.core.util.VersionUtil;
  * for this module.
  */
 class ModuleVersion extends VersionUtil {
-  public final static ModuleVersion instance = new ModuleVersion();
+  public static final ModuleVersion instance = new ModuleVersion();
 }
