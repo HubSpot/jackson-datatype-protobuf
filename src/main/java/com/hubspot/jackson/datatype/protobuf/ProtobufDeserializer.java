@@ -62,16 +62,23 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
 
   private void populate(Message.Builder builder, JsonParser parser, DeserializationContext context)
           throws IOException {
-    if (!JsonToken.START_OBJECT.equals(parser.getCurrentToken()) &&
-        !JsonToken.START_OBJECT.equals(parser.nextToken())) {
-      throw context.mappingException(builder.getClass());
+    JsonToken token = parser.getCurrentToken();
+    if (token == JsonToken.START_ARRAY) {
+      token = parser.nextToken();
+    }
+
+    switch (token) {
+      case END_OBJECT:
+        return;
+      case START_OBJECT:
+        token = parser.nextToken();
+        break;
     }
 
     Descriptor descriptor = builder.getDescriptorForType();
     Map<String, FieldDescriptor> fieldLookup = buildFieldLookup(descriptor, context);
 
-    while (!parser.nextToken().equals(JsonToken.END_OBJECT)) {
-      JsonToken token = parser.getCurrentToken();
+    do {
       if (!token.equals(JsonToken.FIELD_NAME)) {
         throw context.wrongTokenException(parser, JsonToken.FIELD_NAME, "");
       }
@@ -89,7 +96,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
 
       parser.nextToken();
       setField(builder, field, parser, context);
-    }
+    } while ((token = parser.nextToken()) != JsonToken.END_OBJECT);
   }
 
   private Map<String, FieldDescriptor> buildFieldLookup(Descriptor descriptor, DeserializationContext context) {
@@ -254,7 +261,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
   private List<Object> readArray(Message.Builder builder, FieldDescriptor field, JsonParser parser,
                                  DeserializationContext context) throws IOException {
     List<Object> values = Lists.newArrayList();
-    while (!JsonToken.END_ARRAY.equals(parser.nextToken())) {
+    while (parser.nextToken() != JsonToken.END_ARRAY) {
       Object value = readValue(builder, field, parser, context);
 
       if (value != null) {
