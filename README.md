@@ -13,7 +13,7 @@ To use module on Maven-based projects, use following dependency:
 <dependency>
   <groupId>com.hubspot.jackson</groupId>
   <artifactId>jackson-datatype-protobuf</artifactId>
-  <version>0.6.0</version>
+  <version>0.7.0</version>
 </dependency>
 ```
 
