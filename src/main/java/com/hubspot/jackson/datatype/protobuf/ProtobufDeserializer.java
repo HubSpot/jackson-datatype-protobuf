@@ -73,6 +73,8 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
       case START_OBJECT:
         token = parser.nextToken();
         break;
+      default:
+        break; // make findbugs happy
     }
 
     Descriptor descriptor = builder.getDescriptorForType();
