@@ -143,6 +143,14 @@
                         <protobufVersion>2.5.0</protobufVersion>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${dep.plugin.gpg.version}</version>
+                    <configuration>
+                        <useAgent>false</useAgent>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
 
