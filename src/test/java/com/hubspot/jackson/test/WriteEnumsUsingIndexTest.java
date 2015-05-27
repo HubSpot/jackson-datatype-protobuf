@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import static com.hubspot.jackson.test.util.ObjectMapperHelper.camelCase;
 import static com.hubspot.jackson.test.util.ObjectMapperHelper.writeAndReadBack;
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class WriteEnumsUsingIndexTest {
 

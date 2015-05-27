@@ -9,7 +9,7 @@ import com.hubspot.jackson.test.util.TestProtobuf.AllFields;
 import org.junit.Test;
 
 import static com.hubspot.jackson.test.util.ObjectMapperHelper.camelCase;
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReadUnknownEnumValuesAsNullTest {
 
