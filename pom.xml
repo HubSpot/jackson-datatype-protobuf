@@ -106,9 +106,8 @@
                 <plugin>
                     <groupId>com.comoyo.maven.plugins</groupId>
                     <artifactId>protoc-bundled-plugin</artifactId>
-                    <version>1.4.46</version>
+                    <version>1.4.47</version>
                     <configuration>
-                        <!-- no newer version exists... -->
                         <protobufVersion>2.5.0</protobufVersion>
                     </configuration>
                 </plugin>
