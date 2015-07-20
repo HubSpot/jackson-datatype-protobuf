@@ -14,14 +14,21 @@ import com.google.protobuf.MessageOrBuilder;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.lang.String.format;
 
 public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
+  private static final Map<Class<?>, JsonSerializer<Object>> SERIALIZER_CACHE = new ConcurrentHashMap<>();
 
   public ProtobufSerializer() {
     super(MessageOrBuilder.class);
+  }
+
+  public static void clearCache() {
+    SERIALIZER_CACHE.clear();
   }
 
   @Override
@@ -104,7 +111,15 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
         generator.writeString(serializerProvider.getConfig().getBase64Variant().encode(((ByteString) value).toByteArray()));
         break;
       case MESSAGE:
-        JsonSerializer<Object> serializer = serializerProvider.findValueSerializer(value.getClass(), null);
+        Class<?> subType = value.getClass();
+
+        final JsonSerializer<Object> serializer;
+        if (SERIALIZER_CACHE.containsKey(subType)) {
+          serializer = SERIALIZER_CACHE.get(subType);
+        } else {
+          serializer = serializerProvider.findValueSerializer(value.getClass(), null);
+          SERIALIZER_CACHE.put(subType, serializer);
+        }
 
         serializer.serialize(value, generator, serializerProvider);
         break;

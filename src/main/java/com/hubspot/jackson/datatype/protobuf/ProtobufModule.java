@@ -14,6 +14,11 @@ import com.google.protobuf.MessageOrBuilder;
  */
 public class ProtobufModule extends Module {
 
+  public static void clearCache() {
+    ProtobufSerializer.clearCache();
+    ProtobufDeserializer.clearCache();
+  }
+
   @Override
   public String getModuleName() {
     return "ProtobufModule";

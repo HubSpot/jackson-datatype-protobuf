@@ -27,10 +27,13 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nonnull;
 
 public class ProtobufDeserializer<T extends Message> extends StdDeserializer<MessageOrBuilder> {
+  private static final Map<Class<?>, JsonDeserializer<Object>> DESERIALIZER_CACHE = new ConcurrentHashMap<>();
+
   private final T defaultInstance;
   private final boolean build;
 
@@ -45,6 +48,10 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     }
 
     this.build = build;
+  }
+
+  public static void clearCache() {
+    DESERIALIZER_CACHE.clear();
   }
 
   @Override
@@ -241,9 +248,17 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
         switch (parser.getCurrentToken()) {
           case START_OBJECT:
             Message.Builder subBuilder = builder.newBuilderForField(field);
-            JavaType type = context.constructType(subBuilder.getDefaultInstanceForType().getClass());
+            Class<?> subType = subBuilder.getDefaultInstanceForType().getClass();
 
-            JsonDeserializer<Object> deserializer = context.findContextualValueDeserializer(type, null);
+            final JsonDeserializer<Object> deserializer;
+            if (DESERIALIZER_CACHE.containsKey(subType)) {
+              deserializer = DESERIALIZER_CACHE.get(subType);
+            } else {
+              JavaType type = SimpleType.construct(subType);
+              deserializer = context.findContextualValueDeserializer(type, null);
+              DESERIALIZER_CACHE.put(subType, deserializer);
+            }
+
             value = deserializer.deserialize(parser, context);
             break;
           case VALUE_NULL:

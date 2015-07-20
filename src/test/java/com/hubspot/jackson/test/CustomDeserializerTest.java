@@ -9,6 +9,8 @@ import com.google.protobuf.Message;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 import com.hubspot.jackson.test.util.TestProtobuf.AllFields;
 import com.hubspot.jackson.test.util.TestProtobuf.Nested;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -16,6 +18,12 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CustomDeserializerTest {
+
+  @BeforeClass
+  @AfterClass
+  public static void clearCache() {
+    ProtobufModule.clearCache();
+  }
 
   @Test
   public void testTopLevelMessage() throws IOException {
