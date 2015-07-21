@@ -21,10 +21,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import static java.lang.String.format;
 
 public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
-  private final Map<Class<?>, JsonSerializer<Object>> serializerCache = new ConcurrentHashMap<>();
+  private final Map<Class<?>, JsonSerializer<Object>> serializerCache;
 
   public ProtobufSerializer() {
     super(MessageOrBuilder.class);
+
+    this.serializerCache = new ConcurrentHashMap<>();
   }
 
   @Override
