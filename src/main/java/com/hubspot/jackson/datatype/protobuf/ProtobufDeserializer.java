@@ -245,10 +245,8 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
       case MESSAGE:
         switch (parser.getCurrentToken()) {
           case START_OBJECT:
-            final JsonDeserializer<Object> deserializer;
-            if (deserializerCache.containsKey(field)) {
-              deserializer = deserializerCache.get(field);
-            } else {
+            JsonDeserializer<Object> deserializer = deserializerCache.get(field);
+            if (deserializer == null) {
               Message.Builder subBuilder = builder.newBuilderForField(field);
               Class<?> subType = subBuilder.getDefaultInstanceForType().getClass();
 

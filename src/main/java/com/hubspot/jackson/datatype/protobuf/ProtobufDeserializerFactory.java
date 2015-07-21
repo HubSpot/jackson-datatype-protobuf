@@ -33,10 +33,8 @@ public class ProtobufDeserializerFactory extends Deserializers.Base {
           throws JsonMappingException {
     CacheKey cacheKey = new CacheKey(messageType, build);
 
-    final ProtobufDeserializer<?> deserializer;
-    if (DESERIALIZER_CACHE.containsKey(cacheKey)) {
-      deserializer = DESERIALIZER_CACHE.get(cacheKey);
-    } else {
+    ProtobufDeserializer<?> deserializer = DESERIALIZER_CACHE.get(cacheKey);
+    if (deserializer == null) {
       ProtobufDeserializer<T> newDeserializer = new ProtobufDeserializer<>(messageType, build);
       ProtobufDeserializer<?> previousDeserializer = DESERIALIZER_CACHE.putIfAbsent(cacheKey, newDeserializer);
       deserializer = previousDeserializer == null ? newDeserializer : previousDeserializer;

@@ -111,10 +111,8 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
       case MESSAGE:
         Class<?> subType = value.getClass();
 
-        final JsonSerializer<Object> serializer;
-        if (serializerCache.containsKey(subType)) {
-          serializer = serializerCache.get(subType);
-        } else {
+        JsonSerializer<Object> serializer = serializerCache.get(subType);
+        if (serializer == null) {
           serializer = serializerProvider.findValueSerializer(value.getClass(), null);
           serializerCache.put(subType, serializer);
         }
