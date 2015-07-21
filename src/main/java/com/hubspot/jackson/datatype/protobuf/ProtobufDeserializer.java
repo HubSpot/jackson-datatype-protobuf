@@ -22,6 +22,7 @@ import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -32,13 +33,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 
 public class ProtobufDeserializer<T extends Message> extends StdDeserializer<MessageOrBuilder> {
-  private static final Map<Class<?>, JsonDeserializer<Object>> DESERIALIZER_CACHE = new ConcurrentHashMap<>();
-
   private final T defaultInstance;
   private final boolean build;
+  @SuppressFBWarnings(value="SE_BAD_FIELD")
+  private final Map<FieldDescriptor, JsonDeserializer<Object>> deserializerCache;
 
   @SuppressWarnings("unchecked")
-  public ProtobufDeserializer(Class<T> messageType, boolean build) throws JsonMappingException {
+  public ProtobufDeserializer(Class<T> messageType, boolean build) throws JsonMappingException{
     super(messageType);
 
     try {
@@ -48,10 +49,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     }
 
     this.build = build;
-  }
-
-  public static void clearCache() {
-    DESERIALIZER_CACHE.clear();
+    this.deserializerCache = new ConcurrentHashMap<>();
   }
 
   @Override
@@ -247,16 +245,16 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
       case MESSAGE:
         switch (parser.getCurrentToken()) {
           case START_OBJECT:
-            Message.Builder subBuilder = builder.newBuilderForField(field);
-            Class<?> subType = subBuilder.getDefaultInstanceForType().getClass();
-
             final JsonDeserializer<Object> deserializer;
-            if (DESERIALIZER_CACHE.containsKey(subType)) {
-              deserializer = DESERIALIZER_CACHE.get(subType);
+            if (deserializerCache.containsKey(field)) {
+              deserializer = deserializerCache.get(field);
             } else {
+              Message.Builder subBuilder = builder.newBuilderForField(field);
+              Class<?> subType = subBuilder.getDefaultInstanceForType().getClass();
+
               JavaType type = SimpleType.construct(subType);
               deserializer = context.findContextualValueDeserializer(type, null);
-              DESERIALIZER_CACHE.put(subType, deserializer);
+              deserializerCache.put(field, deserializer);
             }
 
             value = deserializer.deserialize(parser, context);

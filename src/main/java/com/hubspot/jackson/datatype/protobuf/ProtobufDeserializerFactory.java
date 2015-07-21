@@ -8,7 +8,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.google.protobuf.Message;
 
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 public class ProtobufDeserializerFactory extends Deserializers.Base {
+  private final ConcurrentMap<CacheKey, ProtobufDeserializer<?>> DESERIALIZER_CACHE = new ConcurrentHashMap<>();
 
   @Override
   @SuppressWarnings("unchecked")
@@ -23,8 +28,49 @@ public class ProtobufDeserializerFactory extends Deserializers.Base {
     }
   }
 
+  @SuppressWarnings("unchecked")
   private <T extends Message> ProtobufDeserializer<T> getDeserializer(Class<T> messageType, boolean build)
-          throws JsonMappingException{
-    return new ProtobufDeserializer<T>(messageType, build);
+          throws JsonMappingException {
+    CacheKey cacheKey = new CacheKey(messageType, build);
+
+    final ProtobufDeserializer<?> deserializer;
+    if (DESERIALIZER_CACHE.containsKey(cacheKey)) {
+      deserializer = DESERIALIZER_CACHE.get(cacheKey);
+    } else {
+      ProtobufDeserializer<T> newDeserializer = new ProtobufDeserializer<>(messageType, build);
+      ProtobufDeserializer<?> previousDeserializer = DESERIALIZER_CACHE.putIfAbsent(cacheKey, newDeserializer);
+      deserializer = previousDeserializer == null ? newDeserializer : previousDeserializer;
+    }
+
+    return (ProtobufDeserializer<T>) deserializer;
+  }
+
+  private static class CacheKey {
+    private final Class<?> messageType;
+    private final boolean build;
+
+    public CacheKey(Class<?> messageType, boolean build) {
+      this.messageType = messageType;
+      this.build = build;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+
+      CacheKey cacheKey = (CacheKey) o;
+      return Objects.equals(build, cacheKey.build) && Objects.equals(messageType, cacheKey.messageType);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(messageType, build);
+    }
   }
 }
