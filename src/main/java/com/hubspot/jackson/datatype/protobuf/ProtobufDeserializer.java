@@ -39,7 +39,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
   private final Map<FieldDescriptor, JsonDeserializer<Object>> deserializerCache;
 
   @SuppressWarnings("unchecked")
-  public ProtobufDeserializer(Class<T> messageType, boolean build) throws JsonMappingException{
+  public ProtobufDeserializer(Class<T> messageType, boolean build) throws JsonMappingException {
     super(messageType);
 
     try {
