@@ -4,8 +4,10 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.hubspot.jackson.test.util.ProtobufCreator;
 import com.hubspot.jackson.test.util.TestProtobuf.AllFields;
+import com.hubspot.jackson.test.util.TestProtobuf.Nested;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.hubspot.jackson.test.util.ObjectMapperHelper.camelCase;
@@ -85,6 +87,15 @@ public class AllFieldsTest {
     List<AllFields.Builder> parsed = writeAndReadBack(underscore(), builders);
 
     assertThat(build(parsed)).isEqualTo(build(builders));
+  }
+
+  @Test
+  public void testEmptyNestedObject() throws IOException {
+    String json = "{\"nested\":{}}";
+
+    AllFields parsed = camelCase().readValue(json, AllFields.class);
+
+    assertThat(parsed.getNested()).isEqualTo(Nested.getDefaultInstance());
   }
 
   private static List<AllFields> build(List<AllFields.Builder> builders) {

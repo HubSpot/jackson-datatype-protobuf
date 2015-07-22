@@ -77,6 +77,9 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
         return;
       case START_OBJECT:
         token = parser.nextToken();
+        if (token == JsonToken.END_OBJECT) {
+          return;
+        }
         break;
       default:
         break; // make findbugs happy
