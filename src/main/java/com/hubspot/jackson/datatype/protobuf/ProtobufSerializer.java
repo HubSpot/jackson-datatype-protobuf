@@ -1,5 +1,6 @@
 package com.hubspot.jackson.datatype.protobuf;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -15,7 +16,6 @@ import com.google.protobuf.MessageOrBuilder;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.lang.String.format;
@@ -34,41 +34,32 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
           throws IOException {
     generator.writeStartObject();
 
+    Include include = serializerProvider.getConfig().getSerializationInclusion();
     PropertyNamingStrategyBase namingStrategy =
             new PropertyNamingStrategyWrapper(serializerProvider.getConfig().getPropertyNamingStrategy());
-    for (Entry<FieldDescriptor, Object> record : message.getAllFields().entrySet()) {
-      FieldDescriptor field = record.getKey();
-      Object value = record.getValue();
 
+    for (FieldDescriptor field : message.getDescriptorForType().getFields()) {
       if (field.isRepeated()) {
-        List<?> valueList = (List<?>) value;
+        List<?> valueList = (List<?>) message.getField(field);
 
-        if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
-          generator.writeFieldName(namingStrategy.translate(field.getName()));
-          writeValue(field, valueList.get(0), generator, serializerProvider);
-        } else {
-          generator.writeArrayFieldStart(namingStrategy.translate(field.getName()));
-          for (Object subValue : valueList) {
-            writeValue(field, subValue, generator, serializerProvider);
-          }
-          generator.writeEndArray();
-        }
-      } else {
-        generator.writeFieldName(namingStrategy.translate(field.getName()));
-        writeValue(field, value, generator, serializerProvider);
-      }
-    }
-
-    if (writeEmptyArrays(serializerProvider)) {
-      for (FieldDescriptor field : message.getDescriptorForType().getFields()) {
-        if (field.isRepeated()) {
-          List<?> valueList = (List<?>) message.getField(field);
-
-          if (valueList.isEmpty()) {
+        if (!valueList.isEmpty() || writeEmptyArrays(serializerProvider)) {
+          if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
+            generator.writeFieldName(namingStrategy.translate(field.getName()));
+            writeValue(field, valueList.get(0), generator, serializerProvider);
+          } else {
             generator.writeArrayFieldStart(namingStrategy.translate(field.getName()));
+            for (Object subValue : valueList) {
+              writeValue(field, subValue, generator, serializerProvider);
+            }
             generator.writeEndArray();
           }
         }
+      } else if (message.hasField(field)) {
+        generator.writeFieldName(namingStrategy.translate(field.getName()));
+        writeValue(field, message.getField(field), generator, serializerProvider);
+      } else if (include == Include.ALWAYS) {
+        generator.writeFieldName(namingStrategy.translate(field.getName()));
+        generator.writeNull();
       }
     }
 

@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hubspot.jackson.test.util.TestProtobuf;
-import com.hubspot.jackson.test.util.TestProtobuf.AllFields;
 import com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields;
 import org.junit.Test;
 
