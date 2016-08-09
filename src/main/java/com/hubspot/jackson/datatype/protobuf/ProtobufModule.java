@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
+import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.MessageOrBuilder;
 
 /**
@@ -13,6 +14,15 @@ import com.google.protobuf.MessageOrBuilder;
  * Register with Jackson via {@link com.fasterxml.jackson.databind.ObjectMapper#registerModule}
  */
 public class ProtobufModule extends Module {
+  private final ExtensionRegistryWrapper extensionRegistry;
+
+  public ProtobufModule() {
+    this.extensionRegistry = ExtensionRegistryWrapper.empty();
+  }
+
+  public ProtobufModule(ExtensionRegistry extensionRegistry) {
+    this.extensionRegistry = ExtensionRegistryWrapper.wrap(extensionRegistry);
+  }
 
   @Override
   public String getModuleName() {
@@ -30,7 +40,7 @@ public class ProtobufModule extends Module {
     serializers.addSerializer(new ProtobufSerializer());
 
     context.addSerializers(serializers);
-    context.addDeserializers(new ProtobufDeserializerFactory());
+    context.addDeserializers(new ProtobufDeserializerFactory(extensionRegistry));
     context.setMixInAnnotations(MessageOrBuilder.class, MessageOrBuilderMixin.class);
   }
 

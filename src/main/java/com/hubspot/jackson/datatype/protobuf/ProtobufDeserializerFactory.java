@@ -13,7 +13,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class ProtobufDeserializerFactory extends Deserializers.Base {
-  private final ConcurrentMap<CacheKey, ProtobufDeserializer<?>> DESERIALIZER_CACHE = new ConcurrentHashMap<>();
+  private final ExtensionRegistryWrapper extensionRegistry;
+  private final ConcurrentMap<CacheKey, ProtobufDeserializer<?>> deserializerCache;
+
+  public ProtobufDeserializerFactory() {
+    this(ExtensionRegistryWrapper.empty());
+  }
+
+  public ProtobufDeserializerFactory(ExtensionRegistryWrapper extensionRegistry) {
+    this.extensionRegistry = extensionRegistry;
+    this.deserializerCache = new ConcurrentHashMap<>();
+  }
 
   @Override
   @SuppressWarnings("unchecked")
@@ -33,10 +43,10 @@ public class ProtobufDeserializerFactory extends Deserializers.Base {
           throws JsonMappingException {
     CacheKey cacheKey = new CacheKey(messageType, build);
 
-    ProtobufDeserializer<?> deserializer = DESERIALIZER_CACHE.get(cacheKey);
+    ProtobufDeserializer<?> deserializer = deserializerCache.get(cacheKey);
     if (deserializer == null) {
-      ProtobufDeserializer<T> newDeserializer = new ProtobufDeserializer<>(messageType, build);
-      ProtobufDeserializer<?> previousDeserializer = DESERIALIZER_CACHE.putIfAbsent(cacheKey, newDeserializer);
+      ProtobufDeserializer<T> newDeserializer = new ProtobufDeserializer<>(messageType, build, extensionRegistry);
+      ProtobufDeserializer<?> previousDeserializer = deserializerCache.putIfAbsent(cacheKey, newDeserializer);
       deserializer = previousDeserializer == null ? newDeserializer : previousDeserializer;
     }
 

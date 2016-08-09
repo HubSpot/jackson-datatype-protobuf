@@ -20,6 +20,7 @@ message AllFields {
     optional bytes bytes = 15;
     optional Enum enum = 16;
     optional Nested nested = 17;
+    extensions 18 to 34;
 }
 
 message RepeatedFields {
@@ -40,6 +41,7 @@ message RepeatedFields {
     repeated bytes bytes = 15;
     repeated Enum enum = 16;
     repeated Nested nested = 17;
+    extensions 18 to 34;
 }
 
 message PropertyNamingSnakeCased {

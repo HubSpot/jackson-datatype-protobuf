@@ -11,11 +11,13 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.GeneratedMessage.ExtendableMessageOrBuilder;
 import com.google.protobuf.MessageOrBuilder;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.lang.String.format;
@@ -60,6 +62,36 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
       } else if (include == Include.ALWAYS) {
         generator.writeFieldName(namingStrategy.translate(field.getName()));
         generator.writeNull();
+      }
+    }
+
+    if (message instanceof ExtendableMessageOrBuilder<?>) {
+      for (Entry<FieldDescriptor, Object> entry : message.getAllFields().entrySet()) {
+        FieldDescriptor field = entry.getKey();
+        if (!field.isExtension()) {
+          continue;
+        }
+
+        Object value = entry.getValue();
+        if (field.isRepeated()) {
+          List<?> valueList = (List<?>) value;
+
+          if (!valueList.isEmpty() || writeEmptyArrays(serializerProvider)) {
+            if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
+              generator.writeFieldName(namingStrategy.translate(field.getName()));
+              writeValue(field, valueList.get(0), generator, serializerProvider);
+            } else {
+              generator.writeArrayFieldStart(namingStrategy.translate(field.getName()));
+              for (Object subValue : valueList) {
+                writeValue(field, subValue, generator, serializerProvider);
+              }
+              generator.writeEndArray();
+            }
+          }
+        } else {
+          generator.writeFieldName(namingStrategy.translate(field.getName()));
+          writeValue(field, value, generator, serializerProvider);
+        }
       }
     }
 

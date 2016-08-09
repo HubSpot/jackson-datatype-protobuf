@@ -14,18 +14,19 @@ import com.fasterxml.jackson.databind.type.SimpleType;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,10 +37,17 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
   private final T defaultInstance;
   private final boolean build;
   @SuppressFBWarnings(value="SE_BAD_FIELD")
+  private final ExtensionRegistryWrapper extensionRegistry;
+  @SuppressFBWarnings(value="SE_BAD_FIELD")
   private final Map<FieldDescriptor, JsonDeserializer<Object>> deserializerCache;
 
-  @SuppressWarnings("unchecked")
   public ProtobufDeserializer(Class<T> messageType, boolean build) throws JsonMappingException {
+    this(messageType, build, ExtensionRegistryWrapper.empty());
+  }
+
+  @SuppressWarnings("unchecked")
+  public ProtobufDeserializer(Class<T> messageType, boolean build,
+                              ExtensionRegistryWrapper extensionRegistry) throws JsonMappingException {
     super(messageType);
 
     try {
@@ -49,6 +57,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     }
 
     this.build = build;
+    this.extensionRegistry = extensionRegistry;
     this.deserializerCache = new ConcurrentHashMap<>();
   }
 
@@ -87,16 +96,27 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
 
     Descriptor descriptor = builder.getDescriptorForType();
     Map<String, FieldDescriptor> fieldLookup = buildFieldLookup(descriptor, context);
+    Map<String, ExtensionInfo> extensionLookup = buildExtensionLookup(descriptor, context);
 
     do {
       if (!token.equals(JsonToken.FIELD_NAME)) {
         throw context.wrongTokenException(parser, JsonToken.FIELD_NAME, "");
       }
 
-      FieldDescriptor field = fieldLookup.get(parser.getCurrentName());
+      String name = parser.getCurrentName();
+      FieldDescriptor field = fieldLookup.get(name);
+      Message defaultInstance = null;
       if (field == null) {
-        if (!context.handleUnknownProperty(parser, this, builder, parser.getCurrentName())) {
-          context.reportUnknownProperty(builder, parser.getCurrentName(), this);
+        ExtensionInfo extensionInfo = extensionLookup.get(name);
+        if (extensionInfo != null) {
+          field = extensionInfo.descriptor;
+          defaultInstance = extensionInfo.defaultInstance;
+        }
+      }
+
+      if (field == null) {
+        if (!context.handleUnknownProperty(parser, this, builder, name)) {
+          context.reportUnknownProperty(builder, name, this);
         }
 
         parser.nextToken();
@@ -105,7 +125,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
       }
 
       parser.nextToken();
-      setField(builder, field, parser, context);
+      setField(builder, field, defaultInstance, parser, context);
     } while ((token = parser.nextToken()) != JsonToken.END_OBJECT);
   }
 
@@ -113,8 +133,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     PropertyNamingStrategyBase namingStrategy =
             new PropertyNamingStrategyWrapper(context.getConfig().getPropertyNamingStrategy());
 
-    Map<String, FieldDescriptor> fieldLookup = Maps.newHashMap();
-
+    Map<String, FieldDescriptor> fieldLookup = new HashMap<>();
     for (FieldDescriptor field : descriptor.getFields()) {
       fieldLookup.put(namingStrategy.translate(field.getName()), field);
     }
@@ -122,9 +141,21 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     return fieldLookup;
   }
 
-  private void setField(Message.Builder builder, FieldDescriptor field, JsonParser parser,
+  private Map<String, ExtensionInfo> buildExtensionLookup(Descriptor descriptor, DeserializationContext context) {
+    PropertyNamingStrategyBase namingStrategy =
+            new PropertyNamingStrategyWrapper(context.getConfig().getPropertyNamingStrategy());
+
+    Map<String, ExtensionInfo> extensionLookup = new HashMap<>();
+    for (ExtensionInfo extensionInfo : extensionRegistry.findExtensionsByDescriptor(descriptor)) {
+      extensionLookup.put(namingStrategy.translate(extensionInfo.descriptor.getName()), extensionInfo);
+    }
+
+    return extensionLookup;
+  }
+
+  private void setField(Message.Builder builder, FieldDescriptor field, Message defaultInstance, JsonParser parser,
                         DeserializationContext context) throws IOException {
-    Object value = readValue(builder, field, parser, context);
+    Object value = readValue(builder, field, defaultInstance, parser, context);
 
     if (value != null) {
       if (field.isRepeated()) {
@@ -143,13 +174,13 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     }
   }
 
-  private Object readValue(Message.Builder builder, FieldDescriptor field, JsonParser parser,
+  private Object readValue(Message.Builder builder, FieldDescriptor field, Message defaultInstance, JsonParser parser,
                            DeserializationContext context) throws IOException {
     final Object value;
 
     if (parser.getCurrentToken() == JsonToken.START_ARRAY) {
       if (field.isRepeated()) {
-        return readArray(builder, field, parser, context);
+        return readArray(builder, field, defaultInstance, parser, context);
       } else {
         throw mappingException(field, context);
       }
@@ -250,8 +281,13 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
           case START_OBJECT:
             JsonDeserializer<Object> deserializer = deserializerCache.get(field);
             if (deserializer == null) {
-              Message.Builder subBuilder = builder.newBuilderForField(field);
-              Class<?> subType = subBuilder.getDefaultInstanceForType().getClass();
+              final Class<?> subType;
+              if (defaultInstance == null) {
+                Message.Builder subBuilder = builder.newBuilderForField(field);
+                subType = subBuilder.getDefaultInstanceForType().getClass();
+              } else {
+                subType = defaultInstance.getClass();
+              }
 
               JavaType type = SimpleType.construct(subType);
               deserializer = context.findContextualValueDeserializer(type, null);
@@ -274,11 +310,11 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     return value;
   }
 
-  private List<Object> readArray(Message.Builder builder, FieldDescriptor field, JsonParser parser,
+  private List<Object> readArray(Message.Builder builder, FieldDescriptor field, Message defaultInstance, JsonParser parser,
                                  DeserializationContext context) throws IOException {
     List<Object> values = Lists.newArrayList();
     while (parser.nextToken() != JsonToken.END_ARRAY) {
-      Object value = readValue(builder, field, parser, context);
+      Object value = readValue(builder, field, defaultInstance, parser, context);
 
       if (value != null) {
         values.add(value);
