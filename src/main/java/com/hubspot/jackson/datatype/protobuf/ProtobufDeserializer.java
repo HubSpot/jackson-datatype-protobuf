@@ -20,6 +20,7 @@ import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
+import com.google.protobuf.GeneratedMessage.ExtendableMessageOrBuilder;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -94,9 +95,14 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
         break; // make findbugs happy
     }
 
-    Descriptor descriptor = builder.getDescriptorForType();
-    Map<String, FieldDescriptor> fieldLookup = buildFieldLookup(descriptor, context);
-    Map<String, ExtensionInfo> extensionLookup = buildExtensionLookup(descriptor, context);
+    final Descriptor descriptor = builder.getDescriptorForType();
+    final Map<String, FieldDescriptor> fieldLookup = buildFieldLookup(descriptor, context);
+    final Map<String, ExtensionInfo> extensionLookup;
+    if (builder instanceof ExtendableMessageOrBuilder<?>) {
+      extensionLookup = buildExtensionLookup(descriptor, context);
+    } else {
+      extensionLookup = Collections.emptyMap();
+    }
 
     do {
       if (!token.equals(JsonToken.FIELD_NAME)) {
