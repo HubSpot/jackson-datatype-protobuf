@@ -1,8 +1,5 @@
 package com.hubspot.jackson.test.util;
 
-import com.google.common.base.Throwables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
@@ -13,6 +10,8 @@ import com.google.protobuf.Message;
 import com.google.protobuf.Message.Builder;
 import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -33,7 +32,7 @@ public class ProtobufCreator {
   }
 
   public static <T extends Message> List<T> create(Class<T> messageType, ExtensionRegistry extensionRegistry, int count) {
-    List<T> messages = Lists.newArrayListWithCapacity(count);
+    List<T> messages = new ArrayList<>(count);
 
     for (int i = 0; i < count; i++) {
       messages.add(create(messageType, extensionRegistry));
@@ -57,7 +56,7 @@ public class ProtobufCreator {
   }
 
   public static <T extends Builder> List<T> createBuilder(Class<T> builderType, ExtensionRegistry extensionRegistry, int count) {
-    List<T> builders = Lists.newArrayListWithCapacity(count);
+    List<T> builders = new ArrayList<>(count);
 
     for (int i = 0; i < count; i++) {
       builders.add(createBuilder(builderType, extensionRegistry));
@@ -67,7 +66,7 @@ public class ProtobufCreator {
   }
 
   private static class Creator {
-    private final Map<Class<? extends Message>, Builder> partiallyBuilt = Maps.newHashMap();
+    private final Map<Class<? extends Message>, Builder> partiallyBuilt = new HashMap<>();
 
     private <T extends Message> T create(Class<T> messageType) {
       return create(messageType, ExtensionRegistry.getEmptyRegistry());
@@ -88,8 +87,8 @@ public class ProtobufCreator {
     private static <T extends Message> Builder newBuilder(Class<T> messageType) {
       try {
         return (Builder) messageType.getMethod("newBuilder").invoke(null);
-      } catch (Exception e) {
-        throw Throwables.propagate(e);
+      } catch (ReflectiveOperationException e) {
+        throw new RuntimeException(e);
       }
     }
 

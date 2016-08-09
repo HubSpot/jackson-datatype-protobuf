@@ -9,25 +9,36 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.google.protobuf.GeneratedMessage.ExtendableMessageOrBuilder;
 import com.google.protobuf.MessageOrBuilder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.lang.String.format;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
+  @SuppressFBWarnings(value="SE_BAD_FIELD")
+  private final ExtensionRegistryWrapper extensionRegistry;
   private final Map<Class<?>, JsonSerializer<Object>> serializerCache;
 
   public ProtobufSerializer() {
+    this(ExtensionRegistryWrapper.empty());
+  }
+
+  public ProtobufSerializer(ExtensionRegistryWrapper extensionRegistry) {
     super(MessageOrBuilder.class);
 
+    this.extensionRegistry = extensionRegistry;
     this.serializerCache = new ConcurrentHashMap<>();
   }
 
@@ -40,7 +51,17 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
     PropertyNamingStrategyBase namingStrategy =
             new PropertyNamingStrategyWrapper(serializerProvider.getConfig().getPropertyNamingStrategy());
 
-    for (FieldDescriptor field : message.getDescriptorForType().getFields()) {
+    Descriptor descriptor = message.getDescriptorForType();
+    List<FieldDescriptor> fields = new ArrayList<>();
+    fields.addAll(descriptor.getFields());
+    if (message instanceof ExtendableMessageOrBuilder<?>) {
+      List<ExtensionInfo> extensions = extensionRegistry.findExtensionsByDescriptor(descriptor);
+      for (ExtensionInfo extensionInfo : extensions) {
+        fields.add(extensionInfo.descriptor);
+      }
+    }
+
+    for (FieldDescriptor field : fields) {
       if (field.isRepeated()) {
         List<?> valueList = (List<?>) message.getField(field);
 
@@ -62,36 +83,6 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
       } else if (include == Include.ALWAYS) {
         generator.writeFieldName(namingStrategy.translate(field.getName()));
         generator.writeNull();
-      }
-    }
-
-    if (message instanceof ExtendableMessageOrBuilder<?>) {
-      for (Entry<FieldDescriptor, Object> entry : message.getAllFields().entrySet()) {
-        FieldDescriptor field = entry.getKey();
-        if (!field.isExtension()) {
-          continue;
-        }
-
-        Object value = entry.getValue();
-        if (field.isRepeated()) {
-          List<?> valueList = (List<?>) value;
-
-          if (!valueList.isEmpty() || writeEmptyArrays(serializerProvider)) {
-            if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
-              generator.writeFieldName(namingStrategy.translate(field.getName()));
-              writeValue(field, valueList.get(0), generator, serializerProvider);
-            } else {
-              generator.writeArrayFieldStart(namingStrategy.translate(field.getName()));
-              for (Object subValue : valueList) {
-                writeValue(field, subValue, generator, serializerProvider);
-              }
-              generator.writeEndArray();
-            }
-          }
-        } else {
-          generator.writeFieldName(namingStrategy.translate(field.getName()));
-          writeValue(field, value, generator, serializerProvider);
-        }
       }
     }
 

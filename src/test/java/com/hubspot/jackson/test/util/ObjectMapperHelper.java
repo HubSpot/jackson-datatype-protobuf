@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.MessageOrBuilder;
@@ -47,7 +46,7 @@ public class ObjectMapperHelper {
     try {
       return (T) mapper.treeToValue(tree, value.getClass());
     } catch (JsonProcessingException e) {
-      throw Throwables.propagate(e);
+      throw new RuntimeException(e);
     }
   }
 
@@ -63,7 +62,7 @@ public class ObjectMapperHelper {
     try {
       return Lists.newArrayList(mapper.readValues(parser, messageType));
     } catch (IOException e) {
-      throw Throwables.propagate(e);
+      throw new RuntimeException(e);
     }
   }
 

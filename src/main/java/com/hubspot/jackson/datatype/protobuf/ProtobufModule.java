@@ -37,7 +37,7 @@ public class ProtobufModule extends Module {
   @Override
   public void setupModule(SetupContext context) {
     SimpleSerializers serializers = new SimpleSerializers();
-    serializers.addSerializer(new ProtobufSerializer());
+    serializers.addSerializer(new ProtobufSerializer(extensionRegistry));
 
     context.addSerializers(serializers);
     context.addDeserializers(new ProtobufDeserializerFactory(extensionRegistry));
