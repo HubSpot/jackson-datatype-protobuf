@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.base.Function;
@@ -18,6 +19,7 @@ import com.hubspot.jackson.test.util.TestExtensionRegistry;
 import com.hubspot.jackson.test.util.TestProtobuf.AllFields;
 import com.hubspot.jackson.test.util.TestProtobuf.Nested;
 
+@Ignore
 public class AllExtensionsTest {
   private static final ExtensionRegistry EXTENSION_REGISTRY = TestExtensionRegistry.getInstance();
 

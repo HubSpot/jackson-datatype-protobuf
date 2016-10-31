@@ -53,7 +53,8 @@ public class ExtensionRegistryWrapper {
   @SuppressWarnings("unchecked")
   private static Collection<ExtensionInfo> extractExtensionInfo(ExtensionRegistry extensionRegistry) {
     try {
-      Field field = ExtensionRegistry.class.getDeclaredField("extensionsByName");
+      // FIXME there is also a field called mutableExtensionsByName
+      Field field = ExtensionRegistry.class.getDeclaredField("immutableExtensionsByName");
       field.setAccessible(true);
       Map<String, ExtensionInfo> extensionInfoMap = (Map<String, ExtensionInfo>) field.get(extensionRegistry);
       return extensionInfoMap.values();

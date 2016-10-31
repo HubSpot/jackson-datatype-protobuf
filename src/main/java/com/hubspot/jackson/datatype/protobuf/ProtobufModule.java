@@ -42,6 +42,7 @@ public class ProtobufModule extends Module {
     context.addSerializers(serializers);
     context.addDeserializers(new ProtobufDeserializerFactory(extensionRegistry));
     context.setMixInAnnotations(MessageOrBuilder.class, MessageOrBuilderMixin.class);
+    context.setClassIntrospector(new ProtobufClassIntrospector());
   }
 
   @JsonAutoDetect(getterVisibility = Visibility.NONE,

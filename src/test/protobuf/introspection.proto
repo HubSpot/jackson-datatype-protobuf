@@ -1,0 +1,33 @@
+syntax = "proto2";
+package Introspection;
+option java_package = "com.hubspot.jackson.test.util";
+option java_outer_classname = "TestIntrospection";
+
+message AllFields {
+    optional double double = 1;
+    optional string string = 2;
+    repeated Schtroumpf schlumpfen = 3;
+    optional Enum enum = 4;
+    optional Nested nested = 5;
+    map<string,string> bar = 6;
+    optional string camelCaseField = 7;
+    optional string snake_case_field = 8;
+}
+
+message Schtroumpf {
+    optional string foo = 1;
+}
+
+message Nested {
+    optional string a = 1;
+    optional SubNested c = 2;
+}
+
+message SubNested {
+    optional string b = 1;
+}
+
+enum Enum {
+    ONE = 1;
+    TWO = 2;
+}

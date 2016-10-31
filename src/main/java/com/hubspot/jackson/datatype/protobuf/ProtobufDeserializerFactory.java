@@ -57,7 +57,7 @@ public class ProtobufDeserializerFactory extends Deserializers.Base {
     private final Class<?> messageType;
     private final boolean build;
 
-    public CacheKey(Class<?> messageType, boolean build) {
+    CacheKey(Class<?> messageType, boolean build) {
       this.messageType = messageType;
       this.build = build;
     }
