@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
-//import com.fasterxml.jackson.databind.deser.impl.NullProvider;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.type.SimpleType;
 import com.google.common.base.Function;
@@ -208,7 +207,6 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
 
         if (value == null) {
           getNullValue(SimpleType.construct(Integer.TYPE), 0, context);
-//          new NullProvider(SimpleType.construct(Integer.TYPE), 0).nullValue(context);
         }
         break;
       case LONG:
@@ -216,7 +214,6 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
 
         if (value == null) {
           getNullValue(SimpleType.construct(Long.TYPE), 0L, context);
-//          new NullProvider(SimpleType.construct(Long.TYPE), 0L).nullValue(context);
         }
         break;
       case FLOAT:
@@ -224,7 +221,6 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
 
         if (value == null) {
           getNullValue(SimpleType.construct(Float.TYPE), 0.0f, context);
-//          new NullProvider(SimpleType.construct(Float.TYPE), 0.0f).nullValue(context);
         }
         break;
       case DOUBLE:
@@ -232,7 +228,6 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
 
         if (value == null) {
           getNullValue(SimpleType.construct(Double.TYPE), 0.0d, context);
-//          new NullProvider(SimpleType.construct(Double.TYPE), 0.0d).nullValue(context);
         }
         break;
       case BOOLEAN:
@@ -240,7 +235,6 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
 
         if (value == null) {
           getNullValue(SimpleType.construct(Boolean.TYPE), false, context);
-//          new NullProvider(SimpleType.construct(Boolean.TYPE), false).nullValue(context);
         }
         break;
       case STRING:
