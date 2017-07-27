@@ -1,6 +1,7 @@
 package com.hubspot.jackson.datatype.protobuf;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -8,7 +9,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
-import com.fasterxml.jackson.databind.deser.impl.NullProvider;
+//import com.fasterxml.jackson.databind.deser.impl.NullProvider;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.type.SimpleType;
 import com.google.common.base.Function;
@@ -180,6 +181,15 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     }
   }
 
+  private Object getNullValue(JavaType type, Object nullValue, DeserializationContext context) throws JsonProcessingException {
+    if (type.isPrimitive() && context.isEnabled(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)) {
+      throw context.mappingException("Can not map JSON null into type %s"
+          + " (set DeserializationConfig.DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES to 'false' to allow) -- "
+          + type.getRawClass().getName());
+    }
+    return nullValue;
+  }
+
   private Object readValue(Message.Builder builder, FieldDescriptor field, Message defaultInstance, JsonParser parser,
                            DeserializationContext context) throws IOException {
     final Object value;
@@ -197,35 +207,40 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
         value = _parseInteger(parser, context);
 
         if (value == null) {
-          new NullProvider(SimpleType.construct(Integer.TYPE), 0).nullValue(context);
+          getNullValue(SimpleType.construct(Integer.TYPE), 0, context);
+//          new NullProvider(SimpleType.construct(Integer.TYPE), 0).nullValue(context);
         }
         break;
       case LONG:
         value = _parseLong(parser, context);
 
         if (value == null) {
-          new NullProvider(SimpleType.construct(Long.TYPE), 0L).nullValue(context);
+          getNullValue(SimpleType.construct(Long.TYPE), 0L, context);
+//          new NullProvider(SimpleType.construct(Long.TYPE), 0L).nullValue(context);
         }
         break;
       case FLOAT:
         value = _parseFloat(parser, context);
 
         if (value == null) {
-          new NullProvider(SimpleType.construct(Float.TYPE), 0.0f).nullValue(context);
+          getNullValue(SimpleType.construct(Float.TYPE), 0.0f, context);
+//          new NullProvider(SimpleType.construct(Float.TYPE), 0.0f).nullValue(context);
         }
         break;
       case DOUBLE:
         value = _parseDouble(parser, context);
 
         if (value == null) {
-          new NullProvider(SimpleType.construct(Double.TYPE), 0.0d).nullValue(context);
+          getNullValue(SimpleType.construct(Double.TYPE), 0.0d, context);
+//          new NullProvider(SimpleType.construct(Double.TYPE), 0.0d).nullValue(context);
         }
         break;
       case BOOLEAN:
         value = _parseBoolean(parser, context);
 
         if (value == null) {
-          new NullProvider(SimpleType.construct(Boolean.TYPE), false).nullValue(context);
+          getNullValue(SimpleType.construct(Boolean.TYPE), false, context);
+//          new NullProvider(SimpleType.construct(Boolean.TYPE), false).nullValue(context);
         }
         break;
       case STRING:
