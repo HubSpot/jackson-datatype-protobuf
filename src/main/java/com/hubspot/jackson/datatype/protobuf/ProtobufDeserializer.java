@@ -1,9 +1,6 @@
 package com.hubspot.jackson.datatype.protobuf;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -39,12 +36,6 @@ import com.google.protobuf.MessageOrBuilder;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class ProtobufDeserializer<T extends Message> extends StdDeserializer<MessageOrBuilder> {
-  private static final Method INT_PARSER = determineIntParser();
-  private static final Method LONG_PARSER = determineLongParser();
-  private static final Method FLOAT_PARSER = determineFloatParser();
-  private static final Method DOUBLE_PARSER = determineDoubleParser();
-  private static final Method BOOLEAN_PARSER = determineBooleanParser();
-
   private final T defaultInstance;
   private final boolean build;
   @SuppressFBWarnings(value="SE_BAD_FIELD")
@@ -223,15 +214,15 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
 
     switch (field.getJavaType()) {
       case INT:
-        return invoke(INT_PARSER, this, parser, context);
+        return _parseIntPrimitive(parser, context);
       case LONG:
-        return invoke(LONG_PARSER, this, parser, context);
+        return _parseLongPrimitive(parser, context);
       case FLOAT:
-        return invoke(FLOAT_PARSER, this, parser, context);
+        return _parseFloatPrimitive(parser, context);
       case DOUBLE:
-        return invoke(DOUBLE_PARSER, this, parser, context);
+        return _parseDoublePrimitive(parser, context);
       case BOOLEAN:
-        return invoke(BOOLEAN_PARSER, this, parser, context);
+        return _parseBooleanPrimitive(parser, context);
       case STRING:
         switch (parser.getCurrentToken()) {
           case VALUE_STRING:
@@ -352,47 +343,5 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     JsonToken token = context.getParser().getCurrentToken();
     String message = "Can not deserialize instance of " + field.getJavaType() + " out of " + token + " token";
     throw context.mappingException(message);
-  }
-
-  private static Method determineIntParser() {
-    return findParseMethod("_parseIntPrimitive", "_parseInteger");
-  }
-
-  private static Method determineLongParser() {
-    return findParseMethod("_parseLongPrimitive", "_parseLong");
-  }
-
-  private static Method determineFloatParser() {
-    return findParseMethod("_parseFloatPrimitive", "_parseFloat");
-  }
-
-  private static Method determineDoubleParser() {
-    return findParseMethod("_parseDoublePrimitive", "_parseDouble");
-  }
-
-  private static Method determineBooleanParser() {
-    return findParseMethod("_parseBooleanPrimitive", "_parseBoolean");
-  }
-
-  private static Method findParseMethod(String... names) {
-    for (String name : names) {
-      try {
-        return StdDeserializer.class.getDeclaredMethod(name, JsonParser.class, DeserializationContext.class);
-      } catch (NoSuchMethodException e) {
-        // ignored
-      }
-    }
-
-    throw new RuntimeException("No method found on " + StdDeserializer.class + " for names: " + Arrays.asList(names));
-  }
-
-  private static Object invoke(Method method, Object instance, Object... args) {
-    try {
-      return method.invoke(instance, args);
-    } catch (IllegalAccessException e) {
-      throw new RuntimeException(e);
-    } catch (InvocationTargetException e) {
-      throw new RuntimeException(e.getCause());
-    }
   }
 }
