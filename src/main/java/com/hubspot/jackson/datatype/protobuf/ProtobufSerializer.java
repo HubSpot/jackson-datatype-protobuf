@@ -1,8 +1,16 @@
 package com.hubspot.jackson.datatype.protobuf;
 
+import static java.lang.String.format;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -15,14 +23,6 @@ import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.google.protobuf.GeneratedMessage.ExtendableMessageOrBuilder;
 import com.google.protobuf.MessageOrBuilder;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static java.lang.String.format;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -47,7 +47,7 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
           throws IOException {
     generator.writeStartObject();
 
-    Include include = serializerProvider.getConfig().getSerializationInclusion();
+    Include include = serializerProvider.getConfig().getDefaultPropertyInclusion().getValueInclusion();
     PropertyNamingStrategyBase namingStrategy =
             new PropertyNamingStrategyWrapper(serializerProvider.getConfig().getPropertyNamingStrategy());
 
@@ -134,7 +134,7 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
         serializer.serialize(value, generator, serializerProvider);
         break;
       default:
-        throw unrecognizedType(field);
+        throw unrecognizedType(field, generator);
     }
   }
 
@@ -150,8 +150,8 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
     return config.isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX);
   }
 
-  private static IOException unrecognizedType(FieldDescriptor field) throws IOException {
+  private static IOException unrecognizedType(FieldDescriptor field, JsonGenerator generator) throws IOException {
     String error = format("Unrecognized java type '%s' for field %s", field.getJavaType(), field.getFullName());
-    throw new JsonMappingException(error);
+    throw new JsonGenerationException(error, generator);
   }
 }

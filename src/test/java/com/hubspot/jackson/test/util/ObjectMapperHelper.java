@@ -1,5 +1,9 @@
 package com.hubspot.jackson.test.util;
 
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.TreeNode;
@@ -11,13 +15,9 @@ import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.MessageOrBuilder;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-
 public class ObjectMapperHelper {
   private static final ObjectMapper DEFAULT = create();
-  private static final ObjectMapper UNDERSCORE = create(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+  private static final ObjectMapper UNDERSCORE = create(PropertyNamingStrategy.SNAKE_CASE);
 
   public static ObjectMapper camelCase() {
     return DEFAULT;
@@ -32,7 +32,7 @@ public class ObjectMapperHelper {
   }
 
   public static ObjectMapper underscore(ExtensionRegistry extensionRegistry) {
-    return create(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES, extensionRegistry);
+    return create(PropertyNamingStrategy.SNAKE_CASE, extensionRegistry);
   }
 
   public static JsonNode toTree(ObjectMapper mapper, Object value) {

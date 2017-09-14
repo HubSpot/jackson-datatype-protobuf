@@ -279,7 +279,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
                 subType = defaultInstance.getClass();
               }
 
-              JavaType type = SimpleType.construct(subType);
+              JavaType type = context.constructType(subType);
               deserializer = context.findContextualValueDeserializer(type, null);
               deserializerCache.put(field, deserializer);
             }
