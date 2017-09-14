@@ -55,7 +55,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     try {
       this.defaultInstance = (T) messageType.getMethod("getDefaultInstance").invoke(null);
     } catch (Exception e) {
-      throw new JsonMappingException("Unable to get default instance for type " + messageType, e);
+      throw new RuntimeException("Unable to get default instance for type " + messageType, e);
     }
 
     this.build = build;
