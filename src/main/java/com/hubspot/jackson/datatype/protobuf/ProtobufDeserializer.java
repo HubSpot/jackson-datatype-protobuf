@@ -1,5 +1,17 @@
 package com.hubspot.jackson.datatype.protobuf;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.annotation.Nonnull;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
@@ -23,18 +35,16 @@ import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.google.protobuf.GeneratedMessage.ExtendableMessageOrBuilder;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.annotation.Nonnull;
-
 public class ProtobufDeserializer<T extends Message> extends StdDeserializer<MessageOrBuilder> {
+  private static final Method INT_PARSER = determineIntParser();
+  private static final Method LONG_PARSER = determineLongParser();
+  private static final Method FLOAT_PARSER = determineFloatParser();
+  private static final Method DOUBLE_PARSER = determineDoubleParser();
+  private static final Method BOOLEAN_PARSER = determineBooleanParser();
+
   private final T defaultInstance;
   private final boolean build;
   @SuppressFBWarnings(value="SE_BAD_FIELD")
@@ -180,19 +190,15 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     }
   }
 
-  private Object getNullValue(JavaType type, Object nullValue, DeserializationContext context) throws JsonProcessingException {
-    if (type.isPrimitive() && context.isEnabled(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)) {
-      throw context.mappingException("Can not map JSON null into type %s"
-          + " (set DeserializationConfig.DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES to 'false' to allow) -- "
-          + type.getRawClass().getName());
+  private void checkNullReturn(FieldDescriptor field, DeserializationContext context) throws JsonProcessingException {
+    if (context.isEnabled(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)) {
+      throw context.mappingException("Can not map JSON null into primitive field " + field.getFullName()
+          + " (set DeserializationConfig.DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES to 'false' to allow)");
     }
-    return nullValue;
   }
 
   private Object readValue(Message.Builder builder, FieldDescriptor field, Message defaultInstance, JsonParser parser,
                            DeserializationContext context) throws IOException {
-    final Object value;
-
     if (parser.getCurrentToken() == JsonToken.START_ARRAY) {
       if (field.isRepeated()) {
         return readArray(builder, field, defaultInstance, parser, context);
@@ -201,96 +207,74 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
       }
     }
 
+    if (parser.getCurrentToken() == JsonToken.VALUE_NULL) {
+      switch (field.getJavaType()) {
+        case INT:
+        case LONG:
+        case FLOAT:
+        case DOUBLE:
+        case BOOLEAN:
+          checkNullReturn(field, context);
+          // fall through
+        default:
+          return null;
+      }
+    }
+
     switch (field.getJavaType()) {
       case INT:
-        value = _parseInteger(parser, context);
-
-        if (value == null) {
-          getNullValue(SimpleType.construct(Integer.TYPE), 0, context);
-        }
-        break;
+        return invoke(INT_PARSER, this, parser, context);
       case LONG:
-        value = _parseLong(parser, context);
-
-        if (value == null) {
-          getNullValue(SimpleType.construct(Long.TYPE), 0L, context);
-        }
-        break;
+        return invoke(LONG_PARSER, this, parser, context);
       case FLOAT:
-        value = _parseFloat(parser, context);
-
-        if (value == null) {
-          getNullValue(SimpleType.construct(Float.TYPE), 0.0f, context);
-        }
-        break;
+        return invoke(FLOAT_PARSER, this, parser, context);
       case DOUBLE:
-        value = _parseDouble(parser, context);
-
-        if (value == null) {
-          getNullValue(SimpleType.construct(Double.TYPE), 0.0d, context);
-        }
-        break;
+        return invoke(DOUBLE_PARSER, this, parser, context);
       case BOOLEAN:
-        value = _parseBoolean(parser, context);
-
-        if (value == null) {
-          getNullValue(SimpleType.construct(Boolean.TYPE), false, context);
-        }
-        break;
+        return invoke(BOOLEAN_PARSER, this, parser, context);
       case STRING:
         switch (parser.getCurrentToken()) {
           case VALUE_STRING:
-            value = parser.getText();
-            break;
-          case VALUE_NULL:
-            value = null;
-            break;
+            return parser.getText();
           default:
-            value = _parseString(parser, context);
+            return _parseString(parser, context);
         }
-        break;
       case BYTE_STRING:
         switch (parser.getCurrentToken()) {
           case VALUE_STRING:
-            value = ByteString.copyFrom(context.getBase64Variant().decode(parser.getText()));
-            break;
-          case VALUE_NULL:
-            value = null;
-            break;
+            return ByteString.copyFrom(context.getBase64Variant().decode(parser.getText()));
           default:
             throw mappingException(field, context);
         }
-        break;
       case ENUM:
+        final EnumValueDescriptor enumValueDescriptor;
         switch (parser.getCurrentToken()) {
           case VALUE_STRING:
-            value = field.getEnumType().findValueByName(parser.getText());
+            enumValueDescriptor = field.getEnumType().findValueByName(parser.getText());
 
-            if (value == null && !ignorableEnum(parser.getText().trim(), context)) {
+            if (enumValueDescriptor == null && !ignorableEnum(parser.getText().trim(), context)) {
               throw context.weirdStringException(parser.getText(), field.getEnumType().getClass(),
                       "value not one of declared Enum instance names");
             }
-            break;
+
+            return enumValueDescriptor;
           case VALUE_NUMBER_INT:
             if (allowNumbersForEnums(context)) {
-              value = field.getEnumType().findValueByNumber(parser.getIntValue());
+              enumValueDescriptor = field.getEnumType().findValueByNumber(parser.getIntValue());
 
-              if (value == null && !ignoreUnknownEnums(context)) {
+              if (enumValueDescriptor == null && !ignoreUnknownEnums(context)) {
                 throw context.weirdNumberException(parser.getIntValue(), field.getEnumType().getClass(),
                         "index value outside legal index range " + indexRange(field.getEnumType()));
               }
+
+              return enumValueDescriptor;
             } else {
               throw context.mappingException("Not allowed to deserialize Enum value out of JSON number " +
                       "(disable DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS to allow)");
             }
-            break;
-          case VALUE_NULL:
-            value = null;
-            break;
           default:
             throw mappingException(field, context);
         }
-        break;
       case MESSAGE:
         switch (parser.getCurrentToken()) {
           case START_OBJECT:
@@ -309,20 +293,13 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
               deserializerCache.put(field, deserializer);
             }
 
-            value = deserializer.deserialize(parser, context);
-            break;
-          case VALUE_NULL:
-            value = null;
-            break;
+            return deserializer.deserialize(parser, context);
           default:
             throw mappingException(field, context);
         }
-        break;
       default:
         throw mappingException(field, context);
     }
-
-    return value;
   }
 
   private List<Object> readArray(Message.Builder builder, FieldDescriptor field, Message defaultInstance, JsonParser parser,
@@ -375,5 +352,47 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     JsonToken token = context.getParser().getCurrentToken();
     String message = "Can not deserialize instance of " + field.getJavaType() + " out of " + token + " token";
     throw context.mappingException(message);
+  }
+
+  private static Method determineIntParser() {
+    return findParseMethod("_parseIntPrimitive", "_parseInteger");
+  }
+
+  private static Method determineLongParser() {
+    return findParseMethod("_parseLongPrimitive", "_parseLong");
+  }
+
+  private static Method determineFloatParser() {
+    return findParseMethod("_parseFloatPrimitive", "_parseFloat");
+  }
+
+  private static Method determineDoubleParser() {
+    return findParseMethod("_parseDoublePrimitive", "_parseDouble");
+  }
+
+  private static Method determineBooleanParser() {
+    return findParseMethod("_parseBooleanPrimitive", "_parseBoolean");
+  }
+
+  private static Method findParseMethod(String... names) {
+    for (String name : names) {
+      try {
+        return StdDeserializer.class.getDeclaredMethod(name, JsonParser.class, DeserializationContext.class);
+      } catch (NoSuchMethodException e) {
+        // ignored
+      }
+    }
+
+    throw new RuntimeException("No method found on " + StdDeserializer.class + " for names: " + Arrays.asList(names));
+  }
+
+  private static Object invoke(Method method, Object instance, Object... args) {
+    try {
+      return method.invoke(instance, args);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    } catch (InvocationTargetException e) {
+      throw new RuntimeException(e.getCause());
+    }
   }
 }
