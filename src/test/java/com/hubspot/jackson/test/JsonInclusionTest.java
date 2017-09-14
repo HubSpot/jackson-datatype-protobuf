@@ -1,9 +1,20 @@
 package com.hubspot.jackson.test;
 
+import static com.hubspot.jackson.test.util.ObjectMapperHelper.camelCase;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.CaseFormat;
+import com.google.common.base.Enums;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry;
@@ -11,17 +22,9 @@ import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
 import com.hubspot.jackson.test.util.TestExtensionRegistry;
 import com.hubspot.jackson.test.util.TestProtobuf.AllFields;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
-
-import static com.hubspot.jackson.test.util.ObjectMapperHelper.camelCase;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class JsonInclusionTest {
+  private static final EnumSet<Include> EXCLUDED_VALUES = presentValues("ALWAYS", "USE_DEFAULTS", "CUSTOM");
   private static final ExtensionRegistry EXTENSION_REGISTRY = TestExtensionRegistry.getInstance();
 
   private static Set<String> allFields;
@@ -78,7 +81,7 @@ public class JsonInclusionTest {
   public void itOnlyWritesArrayFieldsWhenSerializationIncludeIsNotAlways() {
     AllFields message = AllFields.getDefaultInstance();
 
-    for (Include inclusion : EnumSet.complementOf(EnumSet.of(Include.ALWAYS))) {
+    for (Include inclusion : EnumSet.complementOf(EXCLUDED_VALUES)) {
       JsonNode node = mapper(inclusion).valueToTree(message);
 
       for (String field : allFields) {
@@ -116,7 +119,7 @@ public class JsonInclusionTest {
   public void itOnlyWritesArrayExtensionFieldsWhenSerializationIncludeIsNotAlways() {
     AllFields message = AllFields.getDefaultInstance();
 
-    for (Include inclusion : EnumSet.complementOf(EnumSet.of(Include.ALWAYS))) {
+    for (Include inclusion : EnumSet.complementOf(EXCLUDED_VALUES)) {
       JsonNode node = mapper(inclusion, EXTENSION_REGISTRY).valueToTree(message);
 
       for (String field : allExtensionFields) {
@@ -140,5 +143,15 @@ public class JsonInclusionTest {
 
   private static ObjectMapper mapper(Include inclusion, ExtensionRegistry extensionRegistry) {
     return camelCase(extensionRegistry).copy().setSerializationInclusion(inclusion);
+  }
+
+  private static EnumSet<Include> presentValues(String... values) {
+    EnumSet<Include> set = EnumSet.noneOf(Include.class);
+
+    for (String value : values) {
+      set.addAll(Enums.getIfPresent(Include.class, value).asSet());
+    }
+
+    return set;
   }
 }
