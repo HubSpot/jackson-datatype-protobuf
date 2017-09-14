@@ -32,28 +32,14 @@ after which functionality is available for all normal Jackson operations.
 
 ### Jackson Compatibility
 
-See the following compatibility table:
+See the following compatibility matrix:
 
-| Library Version | Jackson Version | Compatible |
-| --------------- | --------------- | ---------- |
-| 0.9.3 | 2.3.x | Yes |
-| 0.9.3 | 2.4.x | Yes |
-| 0.9.3 | 2.5.x | Yes |
-| 0.9.3 | 2.6.x | Yes |
-| 0.9.3 | 2.7.x | Yes |
-| 0.9.3 | 2.8.x | **NO** |
-| 0.9.3 | 2.9.x | **NO** |
-| 0.9.4 | 2.3.x | Yes |
-| 0.9.4 | 2.4.x | Yes |
-| 0.9.4 | 2.5.x | Yes |
-| 0.9.4 | 2.6.x | Yes |
-| 0.9.4 | 2.7.x | Yes |
-| 0.9.4 | 2.8.x | Yes |
-| 0.9.4 | 2.9.x | **NO** |
-| 0.9.5 | 2.3.x | Yes |
-| 0.9.5 | 2.4.x | Yes |
-| 0.9.5 | 2.5.x | Yes |
-| 0.9.5 | 2.6.x | Yes |
-| 0.9.5 | 2.7.x | Yes |
-| 0.9.5 | 2.8.x | Yes |
-| 0.9.5 | 2.9.x | Yes |
+| | Library Version 0.9.5 | Library Version 0.9.4 | Library Version 0.9.3 |
+| ----- | --------------------- | --------------------- | --------------------- |
+| Jackson 2.3.x | Yes | Yes | Yes |
+| Jackson 2.4.x | Yes | Yes | Yes |
+| Jackson 2.5.x | Yes | Yes | Yes |
+| Jackson 2.6.x | Yes | Yes | Yes |
+| Jackson 2.7.x | Yes | Yes | Yes |
+| Jackson 2.8.x | Yes | Yes | **NO** |
+| Jackson 2.9.x | Yes | **NO** | **NO** |
