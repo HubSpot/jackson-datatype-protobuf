@@ -36,10 +36,10 @@ See the following compatibility matrix:
 
 | | Library Version 0.9.5 | Library Version 0.9.4 | Library Version 0.9.3 |
 | ----- | --------------------- | --------------------- | --------------------- |
-| Jackson 2.3.x | Yes | Yes | Yes |
-| Jackson 2.4.x | Yes | Yes | Yes |
-| Jackson 2.5.x | Yes | Yes | Yes |
-| Jackson 2.6.x | Yes | Yes | Yes |
-| Jackson 2.7.x | Yes | Yes | Yes |
-| Jackson 2.8.x | Yes | Yes | **NO** |
-| Jackson 2.9.x | Yes | **NO** | **NO** |
+| Jackson 2.3.x | Compatible | Compatible | Compatible |
+| Jackson 2.4.x | Compatible | Compatible | Compatible |
+| Jackson 2.5.x | Compatible | Compatible | Compatible |
+| Jackson 2.6.x | Compatible | Compatible | Compatible |
+| Jackson 2.7.x | Compatible | Compatible | Compatible |
+| Jackson 2.8.x | Compatible | Compatible | **INCOMPATIBLE** |
+| Jackson 2.9.x | Compatible | **INCOMPATIBLE** | **INCOMPATIBLE** |
