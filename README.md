@@ -32,4 +32,28 @@ after which functionality is available for all normal Jackson operations.
 
 ### Jackson Compatibility
 
-All tests pass with Jackson 2.3.x-2.6.x. Possible subtle changes in behavior with Jackson 2.7.x-2.8.x. Incompatible with Jackson 2.9.x+
+See the following compatibility matrix:
+
+| Library Version | Jackson Version | Compatible |
+| --------------- | --------------- | ---------- |
+| 0.9.3 | 2.3.x | Yes |
+| 0.9.3 | 2.4.x | Yes |
+| 0.9.3 | 2.5.x | Yes |
+| 0.9.3 | 2.6.x | Yes |
+| 0.9.3 | 2.7.x | Yes |
+| 0.9.3 | 2.8.x | **NO** |
+| 0.9.3 | 2.9.x | **NO** |
+| 0.9.4 | 2.3.x | Yes |
+| 0.9.4 | 2.4.x | Yes |
+| 0.9.4 | 2.5.x | Yes |
+| 0.9.4 | 2.6.x | Yes |
+| 0.9.4 | 2.7.x | Yes |
+| 0.9.4 | 2.8.x | Yes |
+| 0.9.4 | 2.9.x | **NO** |
+| 0.9.5 | 2.3.x | Yes |
+| 0.9.5 | 2.4.x | Yes |
+| 0.9.5 | 2.5.x | Yes |
+| 0.9.5 | 2.6.x | Yes |
+| 0.9.5 | 2.7.x | Yes |
+| 0.9.5 | 2.8.x | Yes |
+| 0.9.5 | 2.9.x | Yes |
