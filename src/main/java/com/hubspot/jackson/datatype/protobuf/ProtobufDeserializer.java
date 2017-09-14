@@ -215,7 +215,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
         case DOUBLE:
         case BOOLEAN:
           checkNullReturn(field, context);
-          // fall through
+          return null; // could just fall through, but findbugs is dumb
         default:
           return null;
       }
