@@ -29,3 +29,7 @@ mapper.registerModule(new ProtobufModule());
 ```
 
 after which functionality is available for all normal Jackson operations.
+
+### Jackson Compatibility
+
+All tests pass with Jackson 2.3.x-2.6.x. Possible subtle changes in behavior with Jackson 2.7.x-2.8.x. Incompatible with Jackson 2.9.x+
