@@ -121,10 +121,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
       }
 
       if (field == null) {
-        if (!context.handleUnknownProperty(parser, this, builder, name)) {
-          context.reportUnknownProperty(builder, name, this);
-        }
-
+        context.handleUnknownProperty(parser, this, builder, name);
         parser.nextToken();
         parser.skipChildren();
         continue;
