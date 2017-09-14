@@ -32,7 +32,7 @@ after which functionality is available for all normal Jackson operations.
 
 ### Jackson Compatibility
 
-See the following compatibility matrix:
+See the following compatibility table:
 
 | Library Version | Jackson Version | Compatible |
 | --------------- | --------------- | ---------- |
