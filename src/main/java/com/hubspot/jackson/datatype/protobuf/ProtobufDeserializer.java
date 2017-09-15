@@ -106,7 +106,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
 
     do {
       if (!token.equals(JsonToken.FIELD_NAME)) {
-        throw context.wrongTokenException(parser, JsonToken.FIELD_NAME, "");
+        throw reportWrongToken(JsonToken.FIELD_NAME, context, "");
       }
 
       String name = parser.getCurrentName();
@@ -169,7 +169,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
         } else if (context.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)) {
           builder.addRepeatedField(field, value);
         } else {
-          throw mappingException(field, context);
+          throw reportInputMismatch(context, "Expected JSON array for repeated field " + field.getFullName());
         }
       } else {
         builder.setField(field, value);
@@ -179,8 +179,8 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
 
   private void checkNullReturn(FieldDescriptor field, DeserializationContext context) throws JsonProcessingException {
     if (context.isEnabled(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)) {
-      throw context.mappingException("Can not map JSON null into primitive field " + field.getFullName()
-          + " (set DeserializationConfig.DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES to 'false' to allow)");
+      throw reportInputMismatch(context, "Can not map JSON null into primitive field " + field.getFullName()
+              + " (set DeserializationConfig.DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES to 'false' to allow)");
     }
   }
 
@@ -190,7 +190,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
       if (field.isRepeated()) {
         return readArray(builder, field, defaultInstance, parser, context);
       } else {
-        throw mappingException(field, context);
+        throw reportInputMismatch(context, "Encountered START_ARRAY token for non-repeated field " + field.getFullName());
       }
     }
 
@@ -231,7 +231,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
           case VALUE_STRING:
             return ByteString.copyFrom(context.getBase64Variant().decode(parser.getText()));
           default:
-            throw mappingException(field, context);
+            throw reportWrongToken(field, JsonToken.VALUE_STRING, context);
         }
       case ENUM:
         final EnumValueDescriptor enumValueDescriptor;
@@ -256,11 +256,11 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
 
               return enumValueDescriptor;
             } else {
-              throw context.mappingException("Not allowed to deserialize Enum value out of JSON number " +
-                      "(disable DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS to allow)");
+              throw reportWrongToken(JsonToken.VALUE_STRING, context, "Not allowed to deserialize Enum " +
+                      "value out of JSON number (disable DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS to allow)");
             }
           default:
-            throw mappingException(field, context);
+            throw reportWrongToken(field, JsonToken.VALUE_STRING, context);
         }
       case MESSAGE:
         switch (parser.getCurrentToken()) {
@@ -282,10 +282,10 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
 
             return deserializer.deserialize(parser, context);
           default:
-            throw mappingException(field, context);
+            throw reportWrongToken(field, JsonToken.START_OBJECT, context);
         }
       default:
-        throw mappingException(field, context);
+        throw new IllegalArgumentException("Unrecognized field type: " + field.getJavaType());
     }
   }
 
@@ -300,6 +300,22 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
       }
     }
     return values;
+  }
+
+  private AssertionError reportInputMismatch(DeserializationContext context, String message) throws JsonMappingException {
+    context.reportInputMismatch(this, message);
+    // the previous method should have thrown
+    throw new AssertionError();
+  }
+
+  private AssertionError reportWrongToken(FieldDescriptor field, JsonToken expected, DeserializationContext context) throws JsonMappingException {
+    return reportWrongToken(expected, context, wrongTokenMessage(field, context));
+  }
+
+  private AssertionError reportWrongToken(JsonToken expected, DeserializationContext context, String message) throws JsonMappingException {
+    context.reportWrongTokenException(this, expected, message);
+    // the previous method should have thrown
+    throw new AssertionError();
   }
 
   private static boolean ignorableEnum(String value, DeserializationContext context) {
@@ -334,10 +350,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
     return "[" + Joiner.on(',').join(indices) + "]";
   }
 
-  private static JsonMappingException mappingException(FieldDescriptor field, DeserializationContext context)
-          throws IOException {
-    JsonToken token = context.getParser().getCurrentToken();
-    String message = "Can not deserialize instance of " + field.getJavaType() + " out of " + token + " token";
-    throw context.mappingException(message);
+  private static String wrongTokenMessage(FieldDescriptor field, DeserializationContext context) {
+    return "Can not deserialize instance of " + field.getJavaType() + " out of " + context.getParser().currentToken() + " token";
   }
 }
