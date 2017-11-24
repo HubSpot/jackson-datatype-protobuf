@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.google.protobuf.Message;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -80,7 +82,10 @@ public class ProtobufDeserializerFactory extends Deserializers.Base {
 
     @Override
     public int hashCode() {
-      return Objects.hash(messageType, build);
+      List<Object> toHashCode = new ArrayList<>();
+      toHashCode.add(messageType);
+      toHashCode.add(build);
+      return Arrays.hashCode(toHashCode.toArray());
     }
   }
 }
