@@ -57,7 +57,7 @@ public class ExtensionRegistryWrapper {
       field.setAccessible(true);
       Map<String, ExtensionInfo> extensionInfoMap = (Map<String, ExtensionInfo>) field.get(extensionRegistry);
       return extensionInfoMap.values();
-    } catch (ReflectiveOperationException e) {
+    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
