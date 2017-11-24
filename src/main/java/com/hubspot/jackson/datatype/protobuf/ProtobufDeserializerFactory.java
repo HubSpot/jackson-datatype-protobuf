@@ -73,7 +73,9 @@ public class ProtobufDeserializerFactory extends Deserializers.Base {
       }
 
       CacheKey cacheKey = (CacheKey) o;
-      return Objects.equals(build, cacheKey.build) && Objects.equals(messageType, cacheKey.messageType);
+      boolean buildEquals = build == cacheKey.build;
+      boolean messageTypeEquals = messageType == cacheKey.messageType || messageType != null && messageType.equals(cacheKey.messageType);
+      return buildEquals && messageTypeEquals;
     }
 
     @Override
