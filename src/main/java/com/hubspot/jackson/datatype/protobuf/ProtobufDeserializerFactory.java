@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.google.protobuf.Message;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -73,12 +75,17 @@ public class ProtobufDeserializerFactory extends Deserializers.Base {
       }
 
       CacheKey cacheKey = (CacheKey) o;
-      return Objects.equals(build, cacheKey.build) && Objects.equals(messageType, cacheKey.messageType);
+      boolean buildEquals = build == cacheKey.build;
+      boolean messageTypeEquals = messageType == cacheKey.messageType || messageType != null && messageType.equals(cacheKey.messageType);
+      return buildEquals && messageTypeEquals;
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(messageType, build);
+      List<Object> toHashCode = new ArrayList<>();
+      toHashCode.add(messageType);
+      toHashCode.add(build);
+      return Arrays.hashCode(toHashCode.toArray());
     }
   }
 }
