@@ -13,11 +13,16 @@ To use module on Maven-based projects, use following dependency:
 <dependency>
   <groupId>com.hubspot.jackson</groupId>
   <artifactId>jackson-datatype-protobuf</artifactId>
-  <version>0.9.5</version>
+  <version><!-- see table below --></version>
 </dependency>
 ```
 
-(or whatever version is most up-to-date at the moment)
+There are separate versions based on which version of Jackson you are using, as well as which version of protobuf (protobuf 3 compatibility is in the works). The follow table shows which version to use based on these factors:
+
+| | Jackson <= 2.6.x | Jackson 2.7.x | Jackson 2.8.x | Jackson 2.9.x |
+| ----- | ---------- | ------------- | ------------- | ------------- |
+| Protobuf 2.x | 0.9.7-preJackson2.7-proto2 | 0.9.7-jackson2.7-proto2 | 0.9.7-jackson2.8-proto2 | 0.9.7-jackson2.9-proto2 |
+| Protobuf 3.x | coming soon | coming soon | coming soon | coming soon |
 
 ### Registering module
 
@@ -29,17 +34,3 @@ mapper.registerModule(new ProtobufModule());
 ```
 
 after which functionality is available for all normal Jackson operations.
-
-### Jackson Compatibility
-
-See the following compatibility matrix:
-
-| | Library Version 0.9.5 | Library Version 0.9.4 | Library Version 0.9.3 |
-| ----- | --------------------- | --------------------- | --------------------- |
-| Jackson 2.3.x | Compatible | Compatible | Compatible |
-| Jackson 2.4.x | Compatible | Compatible | Compatible |
-| Jackson 2.5.x | Compatible | Compatible | Compatible |
-| Jackson 2.6.x | Compatible | Compatible | Compatible |
-| Jackson 2.7.x | Compatible | Compatible | Compatible |
-| Jackson 2.8.x | Compatible | Compatible | **INCOMPATIBLE** |
-| Jackson 2.9.x | Compatible | **INCOMPATIBLE** | **INCOMPATIBLE** |
