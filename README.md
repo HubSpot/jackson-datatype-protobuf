@@ -17,6 +17,8 @@ To use module on Maven-based projects, use following dependency:
 </dependency>
 ```
 
+### Versions
+
 There are separate versions based on which version of Jackson you are using, as well as which version of protobuf (protobuf 3 compatibility is in the works). The follow table shows which version to use based on these factors:
 
 | | Jackson <= 2.6.x | Jackson 2.7.x | Jackson 2.8.x | Jackson 2.9.x |
