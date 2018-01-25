@@ -152,7 +152,7 @@ public class ProtobufDeserializer<T extends Message> extends StdDeserializer<Mes
             new PropertyNamingStrategyWrapper(context.getConfig().getPropertyNamingStrategy());
 
     Map<String, ExtensionInfo> extensionLookup = new HashMap<>();
-    for (ExtensionInfo extensionInfo : extensionRegistry.findExtensionsByDescriptor(descriptor)) {
+    for (ExtensionInfo extensionInfo : extensionRegistry.getExtensionsByDescriptor(descriptor)) {
       extensionLookup.put(namingStrategy.translate(extensionInfo.descriptor.getName()), extensionInfo);
     }
 

@@ -1,6 +1,8 @@
 package com.hubspot.jackson.datatype.protobuf;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,7 +35,8 @@ public class ExtensionRegistryWrapper {
           return cached;
         }
 
-        Set<ExtensionInfo> extensions = extensionRegistry.getAllImmutableExtensionsByExtendedType(descriptor.getFullName());
+        Set<ExtensionInfo> extensions =
+                extensionRegistry.getAllImmutableExtensionsByExtendedType(descriptor.getFullName());
         extensionCache.put(descriptor, extensions);
         return extensions;
       }
@@ -48,7 +51,15 @@ public class ExtensionRegistryWrapper {
     return new ExtensionRegistryWrapper();
   }
 
-  public Set<ExtensionInfo> findExtensionsByDescriptor(Descriptor descriptor) {
+  /**
+   * @deprecated use {@link #getExtensionsByDescriptor(Descriptor)}
+   */
+  @Deprecated
+  public List<ExtensionInfo> findExtensionsByDescriptor(Descriptor descriptor) {
+    return new ArrayList<>(getExtensionsByDescriptor(descriptor));
+  }
+
+  public Set<ExtensionInfo> getExtensionsByDescriptor(Descriptor descriptor) {
     return extensionFunction.apply(descriptor);
   }
 
