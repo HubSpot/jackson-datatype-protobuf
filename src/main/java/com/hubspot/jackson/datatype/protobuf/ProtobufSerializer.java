@@ -55,7 +55,7 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
     List<FieldDescriptor> fields = new ArrayList<>();
     fields.addAll(descriptor.getFields());
     if (message instanceof ExtendableMessageOrBuilder<?>) {
-      for (ExtensionInfo extensionInfo : extensionRegistry.findExtensionsByDescriptor(descriptor)) {
+      for (ExtensionInfo extensionInfo : extensionRegistry.getExtensionsByDescriptor(descriptor)) {
         fields.add(extensionInfo.descriptor);
       }
     }
