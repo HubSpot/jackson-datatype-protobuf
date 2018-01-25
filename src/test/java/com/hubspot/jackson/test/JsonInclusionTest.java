@@ -49,7 +49,7 @@ public class JsonInclusionTest {
     arrayExtensionFields = new HashSet<>();
 
     ExtensionRegistryWrapper extensionRegistry = ExtensionRegistryWrapper.wrap(EXTENSION_REGISTRY);
-    for (ExtensionInfo extensionInfo : extensionRegistry.findExtensionsByDescriptor(descriptor)) {
+    for (ExtensionInfo extensionInfo : extensionRegistry.getExtensionsByDescriptor(descriptor)) {
       allExtensionFields.add(translate(extensionInfo.descriptor.getName()));
       if (extensionInfo.descriptor.isRepeated()) {
         arrayExtensionFields.add(translate(extensionInfo.descriptor.getName()));
