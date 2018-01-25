@@ -1,5 +1,11 @@
 package com.hubspot.jackson.test.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
@@ -9,12 +15,6 @@ import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.google.protobuf.Message;
 import com.google.protobuf.Message.Builder;
 import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 public class ProtobufCreator {
   private static final Random r = new Random();
@@ -106,7 +106,7 @@ public class ProtobufCreator {
         }
       }
 
-      for (ExtensionInfo extensionInfo : extensionRegistry.findExtensionsByDescriptor(descriptor)) {
+      for (ExtensionInfo extensionInfo : extensionRegistry.getExtensionsByDescriptor(descriptor)) {
         FieldDescriptor extension = extensionInfo.descriptor;
         Message defaultInstance = extensionInfo.defaultInstance;
         if (extension.isRepeated()) {
