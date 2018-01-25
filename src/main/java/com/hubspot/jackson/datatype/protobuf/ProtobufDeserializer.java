@@ -29,7 +29,7 @@ import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
-import com.google.protobuf.GeneratedMessage.ExtendableMessageOrBuilder;
+import com.google.protobuf.GeneratedMessageV3.ExtendableMessageOrBuilder;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 
