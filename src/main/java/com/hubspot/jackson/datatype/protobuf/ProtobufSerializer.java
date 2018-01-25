@@ -21,7 +21,7 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
-import com.google.protobuf.GeneratedMessage.ExtendableMessageOrBuilder;
+import com.google.protobuf.GeneratedMessageV3.ExtendableMessageOrBuilder;
 import com.google.protobuf.MessageOrBuilder;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -55,8 +55,7 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
     List<FieldDescriptor> fields = new ArrayList<>();
     fields.addAll(descriptor.getFields());
     if (message instanceof ExtendableMessageOrBuilder<?>) {
-      List<ExtensionInfo> extensions = extensionRegistry.findExtensionsByDescriptor(descriptor);
-      for (ExtensionInfo extensionInfo : extensions) {
+      for (ExtensionInfo extensionInfo : extensionRegistry.findExtensionsByDescriptor(descriptor)) {
         fields.add(extensionInfo.descriptor);
       }
     }

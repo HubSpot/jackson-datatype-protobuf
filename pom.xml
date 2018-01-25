@@ -31,7 +31,7 @@
     <properties>
         <dep.jackson.version>2.9.4</dep.jackson.version>
         <dep.jackson-databind.version>2.9.4</dep.jackson-databind.version>
-        <dep.protobuf-java.version>2.5.0</dep.protobuf-java.version>
+        <dep.protobuf-java.version>3.3.0</dep.protobuf-java.version>
     </properties>
 
     <dependencyManagement>
