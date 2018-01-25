@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.hubspot</groupId>
         <artifactId>basepom</artifactId>
-        <version>15.15</version>
+        <version>18.2</version>
     </parent>
 
     <groupId>com.hubspot.jackson</groupId>
@@ -29,8 +29,20 @@
     </developers>
 
     <properties>
-        <dep.jackson.version>2.8.10</dep.jackson.version>
+        <dep.jackson.version>2.8.11</dep.jackson.version>
+        <dep.jackson-databind.version>2.8.11</dep.jackson-databind.version>
+        <dep.protobuf-java.version>2.5.0</dep.protobuf-java.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${dep.protobuf-java.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -83,37 +95,12 @@
 
         <pluginManagement>
             <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>com.comoyo.maven.plugins</groupId>
-                                        <artifactId>protoc-bundled-plugin</artifactId>
-                                        <versionRange>[1.4.47,)</versionRange>
-                                        <goals>
-                                            <goal>run</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
                 <plugin>
                     <groupId>com.comoyo.maven.plugins</groupId>
                     <artifactId>protoc-bundled-plugin</artifactId>
-                    <version>1.4.47</version>
+                    <version>1.4.61</version>
                     <configuration>
-                        <protobufVersion>2.5.0</protobufVersion>
+                        <protobufVersion>${dep.protobuf-java.version}</protobufVersion>
                     </configuration>
                 </plugin>
             </plugins>
