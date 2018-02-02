@@ -3,16 +3,13 @@ package com.hubspot.jackson.datatype.protobuf;
 import static java.lang.String.format;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -20,76 +17,48 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
-import com.google.protobuf.GeneratedMessageV3.ExtendableMessageOrBuilder;
+import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
+import com.google.protobuf.NullValue;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends StdSerializer<T> {
+  private static final String NULL_VALUE_FULL_NAME = NullValue.getDescriptor().getFullName();
 
-public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
-  @SuppressFBWarnings(value="SE_BAD_FIELD")
-  private final ExtensionRegistryWrapper extensionRegistry;
   private final Map<Class<?>, JsonSerializer<Object>> serializerCache;
 
-  public ProtobufSerializer() {
-    this(ExtensionRegistryWrapper.empty());
-  }
+  public ProtobufSerializer(Class<T> protobufType) {
+    super(protobufType);
 
-  public ProtobufSerializer(ExtensionRegistryWrapper extensionRegistry) {
-    super(MessageOrBuilder.class);
-
-    this.extensionRegistry = extensionRegistry;
     this.serializerCache = new ConcurrentHashMap<>();
   }
 
-  @Override
-  public void serialize(MessageOrBuilder message, JsonGenerator generator, SerializerProvider serializerProvider)
-          throws IOException {
+  @SuppressWarnings("unchecked")
+  protected void writeMap(
+          FieldDescriptor field,
+          Object entries,
+          JsonGenerator generator,
+          SerializerProvider serializerProvider
+  ) throws IOException {
+    Descriptor entryDescriptor = field.getMessageType();
+    FieldDescriptor keyDescriptor = entryDescriptor.findFieldByName("key");
+    FieldDescriptor valueDescriptor = entryDescriptor.findFieldByName("value");
     generator.writeStartObject();
-
-    Include include = serializerProvider.getConfig().getDefaultPropertyInclusion().getValueInclusion();
-    PropertyNamingStrategyBase namingStrategy =
-            new PropertyNamingStrategyWrapper(serializerProvider.getConfig().getPropertyNamingStrategy());
-
-    Descriptor descriptor = message.getDescriptorForType();
-    List<FieldDescriptor> fields = new ArrayList<>();
-    fields.addAll(descriptor.getFields());
-    if (message instanceof ExtendableMessageOrBuilder<?>) {
-      for (ExtensionInfo extensionInfo : extensionRegistry.getExtensionsByDescriptor(descriptor)) {
-        fields.add(extensionInfo.descriptor);
-      }
+    for (Message entry : (List<? extends Message>) entries) {
+      // map keys can only be integers or strings so this should be fine
+      generator.writeFieldName(entry.getField(keyDescriptor).toString());
+      Object value = entry.getField(valueDescriptor);
+      // map values can't be maps or repeated so this should be fine
+      writeValue(valueDescriptor, value, generator, serializerProvider);
     }
-
-    for (FieldDescriptor field : fields) {
-      if (field.isRepeated()) {
-        List<?> valueList = (List<?>) message.getField(field);
-
-        if (!valueList.isEmpty() || writeEmptyArrays(serializerProvider)) {
-          if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
-            generator.writeFieldName(namingStrategy.translate(field.getName()));
-            writeValue(field, valueList.get(0), generator, serializerProvider);
-          } else {
-            generator.writeArrayFieldStart(namingStrategy.translate(field.getName()));
-            for (Object subValue : valueList) {
-              writeValue(field, subValue, generator, serializerProvider);
-            }
-            generator.writeEndArray();
-          }
-        }
-      } else if (message.hasField(field)) {
-        generator.writeFieldName(namingStrategy.translate(field.getName()));
-        writeValue(field, message.getField(field), generator, serializerProvider);
-      } else if (include == Include.ALWAYS) {
-        generator.writeFieldName(namingStrategy.translate(field.getName()));
-        generator.writeNull();
-      }
-    }
-
     generator.writeEndObject();
   }
 
-  private void writeValue(FieldDescriptor field, Object value, JsonGenerator generator,
-                          SerializerProvider serializerProvider) throws IOException {
+  protected void writeValue(
+          FieldDescriptor field,
+          Object value,
+          JsonGenerator generator,
+          SerializerProvider serializerProvider
+  ) throws IOException {
     switch (field.getJavaType()) {
       case INT:
         generator.writeNumber((Integer) value);
@@ -112,7 +81,10 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
       case ENUM:
         EnumValueDescriptor enumDescriptor = (EnumValueDescriptor) value;
 
-        if (writeEnumsUsingIndex(serializerProvider)) {
+        // special-case NullValue
+        if (NULL_VALUE_FULL_NAME.equals(enumDescriptor.getType().getFullName())) {
+          generator.writeNull();
+        } else if (writeEnumsUsingIndex(serializerProvider)) {
           generator.writeNumber(enumDescriptor.getNumber());
         } else {
           generator.writeString(enumDescriptor.getName());
@@ -135,14 +107,6 @@ public class ProtobufSerializer extends StdSerializer<MessageOrBuilder> {
       default:
         throw unrecognizedType(field, generator);
     }
-  }
-
-  private static boolean writeEmptyArrays(SerializerProvider config) {
-    return config.isEnabled(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
-  }
-
-  private static boolean writeSingleElementArraysUnwrapped(SerializerProvider config) {
-    return config.isEnabled(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
   }
 
   private static boolean writeEnumsUsingIndex(SerializerProvider config) {
