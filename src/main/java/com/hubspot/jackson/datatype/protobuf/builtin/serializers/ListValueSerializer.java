@@ -10,6 +10,7 @@ import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 
 public class ListValueSerializer extends ProtobufSerializer<ListValue> {
+  private static final FieldDescriptor VALUE_FIELD = ListValue.getDescriptor().findFieldByName("value");
 
   public ListValueSerializer() {
     super(ListValue.class);
@@ -21,10 +22,9 @@ public class ListValueSerializer extends ProtobufSerializer<ListValue> {
           JsonGenerator generator,
           SerializerProvider serializerProvider
   ) throws IOException {
-    FieldDescriptor field = listValue.getDescriptorForType().findFieldByName("value");
     generator.writeStartArray();
     for (Value value : listValue.getValuesList()) {
-      writeValue(field, value, generator, serializerProvider);
+      writeValue(VALUE_FIELD, value, generator, serializerProvider);
     }
     generator.writeEndArray();
   }

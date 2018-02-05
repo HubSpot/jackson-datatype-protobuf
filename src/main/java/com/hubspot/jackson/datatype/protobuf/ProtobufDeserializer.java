@@ -1,6 +1,7 @@
 package com.hubspot.jackson.datatype.protobuf;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -21,15 +22,15 @@ import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
-import com.google.protobuf.Message.Builder;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-public abstract class ProtobufDeserializer<T extends Message> extends StdDeserializer<Builder> {
+public abstract class ProtobufDeserializer<T extends Message, V extends Message.Builder> extends StdDeserializer<V> {
   private final T defaultInstance;
   @SuppressFBWarnings(value="SE_BAD_FIELD")
   private final Map<FieldDescriptor, JsonDeserializer<Object>> deserializerCache;
@@ -48,7 +49,7 @@ public abstract class ProtobufDeserializer<T extends Message> extends StdDeseria
   }
 
   protected abstract void populate(
-          Message.Builder builder,
+          V builder,
           JsonParser parser,
           DeserializationContext context
   ) throws IOException;
@@ -65,8 +66,9 @@ public abstract class ProtobufDeserializer<T extends Message> extends StdDeseria
   }
 
   @Override
-  public Builder deserialize(JsonParser parser, DeserializationContext context) throws IOException {
-    Message.Builder builder = defaultInstance.newBuilderForType();
+  @SuppressWarnings("unchecked")
+  public V deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+    V builder = (V) defaultInstance.newBuilderForType();
 
     populate(builder, parser, context);
 
@@ -78,6 +80,38 @@ public abstract class ProtobufDeserializer<T extends Message> extends StdDeseria
       throw context.mappingException("Can not map JSON null into primitive field " + field.getFullName()
               + " (set DeserializationConfig.DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES to 'false' to allow)");
     }
+  }
+
+  protected List<Message> readMap(
+          Message.Builder builder,
+          FieldDescriptor field,
+          JsonParser parser,
+          DeserializationContext context
+  ) throws IOException {
+    if (parser.getCurrentToken() != JsonToken.START_OBJECT) {
+      throw reportWrongToken(
+              JsonToken.START_OBJECT,
+              context,
+              "Can't parse map field out of " + parser.currentToken() + " token"
+      );
+    }
+
+    Descriptor entryDescriptor = field.getMessageType();
+    FieldDescriptor keyDescriptor = entryDescriptor.findFieldByName("key");
+    FieldDescriptor valueDescriptor = entryDescriptor.findFieldByName("value");
+
+    List<Message> entries = new ArrayList<>();
+    while (parser.nextToken() != JsonToken.END_OBJECT) {
+      Message.Builder entryBuilder = builder.newBuilderForField(field);
+      Object key = readValue(entryBuilder, keyDescriptor, null, parser, context);
+      parser.nextToken(); // move from key to value
+      Object value = readValue(entryBuilder, valueDescriptor, null, parser, context);
+
+      entryBuilder.setField(keyDescriptor, key);
+      entryBuilder.setField(valueDescriptor, value);
+      entries.add(entryBuilder.build());
+    }
+    return entries;
   }
 
   protected Object readValue(
@@ -190,13 +224,21 @@ public abstract class ProtobufDeserializer<T extends Message> extends StdDeseria
     }
   }
 
-  private List<Object> readArray(
+  protected List<Object> readArray(
           Message.Builder builder,
           FieldDescriptor field,
           Message defaultInstance,
           JsonParser parser,
           DeserializationContext context
   ) throws IOException {
+    if (parser.getCurrentToken() != JsonToken.START_ARRAY) {
+      throw reportWrongToken(
+              JsonToken.START_ARRAY,
+              context,
+              "Can't parse repeated field out of " + parser.currentToken() + " token"
+      );
+    }
+
     List<Object> values = Lists.newArrayList();
     while (parser.nextToken() != JsonToken.END_ARRAY) {
       Object value = readValue(builder, field, defaultInstance, parser, context);
