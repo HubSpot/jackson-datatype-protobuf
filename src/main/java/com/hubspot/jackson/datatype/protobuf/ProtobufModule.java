@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
+import com.google.protobuf.Any;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.BytesValue;
 import com.google.protobuf.DoubleValue;
@@ -21,14 +22,19 @@ import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.NullValue;
 import com.google.protobuf.StringValue;
+import com.google.protobuf.Struct;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.UInt32Value;
 import com.google.protobuf.UInt64Value;
+import com.google.protobuf.Value;
+import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.AnyDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.DurationDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.FieldMaskDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.ListValueDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.NullValueDeserializer;
+import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.StructDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.TimestampDeserializer;
+import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.ValueDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.WrappedPrimitiveDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.AnySerializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.DurationSerializer;
@@ -92,17 +98,14 @@ public class ProtobufModule extends Module {
     context.addSerializers(serializers);
 
     SimpleDeserializers deserializers = new SimpleDeserializers();
-    // TODO implement
-    // deserializers.addDeserializer(Any.class, new AnyDeserializer());
+    deserializers.addDeserializer(Any.class, new AnyDeserializer().buildAtEnd());
     deserializers.addDeserializer(Duration.class, new DurationDeserializer());
     deserializers.addDeserializer(FieldMask.class, new FieldMaskDeserializer());
     deserializers.addDeserializer(ListValue.class, new ListValueDeserializer().buildAtEnd());
     deserializers.addDeserializer(NullValue.class, new NullValueDeserializer());
-    // TODO implement
-    // deserializers.addDeserializer(Struct.class, new StructDeserializer());
+    deserializers.addDeserializer(Struct.class, new StructDeserializer().buildAtEnd());
     deserializers.addDeserializer(Timestamp.class, new TimestampDeserializer());
-    // TODO implement
-    // deserializers.addDeserializer(Value.class, new ValueDeserializer());
+    deserializers.addDeserializer(Value.class, new ValueDeserializer().buildAtEnd());
     deserializers.addDeserializer(DoubleValue.class, wrappedPrimitiveDeserializer(DoubleValue.class));
     deserializers.addDeserializer(FloatValue.class, wrappedPrimitiveDeserializer(FloatValue.class));
     deserializers.addDeserializer(Int64Value.class, wrappedPrimitiveDeserializer(Int64Value.class));
