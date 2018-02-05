@@ -12,11 +12,11 @@ import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.google.protobuf.Message;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.MessageDeserializer;
 
-public class ProtobufDeserializerFactory extends Deserializers.Base {
+public class MessageDeserializerFactory extends Deserializers.Base {
   private final ExtensionRegistryWrapper extensionRegistry;
-  private final ConcurrentMap<Class<? extends Message>, ProtobufDeserializer<?>> deserializerCache;
+  private final ConcurrentMap<Class<? extends Message>, ProtobufDeserializer<?, ?>> deserializerCache;
 
-  public ProtobufDeserializerFactory(ExtensionRegistryWrapper extensionRegistry) {
+  public MessageDeserializerFactory(ExtensionRegistryWrapper extensionRegistry) {
     this.extensionRegistry = extensionRegistry;
     this.deserializerCache = new ConcurrentHashMap<>();
   }
@@ -35,14 +35,14 @@ public class ProtobufDeserializerFactory extends Deserializers.Base {
   }
 
   @SuppressWarnings("unchecked")
-  private <T extends Message> ProtobufDeserializer<T> getDeserializer(Class<T> messageType) {
-    ProtobufDeserializer<?> deserializer = deserializerCache.get(messageType);
+  private <T extends Message> ProtobufDeserializer<T, ?> getDeserializer(Class<T> messageType) {
+    ProtobufDeserializer<?, ?> deserializer = deserializerCache.get(messageType);
     if (deserializer == null) {
-      ProtobufDeserializer<T> newDeserializer = new MessageDeserializer<>(messageType, extensionRegistry);
-      ProtobufDeserializer<?> previousDeserializer = deserializerCache.putIfAbsent(messageType, newDeserializer);
+      ProtobufDeserializer<T, ?> newDeserializer = new MessageDeserializer<>(messageType, extensionRegistry);
+      ProtobufDeserializer<?, ?> previousDeserializer = deserializerCache.putIfAbsent(messageType, newDeserializer);
       deserializer = previousDeserializer == null ? newDeserializer : previousDeserializer;
     }
 
-    return (ProtobufDeserializer<T>) deserializer;
+    return (ProtobufDeserializer<T, ?>) deserializer;
   }
 }
