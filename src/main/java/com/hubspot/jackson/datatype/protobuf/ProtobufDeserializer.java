@@ -27,10 +27,14 @@ import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
+import com.google.protobuf.NullValue;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public abstract class ProtobufDeserializer<T extends Message, V extends Message.Builder> extends StdDeserializer<V> {
+  private static final String NULL_VALUE_FULL_NAME = NullValue.getDescriptor().getFullName();
+  private static final EnumValueDescriptor NULL_VALUE_DESCRIPTOR = NullValue.NULL_VALUE.getValueDescriptor();
+
   private final T defaultInstance;
   @SuppressFBWarnings(value="SE_BAD_FIELD")
   private final Map<FieldDescriptor, JsonDeserializer<Object>> deserializerCache;
@@ -193,6 +197,11 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
             } else {
               throw reportWrongToken(JsonToken.VALUE_STRING, context, "Not allowed to deserialize Enum " +
                       "value out of JSON number (disable DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS to allow)");
+            }
+          case VALUE_NULL:
+            // special-case NullValue
+            if (NULL_VALUE_FULL_NAME.equals(field.getEnumType().getFullName())) {
+              return NULL_VALUE_DESCRIPTOR;
             }
           default:
             throw reportWrongToken(field, JsonToken.VALUE_STRING, context);
