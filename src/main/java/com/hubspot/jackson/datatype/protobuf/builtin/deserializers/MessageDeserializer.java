@@ -3,6 +3,7 @@ package com.hubspot.jackson.datatype.protobuf.builtin.deserializers;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -16,13 +17,14 @@ import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.google.protobuf.GeneratedMessageV3.ExtendableMessageOrBuilder;
 import com.google.protobuf.Message;
+import com.google.protobuf.Message.Builder;
 import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
 import com.hubspot.jackson.datatype.protobuf.PropertyNamingStrategyWrapper;
 import com.hubspot.jackson.datatype.protobuf.ProtobufDeserializer;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-public class MessageDeserializer<T extends Message> extends ProtobufDeserializer<T> {
+public class MessageDeserializer<T extends Message, V extends Builder> extends ProtobufDeserializer<T, V> {
   @SuppressFBWarnings(value="SE_BAD_FIELD")
   private final ExtensionRegistryWrapper extensionRegistry;
 
@@ -32,8 +34,9 @@ public class MessageDeserializer<T extends Message> extends ProtobufDeserializer
     this.extensionRegistry = extensionRegistry;
   }
 
+  @Override
   protected void populate(
-          Message.Builder builder,
+          V builder,
           JsonParser parser,
           DeserializationContext context
   ) throws IOException {
@@ -117,27 +120,34 @@ public class MessageDeserializer<T extends Message> extends ProtobufDeserializer
   }
 
   private void setField(
-          Message.Builder builder,
+          V builder,
           FieldDescriptor field,
           Message defaultInstance,
           JsonParser parser,
           DeserializationContext context
   ) throws IOException {
-    Object value = readValue(builder, field, defaultInstance, parser, context);
+    if (field.isMapField()) {
+      List<Message> entries = readMap(builder, field, parser, context);
+      for (Message entry : entries) {
+        builder.addRepeatedField(field, entry);
+      }
+    } else {
+      Object value = readValue(builder, field, defaultInstance, parser, context);
 
-    if (value != null) {
-      if (field.isRepeated()) {
-        if (value instanceof Iterable) {
-          for (Object subValue : (Iterable<?>) value) {
-            builder.addRepeatedField(field, subValue);
+      if (value != null) {
+        if (field.isRepeated()) {
+          if (value instanceof Iterable) {
+            for (Object subValue : (Iterable<?>) value) {
+              builder.addRepeatedField(field, subValue);
+            }
+          } else if (context.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)) {
+            builder.addRepeatedField(field, value);
+          } else {
+            throw reportInputMismatch(context, "Expected JSON array for repeated field " + field.getFullName());
           }
-        } else if (context.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)) {
-          builder.addRepeatedField(field, value);
         } else {
-          throw reportInputMismatch(context, "Expected JSON array for repeated field " + field.getFullName());
+          builder.setField(field, value);
         }
-      } else {
-        builder.setField(field, value);
       }
     }
   }
