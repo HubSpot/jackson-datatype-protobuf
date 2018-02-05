@@ -17,7 +17,11 @@ public class ListValueDeserializer extends ProtobufDeserializer<ListValue, ListV
   }
 
   @Override
-  protected void populate(ListValue.Builder builder, JsonParser parser, DeserializationContext context) throws IOException {
+  protected void populate(
+          ListValue.Builder builder,
+          JsonParser parser,
+          DeserializationContext context
+  ) throws IOException {
     List<Object> values = readArray(builder, VALUES_FIELD, null, parser, context);
     for (Object value : values) {
       builder.addRepeatedField(VALUES_FIELD, value);
