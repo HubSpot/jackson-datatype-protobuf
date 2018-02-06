@@ -14,17 +14,17 @@ import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasNullValue;
 public class NullValueTest {
 
   @Test
-  public void itOmitsNullValueWhenSetWithDefaultInclusion() throws IOException {
+  public void itWritesNullValueWhenSetWithDefaultInclusion() throws IOException {
     HasNullValue message = HasNullValue.newBuilder().setNullValue(NullValue.NULL_VALUE).build();
     String json = camelCase().writeValueAsString(message);
-    assertThat(json).isEqualTo("{}");
+    assertThat(json).isEqualTo("{\"nullValue\":null}");
   }
 
   @Test
-  public void itOmitsNullValueWhenNotSetWithDefaultInclusion() throws IOException {
+  public void itWritesNullValueWhenNotSetWithDefaultInclusion() throws IOException {
     HasNullValue message = HasNullValue.newBuilder().build();
     String json = camelCase().writeValueAsString(message);
-    assertThat(json).isEqualTo("{}");
+    assertThat(json).isEqualTo("{\"nullValue\":null}");
   }
 
   @Test
