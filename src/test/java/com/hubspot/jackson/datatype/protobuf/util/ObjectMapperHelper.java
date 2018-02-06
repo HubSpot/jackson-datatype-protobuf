@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.TreeNode;
@@ -25,6 +26,10 @@ public class ObjectMapperHelper {
 
   public static ObjectMapper underscore() {
     return UNDERSCORE;
+  }
+
+  public static ObjectMapper camelCase(Include inclusion) {
+    return create().setSerializationInclusion(inclusion);
   }
 
   public static ObjectMapper camelCase(ExtensionRegistry extensionRegistry) {
