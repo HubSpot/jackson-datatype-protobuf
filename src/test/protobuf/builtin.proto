@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package com.hubspot.jackson.datatype.protobuf.util;
+
+option java_outer_classname = "BuiltInProtobufs";
+
+import 'test.proto';
+import 'google/protobuf/any.proto';
+import 'google/protobuf/wrappers.proto';
+import 'google/protobuf/timestamp.proto';
+import 'google/protobuf/duration.proto';
+import 'google/protobuf/field_mask.proto';
+import 'google/protobuf/struct.proto';
+
+message HasAny {
+  google.protobuf.Any any = 1;
+}
+
+message HasDuration {
+  google.protobuf.Duration duration = 1;
+}
+
+message HasFieldMask {
+  google.protobuf.FieldMask field_mask = 1;
+}
+
+message HasListValue {
+  google.protobuf.ListValue list_value = 1;
+}
+
+message HasNullValue {
+  google.protobuf.NullValue null_value = 1;
+}
+
+message HasStruct {
+  google.protobuf.Struct struct = 1;
+}
+
+message HasTimestamp {
+  google.protobuf.Timestamp timestamp = 1;
+}
+
+message HasValue {
+  google.protobuf.Value vaule = 1;
+}
+
+message HasWrappedPrimitives {
+  google.protobuf.DoubleValue double_wrapper = 1;
+  google.protobuf.FloatValue float_wrapper = 2;
+  google.protobuf.Int64Value int64_wrapper = 3;
+  google.protobuf.UInt64Value uint64_wrapper = 4;
+  google.protobuf.Int32Value int32_wrapper = 5;
+  google.protobuf.UInt32Value uint32_wrapper = 6;
+  google.protobuf.BoolValue bool_wrapper = 7;
+  google.protobuf.StringValue string_wrapper = 8;
+  google.protobuf.BytesValue bytes_wrapper = 9;
+}
+
+message HasOneOf {
+  oneof oneof {
+    string string = 1;
+    google.protobuf.Duration duration = 2;
+    AllFields message = 3;
+  }
+}
+
+message HasAllMapKeys {
+  map<int32, string> int32_map = 1;
+  map<int64, string> int64_map = 2;
+  map<uint32, string> uint32_map = 3;
+  map<uint64, string> uint64_map = 4;
+  map<sint32, string> sint32_map = 5;
+  map<sint64, string> sint64_map = 6;
+  map<fixed32, string> fixed32_map = 7;
+  map<fixed64, string> fixed64_map = 8;
+  map<sfixed32, string> sfixed32_map = 9;
+  map<sfixed64, string> sfixed64_map = 10;
+  map<bool, string> bool_map = 11;
+  map<string, string> string_map = 12;
+}
+
+enum Proto3Enum {
+  ZERO = 0;
+  OTHER = 1;
+}
+
+message HasAllMapValues {
+  map<string, double> double_map = 1;
+  map<string, float> float_map = 2;
+  map<string, int32> int32_map = 3;
+  map<string, int64> int64_map = 4;
+  map<string, uint32> uint32_map = 5;
+  map<string, uint64> uint64_map = 6;
+  map<string, sint32> sint32_map = 7;
+  map<string, sint64> sint64_map = 8;
+  map<string, fixed32> fixed32_map = 9;
+  map<string, fixed64> fixed64_map = 10;
+  map<string, sfixed32> sfixed32_map = 11;
+  map<string, sfixed64> sfixed64_map = 12;
+  map<string, bool> bool_map = 13;
+  map<string, string> string_map = 14;
+  map<string, bytes> bytes_map = 15;
+  map<string, google.protobuf.Any> any_map = 16;
+  map<string, google.protobuf.Duration> duration_map = 17;
+  map<string, google.protobuf.FieldMask> field_mask_map = 18;
+  map<string, google.protobuf.ListValue> list_value_map = 19;
+  map<string, google.protobuf.NullValue> null_value_map = 20;
+  map<string, google.protobuf.Struct> struct_map = 21;
+  map<string, google.protobuf.Timestamp> timestamp_map = 22;
+  map<string, google.protobuf.Value> value_map = 23;
+  map<string, google.protobuf.DoubleValue> double_wrapper_map = 24;
+  map<string, google.protobuf.FloatValue> float_wrapper_map = 25;
+  map<string, google.protobuf.Int64Value> int64_wrapper_map = 26;
+  map<string, google.protobuf.UInt64Value> uint64_wrapper_map = 27;
+  map<string, google.protobuf.Int32Value> int32_wrapper_map = 28;
+  map<string, google.protobuf.UInt32Value> uint32_wrapper_map = 29;
+  map<string, google.protobuf.BoolValue> bool_wrapper_map = 30;
+  map<string, google.protobuf.StringValue> string_wrapper_map = 31;
+  map<string, google.protobuf.BytesValue> bytes_wrapper_map = 32;
+  map<string, Proto3Enum> enum_map = 33;
+  map<string, AllFields> all_fields_map = 34;
+  map<string, Nested> nested_map = 35;
+}

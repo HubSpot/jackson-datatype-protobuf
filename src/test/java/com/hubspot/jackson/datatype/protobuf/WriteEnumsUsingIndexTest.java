@@ -1,14 +1,14 @@
-package com.hubspot.jackson.test;
+package com.hubspot.jackson.datatype.protobuf;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.hubspot.jackson.test.util.TestProtobuf;
-import com.hubspot.jackson.test.util.TestProtobuf.AllFields;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import org.junit.Test;
 
-import static com.hubspot.jackson.test.util.ObjectMapperHelper.camelCase;
-import static com.hubspot.jackson.test.util.ObjectMapperHelper.writeAndReadBack;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.writeAndReadBack;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class WriteEnumsUsingIndexTest {
