@@ -19,7 +19,6 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
-import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
 import com.hubspot.jackson.datatype.protobuf.util.TestExtensionRegistry;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 
