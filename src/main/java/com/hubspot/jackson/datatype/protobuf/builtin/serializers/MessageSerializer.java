@@ -11,8 +11,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Descriptors.FileDescriptor.Syntax;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
-import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.GeneratedMessageV3.ExtendableMessageOrBuilder;
 import com.google.protobuf.MessageOrBuilder;
 import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
@@ -39,7 +39,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   ) throws IOException {
     generator.writeStartObject();
 
-    boolean proto3 = message instanceof GeneratedMessageV3 || message instanceof GeneratedMessageV3.Builder;
+    boolean proto3 = message.getDescriptorForType().getFile().getSyntax() == Syntax.PROTO3;
     Include include = serializerProvider.getConfig().getDefaultPropertyInclusion().getValueInclusion();
     boolean includeAllFields = include == Include.ALWAYS || (proto3 && include == Include.NON_NULL);
     PropertyNamingStrategyBase namingStrategy =
