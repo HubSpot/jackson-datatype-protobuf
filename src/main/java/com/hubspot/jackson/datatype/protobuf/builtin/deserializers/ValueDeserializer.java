@@ -25,10 +25,12 @@ public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder
   ) throws IOException {
     switch (parser.getCurrentToken()) {
       case START_OBJECT:
-        readValue(builder, STRUCT_FIELD, null, parser, context);
+        Object structValue = readValue(builder, STRUCT_FIELD, null, parser, context);
+        builder.setField(STRUCT_FIELD, structValue);
         return;
       case START_ARRAY:
-        readValue(builder, LIST_FIELD, null, parser, context);
+        Object listValue = readValue(builder, LIST_FIELD, null, parser, context);
+        builder.setField(LIST_FIELD, listValue);
         return;
       case VALUE_STRING:
         builder.setStringValue(parser.getText());
