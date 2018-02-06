@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
+import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.GeneratedMessageV3.ExtendableMessageOrBuilder;
 import com.google.protobuf.MessageOrBuilder;
 import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
@@ -38,7 +39,9 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   ) throws IOException {
     generator.writeStartObject();
 
-    Include include = serializerProvider.getConfig().getSerializationInclusion();;
+    boolean proto3 = message instanceof GeneratedMessageV3 || message instanceof GeneratedMessageV3.Builder;
+    Include include = serializerProvider.getConfig().getSerializationInclusion();
+    boolean includeAllFields = include == Include.ALWAYS || (proto3 && include == Include.NON_NULL);
     PropertyNamingStrategyBase namingStrategy =
             new PropertyNamingStrategyWrapper(serializerProvider.getConfig().getPropertyNamingStrategy());
 
@@ -72,7 +75,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
       } else if (message.hasField(field)) {
         generator.writeFieldName(namingStrategy.translate(field.getName()));
         writeValue(field, message.getField(field), generator, serializerProvider);
-      } else if (include == Include.ALWAYS && field.getContainingOneof() == null) {
+      } else if (includeAllFields && field.getContainingOneof() == null) {
         generator.writeFieldName(namingStrategy.translate(field.getName()));
         generator.writeNull();
       }
