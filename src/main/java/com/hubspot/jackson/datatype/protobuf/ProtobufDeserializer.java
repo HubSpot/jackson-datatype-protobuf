@@ -207,27 +207,22 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
             throw reportWrongToken(field, JsonToken.VALUE_STRING, context);
         }
       case MESSAGE:
-        switch (parser.getCurrentToken()) {
-          case START_OBJECT:
-            JsonDeserializer<Object> deserializer = deserializerCache.get(field);
-            if (deserializer == null) {
-              final Class<?> subType;
-              if (defaultInstance == null) {
-                Message.Builder subBuilder = builder.newBuilderForField(field);
-                subType = subBuilder.getDefaultInstanceForType().getClass();
-              } else {
-                subType = defaultInstance.getClass();
-              }
+        JsonDeserializer<Object> deserializer = deserializerCache.get(field);
+        if (deserializer == null) {
+          final Class<?> subType;
+          if (defaultInstance == null) {
+            Message.Builder subBuilder = builder.newBuilderForField(field);
+            subType = subBuilder.getDefaultInstanceForType().getClass();
+          } else {
+            subType = defaultInstance.getClass();
+          }
 
-              JavaType type = context.constructType(subType);
-              deserializer = context.findContextualValueDeserializer(type, null);
-              deserializerCache.put(field, deserializer);
-            }
-
-            return deserializer.deserialize(parser, context);
-          default:
-            throw reportWrongToken(field, JsonToken.START_OBJECT, context);
+          JavaType type = context.constructType(subType);
+          deserializer = context.findContextualValueDeserializer(type, null);
+          deserializerCache.put(field, deserializer);
         }
+
+        return deserializer.deserialize(parser, context);
       default:
         throw new IllegalArgumentException("Unrecognized field type: " + field.getJavaType());
     }

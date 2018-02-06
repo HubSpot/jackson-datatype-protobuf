@@ -97,6 +97,7 @@ public class ProtobufModule extends Module {
 
     context.addSerializers(serializers);
 
+    context.addDeserializers(new MessageDeserializerFactory(extensionRegistry));
     SimpleDeserializers deserializers = new SimpleDeserializers();
     deserializers.addDeserializer(Any.class, new AnyDeserializer().buildAtEnd());
     deserializers.addDeserializer(Duration.class, new DurationDeserializer());
@@ -116,7 +117,6 @@ public class ProtobufModule extends Module {
     deserializers.addDeserializer(StringValue.class, wrappedPrimitiveDeserializer(StringValue.class));
     deserializers.addDeserializer(BytesValue.class, wrappedPrimitiveDeserializer(BytesValue.class));
     context.addDeserializers(deserializers);
-    context.addDeserializers(new MessageDeserializerFactory(extensionRegistry));
     context.setMixInAnnotations(MessageOrBuilder.class, MessageOrBuilderMixin.class);
   }
 
