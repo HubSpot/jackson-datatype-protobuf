@@ -1,4 +1,4 @@
-package com.hubspot.jackson.test.util;
+package com.hubspot.jackson.datatype.protobuf.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;

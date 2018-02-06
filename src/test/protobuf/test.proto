@@ -1,77 +1,79 @@
-package com.hubspot.jackson.test.util;
+syntax = "proto2";
+
+package com.hubspot.jackson.datatype.protobuf.util;
 
 option java_outer_classname = "TestProtobuf";
 
 message AllFields {
-    optional double double = 1;
-    optional float float = 2;
-    optional int32 int32 = 3;
-    optional int64 int64 = 4;
-    optional uint32 uint32 = 5;
-    optional uint64 uint64 = 6;
-    optional sint32 sint32 = 7;
-    optional sint64 sint64 = 8;
-    optional fixed32 fixed32 = 9;
-    optional fixed64 fixed64 = 10;
-    optional sfixed32 sfixed32 = 11;
-    optional sfixed64 sfixed64 = 12;
-    optional bool bool = 13;
-    optional string string = 14;
-    optional bytes bytes = 15;
-    optional Enum enum = 16;
-    optional Nested nested = 17;
-    extensions 18 to 34;
+  optional double double = 1;
+  optional float float = 2;
+  optional int32 int32 = 3;
+  optional int64 int64 = 4;
+  optional uint32 uint32 = 5;
+  optional uint64 uint64 = 6;
+  optional sint32 sint32 = 7;
+  optional sint64 sint64 = 8;
+  optional fixed32 fixed32 = 9;
+  optional fixed64 fixed64 = 10;
+  optional sfixed32 sfixed32 = 11;
+  optional sfixed64 sfixed64 = 12;
+  optional bool bool = 13;
+  optional string string = 14;
+  optional bytes bytes = 15;
+  optional Enum enum = 16;
+  optional Nested nested = 17;
+  extensions 18 to 34;
 }
 
 message RepeatedFields {
-    repeated double double = 1;
-    repeated float float = 2;
-    repeated int32 int32 = 3;
-    repeated int64 int64 = 4;
-    repeated uint32 uint32 = 5;
-    repeated uint64 uint64 = 6;
-    repeated sint32 sint32 = 7;
-    repeated sint64 sint64 = 8;
-    repeated fixed32 fixed32 = 9;
-    repeated fixed64 fixed64 = 10;
-    repeated sfixed32 sfixed32 = 11;
-    repeated sfixed64 sfixed64 = 12;
-    repeated bool bool = 13;
-    repeated string string = 14;
-    repeated bytes bytes = 15;
-    repeated Enum enum = 16;
-    repeated Nested nested = 17;
-    extensions 18 to 34;
+  repeated double double = 1;
+  repeated float float = 2;
+  repeated int32 int32 = 3;
+  repeated int64 int64 = 4;
+  repeated uint32 uint32 = 5;
+  repeated uint64 uint64 = 6;
+  repeated sint32 sint32 = 7;
+  repeated sint64 sint64 = 8;
+  repeated fixed32 fixed32 = 9;
+  repeated fixed64 fixed64 = 10;
+  repeated sfixed32 sfixed32 = 11;
+  repeated sfixed64 sfixed64 = 12;
+  repeated bool bool = 13;
+  repeated string string = 14;
+  repeated bytes bytes = 15;
+  repeated Enum enum = 16;
+  repeated Nested nested = 17;
+  extensions 18 to 34;
 }
 
 message PropertyNamingSnakeCased {
-    optional string string_attribute = 1;
+  optional string string_attribute = 1;
 }
 
 message PropertyNamingCamelCased {
-    optional string stringAttribute = 1;
+  optional string stringAttribute = 1;
 }
 
 message Nested {
-    optional double double = 1;
-    optional float float = 2;
-    optional int32 int32 = 3;
-    optional int64 int64 = 4;
-    optional uint32 uint32 = 5;
-    optional uint64 uint64 = 6;
-    optional sint32 sint32 = 7;
-    optional sint64 sint64 = 8;
-    optional fixed32 fixed32 = 9;
-    optional fixed64 fixed64 = 10;
-    optional sfixed32 sfixed32 = 11;
-    optional sfixed64 sfixed64 = 12;
-    optional bool bool = 13;
-    optional string string = 14;
-    optional bytes bytes = 15;
-    optional Enum enum = 16;
+  optional double double = 1;
+  optional float float = 2;
+  optional int32 int32 = 3;
+  optional int64 int64 = 4;
+  optional uint32 uint32 = 5;
+  optional uint64 uint64 = 6;
+  optional sint32 sint32 = 7;
+  optional sint64 sint64 = 8;
+  optional fixed32 fixed32 = 9;
+  optional fixed64 fixed64 = 10;
+  optional sfixed32 sfixed32 = 11;
+  optional sfixed64 sfixed64 = 12;
+  optional bool bool = 13;
+  optional string string = 14;
+  optional bytes bytes = 15;
+  optional Enum enum = 16;
 }
 
 enum Enum {
-    ONE = 1;
-    TWO = 2;
+  ONE = 1;
+  TWO = 2;
 }

@@ -1,12 +1,12 @@
-package com.hubspot.jackson.test;
+package com.hubspot.jackson.datatype.protobuf;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.hubspot.jackson.test.util.TestProtobuf.RepeatedFields;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.RepeatedFields;
 import org.junit.Test;
 
-import static com.hubspot.jackson.test.util.ObjectMapperHelper.camelCase;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class WriteSingleElementArraysUnwrappedTest {

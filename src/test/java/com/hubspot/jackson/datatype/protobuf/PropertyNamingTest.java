@@ -1,21 +1,21 @@
-package com.hubspot.jackson.test;
+package com.hubspot.jackson.datatype.protobuf;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
-import com.hubspot.jackson.test.util.ProtobufCreator;
-import com.hubspot.jackson.test.util.TestProtobuf.PropertyNamingCamelCased;
-import com.hubspot.jackson.test.util.TestProtobuf.PropertyNamingSnakeCased;
+import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingCamelCased;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingSnakeCased;
 
 import org.junit.Test;
 
 import java.util.List;
 
-import static com.hubspot.jackson.test.util.ObjectMapperHelper.camelCase;
-import static com.hubspot.jackson.test.util.ObjectMapperHelper.toTree;
-import static com.hubspot.jackson.test.util.ObjectMapperHelper.underscore;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.toTree;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.underscore;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PropertyNamingTest {

@@ -1,8 +1,8 @@
-package com.hubspot.jackson.test;
+package com.hubspot.jackson.datatype.protobuf;
 
-import static com.hubspot.jackson.test.util.ObjectMapperHelper.camelCase;
-import static com.hubspot.jackson.test.util.ObjectMapperHelper.underscore;
-import static com.hubspot.jackson.test.util.ObjectMapperHelper.writeAndReadBack;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.underscore;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.writeAndReadBack;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
@@ -13,10 +13,10 @@ import org.junit.Test;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ExtensionRegistry;
-import com.hubspot.jackson.test.util.ProtobufCreator;
-import com.hubspot.jackson.test.util.TestExtensionRegistry;
-import com.hubspot.jackson.test.util.TestProtobuf.AllFields;
-import com.hubspot.jackson.test.util.TestProtobuf.Nested;
+import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
+import com.hubspot.jackson.datatype.protobuf.util.TestExtensionRegistry;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.Nested;
 
 public class AllExtensionsTest {
   private static final ExtensionRegistry EXTENSION_REGISTRY = TestExtensionRegistry.getInstance();

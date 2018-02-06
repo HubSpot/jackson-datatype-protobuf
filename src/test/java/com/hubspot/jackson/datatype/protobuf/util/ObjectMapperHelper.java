@@ -1,4 +1,4 @@
-package com.hubspot.jackson.test.util;
+package com.hubspot.jackson.datatype.protobuf.util;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

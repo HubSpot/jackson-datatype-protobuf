@@ -1,6 +1,6 @@
-package com.hubspot.jackson.test;
+package com.hubspot.jackson.datatype.protobuf;
 
-import static com.hubspot.jackson.test.util.ObjectMapperHelper.camelCase;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.EnumSet;
@@ -20,8 +20,8 @@ import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
-import com.hubspot.jackson.test.util.TestExtensionRegistry;
-import com.hubspot.jackson.test.util.TestProtobuf.AllFields;
+import com.hubspot.jackson.datatype.protobuf.util.TestExtensionRegistry;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 
 public class JsonInclusionTest {
   private static final EnumSet<Include> EXCLUDED_VALUES = presentValues("ALWAYS", "USE_DEFAULTS", "CUSTOM");

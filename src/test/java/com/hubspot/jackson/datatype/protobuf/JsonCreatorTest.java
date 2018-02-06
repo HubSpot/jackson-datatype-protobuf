@@ -1,11 +1,11 @@
-package com.hubspot.jackson.test;
+package com.hubspot.jackson.datatype.protobuf;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.hubspot.jackson.test.util.ProtobufCreator;
-import com.hubspot.jackson.test.util.TestProtobuf.AllFields;
+import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import org.junit.Test;
 
-import static com.hubspot.jackson.test.util.ObjectMapperHelper.camelCase;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class JsonCreatorTest {
