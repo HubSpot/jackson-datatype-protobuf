@@ -1,4 +1,4 @@
-package com.hubspot.jackson.test;
+package com.hubspot.jackson.datatype.protobuf;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.protobuf.Message;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
-import com.hubspot.jackson.test.util.TestProtobuf.AllFields;
-import com.hubspot.jackson.test.util.TestProtobuf.Nested;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.Nested;
 import org.junit.Test;
 
 import java.io.IOException;

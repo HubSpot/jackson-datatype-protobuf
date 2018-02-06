@@ -1,4 +1,4 @@
-package com.hubspot.jackson.test.util;
+package com.hubspot.jackson.datatype.protobuf.util;
 
 import java.io.IOException;
 import java.util.Collections;

@@ -1,49 +1,51 @@
-package com.hubspot.jackson.test.util;
+syntax = "proto2";
+
+package com.hubspot.jackson.datatype.protobuf.util;
 
 option java_outer_classname = "TestExtensions";
 
 import 'test.proto';
 
 message AllExtensions {
-    extend AllFields {
-        optional double double_extension = 18;
-        optional float float_extension = 19;
-        optional int32 int32_extension = 20;
-        optional int64 int64_extension = 21;
-        optional uint32 uint32_extension = 22;
-        optional uint64 uint64_extension = 23;
-        optional sint32 sint32_extension = 24;
-        optional sint64 sint64_extension = 25;
-        optional fixed32 fixed32_extension = 26;
-        optional fixed64 fixed64_extension = 27;
-        optional sfixed32 sfixed32_extension = 28;
-        optional sfixed64 sfixed64_extension = 29;
-        optional bool bool_extension = 30;
-        optional string string_extension = 31;
-        optional bytes bytes_extension = 32;
-        optional Enum enum_extension = 33;
-        optional Nested nested_extension = 34;
-    }
+  extend AllFields {
+    optional double double_extension = 18;
+    optional float float_extension = 19;
+    optional int32 int32_extension = 20;
+    optional int64 int64_extension = 21;
+    optional uint32 uint32_extension = 22;
+    optional uint64 uint64_extension = 23;
+    optional sint32 sint32_extension = 24;
+    optional sint64 sint64_extension = 25;
+    optional fixed32 fixed32_extension = 26;
+    optional fixed64 fixed64_extension = 27;
+    optional sfixed32 sfixed32_extension = 28;
+    optional sfixed64 sfixed64_extension = 29;
+    optional bool bool_extension = 30;
+    optional string string_extension = 31;
+    optional bytes bytes_extension = 32;
+    optional Enum enum_extension = 33;
+    optional Nested nested_extension = 34;
+  }
 }
 
 message RepeatedExtensions {
-    extend RepeatedFields {
-        repeated double double_extension = 18;
-        repeated float float_extension = 19;
-        repeated int32 int32_extension = 20;
-        repeated int64 int64_extension = 21;
-        repeated uint32 uint32_extension = 22;
-        repeated uint64 uint64_extension = 23;
-        repeated sint32 sint32_extension = 24;
-        repeated sint64 sint64_extension = 25;
-        repeated fixed32 fixed32_extension = 26;
-        repeated fixed64 fixed64_extension = 27;
-        repeated sfixed32 sfixed32_extension = 28;
-        repeated sfixed64 sfixed64_extension = 29;
-        repeated bool bool_extension = 30;
-        repeated string string_extension = 31;
-        repeated bytes bytes_extension = 32;
-        repeated Enum enum_extension = 33;
-        repeated Nested nested_extension = 34;
-    }
+  extend RepeatedFields {
+    repeated double double_extension = 18;
+    repeated float float_extension = 19;
+    repeated int32 int32_extension = 20;
+    repeated int64 int64_extension = 21;
+    repeated uint32 uint32_extension = 22;
+    repeated uint64 uint64_extension = 23;
+    repeated sint32 sint32_extension = 24;
+    repeated sint64 sint64_extension = 25;
+    repeated fixed32 fixed32_extension = 26;
+    repeated fixed64 fixed64_extension = 27;
+    repeated sfixed32 sfixed32_extension = 28;
+    repeated sfixed64 sfixed64_extension = 29;
+    repeated bool bool_extension = 30;
+    repeated string string_extension = 31;
+    repeated bytes bytes_extension = 32;
+    repeated Enum enum_extension = 33;
+    repeated Nested nested_extension = 34;
+  }
 }

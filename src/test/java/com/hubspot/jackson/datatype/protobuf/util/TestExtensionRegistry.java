@@ -1,12 +1,12 @@
-package com.hubspot.jackson.test.util;
+package com.hubspot.jackson.datatype.protobuf.util;
 
 import com.google.common.collect.Iterables;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
 import com.google.protobuf.ExtensionRegistry;
-import com.hubspot.jackson.test.util.TestExtensions.AllExtensions;
-import com.hubspot.jackson.test.util.TestExtensions.RepeatedExtensions;
-import com.hubspot.jackson.test.util.TestProtobuf.Nested;
+import com.hubspot.jackson.datatype.protobuf.util.TestExtensions.AllExtensions;
+import com.hubspot.jackson.datatype.protobuf.util.TestExtensions.RepeatedExtensions;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.Nested;
 
 public class TestExtensionRegistry {
 
