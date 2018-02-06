@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
 import com.google.protobuf.Descriptors.FileDescriptor.Syntax;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.google.protobuf.GeneratedMessageV3.ExtendableMessageOrBuilder;
@@ -41,7 +42,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
     boolean proto3 = message.getDescriptorForType().getFile().getSyntax() == Syntax.PROTO3;
     Include include = serializerProvider.getConfig().getSerializationInclusion();
-    boolean includeAllFields = include == Include.ALWAYS || (proto3 && include == Include.NON_NULL);
+    boolean writeDefaultValues = proto3 && include != Include.NON_DEFAULT;
     PropertyNamingStrategyBase namingStrategy =
             new PropertyNamingStrategyWrapper(serializerProvider.getConfig().getPropertyNamingStrategy());
 
@@ -72,16 +73,21 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
             generator.writeEndArray();
           }
         }
-      } else if (message.hasField(field)) {
+      } else if (message.hasField(field) || (writeDefaultValues && !supportsFieldPresence(field) && field.getContainingOneof() == null)) {
         generator.writeFieldName(namingStrategy.translate(field.getName()));
         writeValue(field, message.getField(field), generator, serializerProvider);
-      } else if (includeAllFields && field.getContainingOneof() == null) {
+      } else if (include == Include.ALWAYS && field.getContainingOneof() == null) {
         generator.writeFieldName(namingStrategy.translate(field.getName()));
         generator.writeNull();
       }
     }
 
     generator.writeEndObject();
+  }
+
+  private static boolean supportsFieldPresence(FieldDescriptor field) {
+    // messages still support field presence in proto3
+    return field.getJavaType() == JavaType.MESSAGE;
   }
 
   private static boolean writeEmptyArrays(SerializerProvider config) {

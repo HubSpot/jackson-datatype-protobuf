@@ -47,7 +47,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
     try {
       this.defaultInstance = (T) messageType.getMethod("getDefaultInstance").invoke(null);
     } catch (Exception e) {
-      throw new JsonMappingException("Unable to get default instance for type " + messageType, e);
+      throw new RuntimeException("Unable to get default instance for type " + messageType, e);
     }
 
     this.deserializerCache = new ConcurrentHashMap<>();
@@ -94,11 +94,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
           DeserializationContext context
   ) throws IOException {
     if (parser.getCurrentToken() != JsonToken.START_OBJECT) {
-      throw reportWrongToken(
-              JsonToken.START_OBJECT,
-              context,
-              "Can't parse map field out of " + parser.currentToken() + " token"
-      );
+      throw mappingException(field, context);
     }
 
     Descriptor entryDescriptor = field.getMessageType();
@@ -208,27 +204,22 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
             throw mappingException(field, context);
         }
       case MESSAGE:
-        switch (parser.getCurrentToken()) {
-          case START_OBJECT:
-            JsonDeserializer<Object> deserializer = deserializerCache.get(field);
-            if (deserializer == null) {
-              final Class<?> subType;
-              if (defaultInstance == null) {
-                Message.Builder subBuilder = builder.newBuilderForField(field);
-                subType = subBuilder.getDefaultInstanceForType().getClass();
-              } else {
-                subType = defaultInstance.getClass();
-              }
+        JsonDeserializer<Object> deserializer = deserializerCache.get(field);
+        if (deserializer == null) {
+          final Class<?> subType;
+          if (defaultInstance == null) {
+            Message.Builder subBuilder = builder.newBuilderForField(field);
+            subType = subBuilder.getDefaultInstanceForType().getClass();
+          } else {
+            subType = defaultInstance.getClass();
+          }
 
-              JavaType type = SimpleType.construct(subType);
-              deserializer = context.findContextualValueDeserializer(type, null);
-              deserializerCache.put(field, deserializer);
-            }
-
-            return deserializer.deserialize(parser, context);
-          default:
-            throw mappingException(field, context);
+          JavaType type = context.constructType(subType);
+          deserializer = context.findContextualValueDeserializer(type, null);
+          deserializerCache.put(field, deserializer);
         }
+
+        return deserializer.deserialize(parser, context);
       default:
         throw new IllegalArgumentException("Unrecognized field type: " + field.getJavaType());
     }
@@ -242,11 +233,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
           DeserializationContext context
   ) throws IOException {
     if (parser.getCurrentToken() != JsonToken.START_ARRAY) {
-      throw reportWrongToken(
-              JsonToken.START_ARRAY,
-              context,
-              "Can't parse repeated field out of " + parser.currentToken() + " token"
-      );
+      throw mappingException(field, context);
     }
 
     List<Object> values = Lists.newArrayList();
