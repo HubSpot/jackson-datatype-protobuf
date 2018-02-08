@@ -55,4 +55,9 @@ public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder
         throw new AssertionError();
     }
   }
+
+  @Override
+  public Value.Builder getNullValue(DeserializationContext ctxt) {
+    return Value.newBuilder().setNullValue(NullValue.NULL_VALUE);
+  }
 }
