@@ -26,6 +26,11 @@ public class NullValueDeserializer extends StdDeserializer<NullValue> {
     }
   }
 
+  @Override
+  public NullValue getNullValue(DeserializationContext ctxt) {
+    return NullValue.NULL_VALUE;
+  }
+
   // TODO share this?
   private static String wrongTokenMessage(DeserializationContext context) {
     return "Can not deserialize instance of com.google.protobuf.NullValue out of " + context.getParser().currentToken() + " token";

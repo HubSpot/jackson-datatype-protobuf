@@ -1,4 +1,4 @@
-package com.hubspot.jackson.datatype.protobuf.util;
+package com.hubspot.jackson.datatype.protobuf;
 
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 
