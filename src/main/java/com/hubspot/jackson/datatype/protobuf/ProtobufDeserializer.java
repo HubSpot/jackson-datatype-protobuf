@@ -124,6 +124,9 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
     if (parser.getCurrentToken() == JsonToken.START_ARRAY) {
       if (field.isRepeated()) {
         return readArray(builder, field, defaultInstance, parser, context);
+      } else if (field.getJavaType() == FieldDescriptor.JavaType.MESSAGE) {
+        // don't fail yet, might have a custom serializer/deserializer registered
+        return readMessage(builder, field, defaultInstance, parser, context);
       } else {
         throw mappingException(field, context);
       }
@@ -203,22 +206,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
             throw mappingException(field, context);
         }
       case MESSAGE:
-        JsonDeserializer<Object> deserializer = deserializerCache.get(field);
-        if (deserializer == null) {
-          final Class<?> subType;
-          if (defaultInstance == null) {
-            Message.Builder subBuilder = builder.newBuilderForField(field);
-            subType = subBuilder.getDefaultInstanceForType().getClass();
-          } else {
-            subType = defaultInstance.getClass();
-          }
-
-          JavaType type = context.constructType(subType);
-          deserializer = context.findContextualValueDeserializer(type, null);
-          deserializerCache.put(field, deserializer);
-        }
-
-        return deserializer.deserialize(parser, context);
+        return readMessage(builder, field, defaultInstance, parser, context);
       default:
         throw new IllegalArgumentException("Unrecognized field type: " + field.getJavaType());
     }
@@ -244,6 +232,31 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
       }
     }
     return values;
+  }
+
+  private Object readMessage(
+          Message.Builder builder,
+          FieldDescriptor field,
+          Message defaultInstance,
+          JsonParser parser,
+          DeserializationContext context
+  ) throws IOException {
+    JsonDeserializer<Object> deserializer = deserializerCache.get(field);
+    if (deserializer == null) {
+      final Class<?> subType;
+      if (defaultInstance == null) {
+        Message.Builder subBuilder = builder.newBuilderForField(field);
+        subType = subBuilder.getDefaultInstanceForType().getClass();
+      } else {
+        subType = defaultInstance.getClass();
+      }
+
+      JavaType type = context.constructType(subType);
+      deserializer = context.findContextualValueDeserializer(type, null);
+      deserializerCache.put(field, deserializer);
+    }
+
+    return deserializer.deserialize(parser, context);
   }
 
   private static boolean ignorableEnum(String value, DeserializationContext context) {

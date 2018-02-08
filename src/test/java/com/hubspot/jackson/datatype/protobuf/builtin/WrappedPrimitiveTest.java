@@ -41,6 +41,13 @@ public class WrappedPrimitiveTest {
   }
 
   @Test
+  public void itWritesZeroWhenSetToDefaultInstanceWithDefaultInclusion() throws IOException {
+    HasWrappedPrimitives message = defaultPopulatedMessage();
+    JsonNode json = toNode(message, camelCase());
+    assertThat(json).isEqualTo(defaultPopulatedJsonNode(camelCase()));
+  }
+
+  @Test
   public void itOmitsFieldsWhenNotSetWithDefaultInclusion() throws IOException {
     HasWrappedPrimitives message = emptyMessage();
     JsonNode json = toNode(message, camelCase());
@@ -52,6 +59,13 @@ public class WrappedPrimitiveTest {
     HasWrappedPrimitives message = fullyPopulatedMessage();
     JsonNode json = toNode(message, camelCase(Include.NON_DEFAULT));
     assertThat(json).isEqualTo(fullyPopulatedJsonNode(camelCase(Include.NON_DEFAULT)));
+  }
+
+  @Test
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonDefaultInclusion() throws IOException {
+    HasWrappedPrimitives message = defaultPopulatedMessage();
+    JsonNode json = toNode(message, camelCase(Include.NON_DEFAULT));
+    assertThat(json).isEqualTo(defaultPopulatedJsonNode(camelCase(Include.NON_DEFAULT)));
   }
 
   @Test
@@ -69,6 +83,13 @@ public class WrappedPrimitiveTest {
   }
 
   @Test
+  public void itWritesZeroWhenSetToDefaultInstanceWithAlwaysInclusion() throws IOException {
+    HasWrappedPrimitives message = defaultPopulatedMessage();
+    JsonNode json = toNode(message, camelCase(Include.ALWAYS));
+    assertThat(json).isEqualTo(defaultPopulatedJsonNode(camelCase(Include.ALWAYS)));
+  }
+
+  @Test
   public void itWritesNullWhenNotSetWithAlwaysInclusion() throws IOException {
     HasWrappedPrimitives message = emptyMessage();
     JsonNode json = toNode(message, camelCase(Include.ALWAYS));
@@ -80,6 +101,13 @@ public class WrappedPrimitiveTest {
     HasWrappedPrimitives message = fullyPopulatedMessage();
     JsonNode json = toNode(message, camelCase(Include.NON_NULL));
     assertThat(json).isEqualTo(fullyPopulatedJsonNode(camelCase(Include.NON_NULL)));
+  }
+
+  @Test
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonNullInclusion() throws IOException {
+    HasWrappedPrimitives message = defaultPopulatedMessage();
+    JsonNode json = toNode(message, camelCase(Include.NON_NULL));
+    assertThat(json).isEqualTo(defaultPopulatedJsonNode(camelCase(Include.NON_NULL)));
   }
 
   @Test
@@ -111,6 +139,30 @@ public class WrappedPrimitiveTest {
     assertThat(message.getStringWrapper()).isEqualTo(STRING_WRAPPER);
     assertThat(message.hasBytesWrapper()).isTrue();
     assertThat(message.getBytesWrapper()).isEqualTo(BYTES_WRAPPER);
+  }
+
+  @Test
+  public void itSetsFieldsWhenZeroInJson() throws IOException {
+    String json = camelCase().writeValueAsString(defaultPopulatedJsonNode(camelCase()));
+    HasWrappedPrimitives message = camelCase().readValue(json, HasWrappedPrimitives.class);
+    assertThat(message.hasDoubleWrapper()).isTrue();
+    assertThat(message.getDoubleWrapper()).isEqualTo(DoubleValue.getDefaultInstance());
+    assertThat(message.hasFloatWrapper()).isTrue();
+    assertThat(message.getFloatWrapper()).isEqualTo(FloatValue.getDefaultInstance());
+    assertThat(message.hasInt64Wrapper()).isTrue();
+    assertThat(message.getInt64Wrapper()).isEqualTo(Int64Value.getDefaultInstance());
+    assertThat(message.hasUint64Wrapper()).isTrue();
+    assertThat(message.getUint64Wrapper()).isEqualTo(UInt64Value.getDefaultInstance());
+    assertThat(message.hasInt32Wrapper()).isTrue();
+    assertThat(message.getInt32Wrapper()).isEqualTo(Int32Value.getDefaultInstance());
+    assertThat(message.hasUint32Wrapper()).isTrue();
+    assertThat(message.getUint32Wrapper()).isEqualTo(UInt32Value.getDefaultInstance());
+    assertThat(message.hasBoolWrapper()).isTrue();
+    assertThat(message.getBoolWrapper()).isEqualTo(BoolValue.getDefaultInstance());
+    assertThat(message.hasStringWrapper()).isTrue();
+    assertThat(message.getStringWrapper()).isEqualTo(StringValue.getDefaultInstance());
+    assertThat(message.hasBytesWrapper()).isTrue();
+    assertThat(message.getBytesWrapper()).isEqualTo(BytesValue.getDefaultInstance());
   }
 
   @Test
@@ -161,6 +213,19 @@ public class WrappedPrimitiveTest {
             .put("bytesWrapper", "dGVzdF9ieXRlcw==");
   }
 
+  private static JsonNode defaultPopulatedJsonNode(ObjectMapper mapper) {
+    return mapper.createObjectNode()
+            .put("doubleWrapper", 0.0)
+            .put("floatWrapper", 0.0)
+            .put("int64Wrapper", 0)
+            .put("uint64Wrapper", 0)
+            .put("int32Wrapper", 0)
+            .put("uint32Wrapper", 0)
+            .put("boolWrapper", false)
+            .put("stringWrapper", "")
+            .put("bytesWrapper", "");
+  }
+
   private static JsonNode nullPopulatedJsonNode(ObjectMapper mapper) {
     return mapper.createObjectNode()
             .putNull("doubleWrapper")
@@ -190,6 +255,21 @@ public class WrappedPrimitiveTest {
             .setBoolWrapper(BOOL_WRAPPER)
             .setStringWrapper(STRING_WRAPPER)
             .setBytesWrapper(BYTES_WRAPPER)
+            .build();
+  }
+
+  private static HasWrappedPrimitives defaultPopulatedMessage() {
+    return HasWrappedPrimitives
+            .newBuilder()
+            .setDoubleWrapper(DoubleValue.getDefaultInstance())
+            .setFloatWrapper(FloatValue.getDefaultInstance())
+            .setInt64Wrapper(Int64Value.getDefaultInstance())
+            .setUint64Wrapper(UInt64Value.getDefaultInstance())
+            .setInt32Wrapper(Int32Value.getDefaultInstance())
+            .setUint32Wrapper(UInt32Value.getDefaultInstance())
+            .setBoolWrapper(BoolValue.getDefaultInstance())
+            .setStringWrapper(StringValue.getDefaultInstance())
+            .setBytesWrapper(BytesValue.getDefaultInstance())
             .build();
   }
 
