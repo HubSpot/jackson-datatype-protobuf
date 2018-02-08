@@ -5,6 +5,7 @@ package com.hubspot.jackson.datatype.protobuf.util;
 option java_outer_classname = "BuiltInProtobufs";
 
 import 'test.proto';
+import 'test_proto3.proto';
 import 'google/protobuf/any.proto';
 import 'google/protobuf/wrappers.proto';
 import 'google/protobuf/timestamp.proto';
@@ -60,7 +61,9 @@ message HasOneOf {
   oneof oneof {
     string string = 1;
     google.protobuf.Duration duration = 2;
-    AllFields message = 3;
+    EnumProto3 enum = 3;
+    AllFields proto2_message = 4;
+    AllFieldsProto3 proto3_message = 5;
   }
 }
 
@@ -77,11 +80,6 @@ message HasAllMapKeys {
   map<sfixed64, string> sfixed64_map = 10;
   map<bool, string> bool_map = 11;
   map<string, string> string_map = 12;
-}
-
-enum Proto3Enum {
-  ZERO = 0;
-  OTHER = 1;
 }
 
 message HasAllMapValues {
@@ -117,7 +115,7 @@ message HasAllMapValues {
   map<string, google.protobuf.BoolValue> bool_wrapper_map = 30;
   map<string, google.protobuf.StringValue> string_wrapper_map = 31;
   map<string, google.protobuf.BytesValue> bytes_wrapper_map = 32;
-  map<string, Proto3Enum> enum_map = 33;
-  map<string, AllFields> all_fields_map = 34;
-  map<string, Nested> nested_map = 35;
+  map<string, EnumProto3> enum_map = 33;
+  map<string, AllFields> proto2_message_map = 34;
+  map<string, AllFieldsProto3> proto3_message_map = 35;
 }

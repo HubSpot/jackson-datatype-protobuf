@@ -65,6 +65,6 @@ message NestedProto3 {
 
 enum EnumProto3 {
   DEFAULT = 0;
-  SECOND = 1;
-  THIRD = 2;
+  FIRST = 1;
+  SECOND = 2;
 }

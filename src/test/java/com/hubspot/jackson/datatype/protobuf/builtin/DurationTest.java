@@ -22,6 +22,13 @@ public class DurationTest {
   }
 
   @Test
+  public void itWritesZeroWhenSetToDefaultInstanceWithDefaultInclusion() throws IOException {
+    HasDuration message = HasDuration.newBuilder().setDuration(Duration.getDefaultInstance()).build();
+    String json = camelCase().writeValueAsString(message);
+    assertThat(json).isEqualTo("{\"duration\":\"0s\"}");
+  }
+
+  @Test
   public void itOmitsDurationWhenNotSetWithDefaultInclusion() throws IOException {
     HasDuration message = HasDuration.newBuilder().build();
     String json = camelCase().writeValueAsString(message);
@@ -33,6 +40,13 @@ public class DurationTest {
     HasDuration message = HasDuration.newBuilder().setDuration(DURATION).build();
     String json = camelCase(Include.NON_DEFAULT).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"duration\":\"30s\"}");
+  }
+
+  @Test
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonDefaultInclusion() throws IOException {
+    HasDuration message = HasDuration.newBuilder().setDuration(Duration.getDefaultInstance()).build();
+    String json = camelCase(Include.NON_DEFAULT).writeValueAsString(message);
+    assertThat(json).isEqualTo("{\"duration\":\"0s\"}");
   }
 
   @Test
@@ -50,6 +64,13 @@ public class DurationTest {
   }
 
   @Test
+  public void itWritesZeroWhenSetToDefaultInstanceWithAlwaysInclusion() throws IOException {
+    HasDuration message = HasDuration.newBuilder().setDuration(Duration.getDefaultInstance()).build();
+    String json = camelCase(Include.ALWAYS).writeValueAsString(message);
+    assertThat(json).isEqualTo("{\"duration\":\"0s\"}");
+  }
+
+  @Test
   public void itWritesNullWhenNotSetWithAlwaysInclusion() throws IOException {
     HasDuration message = HasDuration.newBuilder().build();
     String json = camelCase(Include.ALWAYS).writeValueAsString(message);
@@ -61,6 +82,13 @@ public class DurationTest {
     HasDuration message = HasDuration.newBuilder().setDuration(DURATION).build();
     String json = camelCase(Include.NON_NULL).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"duration\":\"30s\"}");
+  }
+
+  @Test
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonNullInclusion() throws IOException {
+    HasDuration message = HasDuration.newBuilder().setDuration(Duration.getDefaultInstance()).build();
+    String json = camelCase(Include.NON_NULL).writeValueAsString(message);
+    assertThat(json).isEqualTo("{\"duration\":\"0s\"}");
   }
 
   @Test
@@ -76,6 +104,14 @@ public class DurationTest {
     HasDuration message = camelCase().readValue(json, HasDuration.class);
     assertThat(message.hasDuration()).isTrue();
     assertThat(message.getDuration()).isEqualTo(DURATION);
+  }
+
+  @Test
+  public void itSetsDurationWhenZeroInJson() throws IOException {
+    String json = "{\"duration\":\"0s\"}";
+    HasDuration message = camelCase().readValue(json, HasDuration.class);
+    assertThat(message.hasDuration()).isTrue();
+    assertThat(message.getDuration()).isEqualTo(Duration.getDefaultInstance());
   }
 
   @Test
