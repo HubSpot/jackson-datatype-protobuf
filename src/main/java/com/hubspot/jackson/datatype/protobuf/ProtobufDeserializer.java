@@ -28,6 +28,7 @@ import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.NullValue;
+import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.MessageDeserializer;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -59,12 +60,14 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   ) throws IOException;
 
   public JsonDeserializer<T> buildAtEnd() {
-    return new JsonDeserializer<T>() {
+
+    @SuppressWarnings("unchecked")
+    Class<T> messageType = (Class<T>) handledType();
+    return new BuildingDeserializer<T, V>(messageType) {
 
       @Override
-      @SuppressWarnings("unchecked")
-      public T deserialize(JsonParser parser, DeserializationContext context) throws IOException {
-        return (T) ProtobufDeserializer.this.deserialize(parser, context).build();
+      public JsonDeserializer<V> getWrappedDeserializer() {
+        return ProtobufDeserializer.this;
       }
     };
   }
@@ -122,11 +125,17 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
           DeserializationContext context
   ) throws IOException {
     if (parser.getCurrentToken() == JsonToken.START_ARRAY) {
+      if (field.getJavaType() == FieldDescriptor.JavaType.MESSAGE) {
+        // might have a custom serializer/deserializer registered
+        JsonDeserializer<Object> deserializer =
+                getMessageDeserializer(builder, field, defaultInstance, context);
+        if (!isDefaultMessageDeserializer(deserializer)) {
+          return deserializer.deserialize(parser, context);
+        }
+      }
+
       if (field.isRepeated()) {
         return readArray(builder, field, defaultInstance, parser, context);
-      } else if (field.getJavaType() == FieldDescriptor.JavaType.MESSAGE) {
-        // don't fail yet, might have a custom serializer/deserializer registered
-        return readMessage(builder, field, defaultInstance, parser, context);
       } else {
         throw mappingException(field, context);
       }
@@ -140,7 +149,11 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
         case DOUBLE:
         case BOOLEAN:
           checkNullReturn(field, context);
-          return null; // could just fall through, but findbugs is dumb
+          return null;
+        case MESSAGE:
+          // don't return null yet, might have a custom serializer/deserializer registered
+          JsonDeserializer<Object> deserializer = getMessageDeserializer(builder, field, defaultInstance, context);
+          return deserializer.getNullValue(context);
         default:
           return null;
       }
@@ -206,7 +219,9 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
             throw mappingException(field, context);
         }
       case MESSAGE:
-        return readMessage(builder, field, defaultInstance, parser, context);
+        JsonDeserializer<Object> deserializer =
+                getMessageDeserializer(builder, field, defaultInstance, context);
+        return deserializer.deserialize(parser, context);
       default:
         throw new IllegalArgumentException("Unrecognized field type: " + field.getJavaType());
     }
@@ -234,11 +249,10 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
     return values;
   }
 
-  private Object readMessage(
+  private JsonDeserializer<Object> getMessageDeserializer(
           Message.Builder builder,
           FieldDescriptor field,
           Message defaultInstance,
-          JsonParser parser,
           DeserializationContext context
   ) throws IOException {
     JsonDeserializer<Object> deserializer = deserializerCache.get(field);
@@ -256,7 +270,17 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
       deserializerCache.put(field, deserializer);
     }
 
-    return deserializer.deserialize(parser, context);
+    return deserializer;
+  }
+
+  private static boolean isDefaultMessageDeserializer(JsonDeserializer<?> deserializer) {
+    final Class<?> deserializerType;
+    if (deserializer instanceof BuildingDeserializer) {
+      deserializerType = ((BuildingDeserializer) deserializer).getWrappedDeserializer().getClass();
+    } else {
+      deserializerType = deserializer.getClass();
+    }
+    return MessageDeserializer.class.equals(deserializerType);
   }
 
   private static boolean ignorableEnum(String value, DeserializationContext context) {

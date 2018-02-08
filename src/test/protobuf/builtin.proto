@@ -42,7 +42,7 @@ message HasTimestamp {
 }
 
 message HasValue {
-  google.protobuf.Value vaule = 1;
+  google.protobuf.Value value = 1;
 }
 
 message HasWrappedPrimitives {
