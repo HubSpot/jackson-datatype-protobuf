@@ -12,6 +12,7 @@ import javax.annotation.Nonnull;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.io.NumberInput;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
@@ -95,7 +96,10 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
           JsonParser parser,
           DeserializationContext context
   ) throws IOException {
-    if (parser.getCurrentToken() != JsonToken.START_OBJECT) {
+    if (parser.getCurrentToken() == JsonToken.VALUE_NULL) {
+      // Seems like we should treat null as an empty map rather than fail?
+      return Collections.emptyList();
+    } else if (parser.getCurrentToken() != JsonToken.START_OBJECT) {
       throw mappingException(field, context);
     }
 
@@ -106,7 +110,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
     List<Message> entries = new ArrayList<>();
     while (parser.nextToken() != JsonToken.END_OBJECT) {
       Message.Builder entryBuilder = builder.newBuilderForField(field);
-      Object key = readValue(entryBuilder, keyDescriptor, null, parser, context);
+      Object key = readKey(keyDescriptor, parser, context);
       parser.nextToken(); // move from key to value
       Object value = readValue(entryBuilder, valueDescriptor, null, parser, context);
 
@@ -115,6 +119,76 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
       entries.add(entryBuilder.build());
     }
     return entries;
+  }
+
+  /**
+   * Specialized version of readValue just for reading map keys, because the StdDeserializer methods like
+   * _parseIntPrimitive blow up when the current JsonToken is FIELD_NAME
+   */
+  private Object readKey(
+          FieldDescriptor field,
+          JsonParser parser,
+          DeserializationContext context
+  ) throws IOException {
+    if (parser.getCurrentToken() != JsonToken.FIELD_NAME) {
+      throw mappingException(field, context);
+    }
+
+    String fieldName = parser.getCurrentName();
+    switch (field.getJavaType()) {
+      case INT:
+        // lifted from StdDeserializer since there's no method to call
+        try {
+          return NumberInput.parseInt(fieldName.trim());
+        } catch (IllegalArgumentException iae) {
+          Number number = (Number) context.handleWeirdStringValue(
+                  _valueClass,
+                  fieldName.trim(),
+                  "not a valid int value"
+          );
+          return number == null ? 0 : number.intValue();
+        }
+      case LONG:
+        // lifted from StdDeserializer since there's no method to call
+        try {
+          return NumberInput.parseLong(fieldName.trim());
+        } catch (IllegalArgumentException iae) {
+          Number number = (Number) context.handleWeirdStringValue(
+                  _valueClass,
+                  fieldName.trim(),
+                  "not a valid long value"
+          );
+          return number == null ? 0L : number.longValue();
+        }
+      case BOOLEAN:
+        // lifted from StdDeserializer since there's no method to call
+        String text = fieldName.trim();
+        if ("true".equals(text) || "True".equals(text)) {
+          return true;
+        }
+        if ("false".equals(text) || "False".equals(text)) {
+          return false;
+        }
+        Boolean b = (Boolean) context.handleWeirdStringValue(
+                _valueClass,
+                text,
+                "only \"true\" or \"false\" recognized"
+        );
+        return Boolean.TRUE.equals(b);
+      case STRING:
+        return fieldName;
+      case ENUM:
+        EnumValueDescriptor enumValueDescriptor = field.getEnumType().findValueByName(parser.getText());
+
+        if (enumValueDescriptor == null && !ignorableEnum(parser.getText().trim(), context)) {
+          throw context.weirdStringException(parser.getText(), field.getEnumType().getClass(),
+                  "value not one of declared Enum instance names");
+        }
+
+        return enumValueDescriptor;
+      default:
+        throw new IllegalArgumentException("Unexpected map key type: " + field.getJavaType());
+    }
   }
 
   protected Object readValue(
@@ -150,6 +224,12 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
         case BOOLEAN:
           checkNullReturn(field, context);
           return null;
+        case ENUM:
+          if (NULL_VALUE_FULL_NAME.equals(field.getEnumType().getFullName())) {
+            return NULL_VALUE_DESCRIPTOR;
+          } else {
+            return null;
+          }
         case MESSAGE:
           // don't return null yet, might have a custom serializer/deserializer registered
           JsonDeserializer<Object> deserializer = getMessageDeserializer(builder, field, defaultInstance, context);
@@ -209,11 +289,6 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
             } else {
               throw context.mappingException("Not allowed to deserialize Enum value out of JSON number " +
                       "(disable DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS to allow)");
-            }
-          case VALUE_NULL:
-            // special-case NullValue
-            if (NULL_VALUE_FULL_NAME.equals(field.getEnumType().getFullName())) {
-              return NULL_VALUE_DESCRIPTOR;
             }
           default:
             throw mappingException(field, context);
