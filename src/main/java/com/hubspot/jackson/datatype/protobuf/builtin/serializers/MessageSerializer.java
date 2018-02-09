@@ -43,6 +43,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     boolean proto3 = message.getDescriptorForType().getFile().getSyntax() == Syntax.PROTO3;
     Include include = serializerProvider.getConfig().getSerializationInclusion();
     boolean writeDefaultValues = proto3 && include != Include.NON_DEFAULT;
+    boolean writeEmptyCollections = include != Include.NON_DEFAULT && include != Include.NON_EMPTY;
     PropertyNamingStrategyBase namingStrategy =
             new PropertyNamingStrategyWrapper(serializerProvider.getConfig().getPropertyNamingStrategy());
 
@@ -55,14 +56,14 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     }
 
     for (FieldDescriptor field : fields) {
-      if (field.isMapField()) {
-        generator.writeFieldName(namingStrategy.translate(field.getName()));
-        writeMap(field, message.getField(field), generator, serializerProvider);
-      } else if (field.isRepeated()) {
+      if (field.isRepeated()) {
         List<?> valueList = (List<?>) message.getField(field);
 
-        if (!valueList.isEmpty() || writeEmptyArrays(serializerProvider)) {
-          if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
+        if (!valueList.isEmpty() || writeEmptyCollections) {
+          if (field.isMapField()) {
+            generator.writeFieldName(namingStrategy.translate(field.getName()));
+            writeMap(field, valueList, generator, serializerProvider);
+          } else if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
             generator.writeFieldName(namingStrategy.translate(field.getName()));
             writeValue(field, valueList.get(0), generator, serializerProvider);
           } else {
