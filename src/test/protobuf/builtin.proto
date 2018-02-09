@@ -57,7 +57,7 @@ message HasWrappedPrimitives {
   google.protobuf.BytesValue bytes_wrapper = 9;
 }
 
-message HasOneOf {
+message HasOneof {
   oneof oneof {
     string string = 1;
     google.protobuf.Duration duration = 2;
