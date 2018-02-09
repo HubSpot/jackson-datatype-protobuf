@@ -98,7 +98,7 @@ message HasAllMapValues {
   map<string, bool> bool_map = 13;
   map<string, string> string_map = 14;
   map<string, bytes> bytes_map = 15;
-  map<string, google.protobuf.Any> any_map = 16;
+  // map<string, google.protobuf.Any> any_map = 16; TODO
   map<string, google.protobuf.Duration> duration_map = 17;
   map<string, google.protobuf.FieldMask> field_mask_map = 18;
   map<string, google.protobuf.ListValue> list_value_map = 19;
@@ -108,10 +108,10 @@ message HasAllMapValues {
   map<string, google.protobuf.Value> value_map = 23;
   map<string, google.protobuf.DoubleValue> double_wrapper_map = 24;
   map<string, google.protobuf.FloatValue> float_wrapper_map = 25;
-  map<string, google.protobuf.Int64Value> int64_wrapper_map = 26;
-  map<string, google.protobuf.UInt64Value> uint64_wrapper_map = 27;
   map<string, google.protobuf.Int32Value> int32_wrapper_map = 28;
+  map<string, google.protobuf.Int64Value> int64_wrapper_map = 26;
   map<string, google.protobuf.UInt32Value> uint32_wrapper_map = 29;
+  map<string, google.protobuf.UInt64Value> uint64_wrapper_map = 27;
   map<string, google.protobuf.BoolValue> bool_wrapper_map = 30;
   map<string, google.protobuf.StringValue> string_wrapper_map = 31;
   map<string, google.protobuf.BytesValue> bytes_wrapper_map = 32;
