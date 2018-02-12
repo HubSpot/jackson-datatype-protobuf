@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
-import com.google.protobuf.Any;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.BytesValue;
 import com.google.protobuf.DoubleValue;
@@ -27,7 +26,6 @@ import com.google.protobuf.Timestamp;
 import com.google.protobuf.UInt32Value;
 import com.google.protobuf.UInt64Value;
 import com.google.protobuf.Value;
-import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.AnyDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.DurationDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.FieldMaskDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.ListValueDeserializer;
@@ -36,7 +34,6 @@ import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.StructDeseria
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.TimestampDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.ValueDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.WrappedPrimitiveDeserializer;
-import com.hubspot.jackson.datatype.protobuf.builtin.serializers.AnySerializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.DurationSerializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.FieldMaskSerializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.ListValueSerializer;
@@ -77,7 +74,6 @@ public class ProtobufModule extends Module {
   public void setupModule(SetupContext context) {
     SimpleSerializers serializers = new SimpleSerializers();
     serializers.addSerializer(new MessageSerializer(extensionRegistry));
-    serializers.addSerializer(new AnySerializer());
     serializers.addSerializer(new DurationSerializer());
     serializers.addSerializer(new FieldMaskSerializer());
     serializers.addSerializer(new ListValueSerializer());
@@ -99,7 +95,6 @@ public class ProtobufModule extends Module {
 
     context.addDeserializers(new MessageDeserializerFactory(extensionRegistry));
     SimpleDeserializers deserializers = new SimpleDeserializers();
-    deserializers.addDeserializer(Any.class, new AnyDeserializer().buildAtEnd());
     deserializers.addDeserializer(Duration.class, new DurationDeserializer());
     deserializers.addDeserializer(FieldMask.class, new FieldMaskDeserializer());
     deserializers.addDeserializer(ListValue.class, new ListValueDeserializer().buildAtEnd());
