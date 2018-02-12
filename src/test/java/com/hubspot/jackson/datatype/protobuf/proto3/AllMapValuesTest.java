@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import com.google.protobuf.Any;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.BytesValue;
@@ -76,6 +77,11 @@ public class AllMapValuesTest {
   private static HasAllMapValues hasAllMapValues() {
     Value value = Value.newBuilder().setStringValue("test").build();
     ByteString byteString = ByteString.copyFromUtf8("test");
+    Any any = Any
+            .newBuilder()
+            .setTypeUrl("type.googleapis.com/google.protobuf.Value")
+            .setValue(value.toByteString())
+            .build();
     return HasAllMapValues
             .newBuilder()
             .putDoubleMap("double", 1.5d)
@@ -93,7 +99,7 @@ public class AllMapValuesTest {
             .putBoolMap("bool", true)
             .putStringMap("string", "test")
             .putBytesMap("bytes", byteString)
-            // .putAnyMap("any", null) TODO
+            .putAnyMap("any", any)
             .putDurationMap("duration", Duration.newBuilder().setSeconds(30).build())
             .putFieldMaskMap("field_mask", FieldMask.newBuilder().addPaths("path_one").addPaths("path_two").build())
             .putListValueMap("list_value", ListValue.newBuilder().addValues(value).build())
@@ -133,7 +139,7 @@ public class AllMapValuesTest {
     node.set("boolMap", newObjectNode().put("bool", true));
     node.set("stringMap", newObjectNode().put("string", "test"));
     node.set("bytesMap", newObjectNode().put("bytes", "dGVzdA=="));
-    // node.set("anyMap", newObjectNode().put("any", null)); TODO
+    node.set("anyMap", newObjectNode().set("any", anyNode()));
     node.set("durationMap", newObjectNode().put("duration", "30s"));
     node.set("fieldMaskMap", newObjectNode().put("field_mask", "pathOne,pathTwo"));
     node.set("listValueMap", newObjectNode().set("list_value", camelCase().createArrayNode().add(TextNode.valueOf("test"))));
@@ -156,6 +162,14 @@ public class AllMapValuesTest {
     return node;
   }
 
+  private static ObjectNode anyNode() {
+    byte[] bytes = Value.newBuilder().setStringValue("test").build().toByteArray();
+    String base64 = camelCase().getSerializationConfig().getBase64Variant().encode(bytes);
+    return newObjectNode()
+            .put("typeUrl", "type.googleapis.com/google.protobuf.Value")
+            .put("value", base64);
+  }
+
   private static ObjectNode hasEmptyMapsNode() {
     ObjectNode node = newObjectNode();
     node.set("doubleMap", newObjectNode());
@@ -173,7 +187,7 @@ public class AllMapValuesTest {
     node.set("boolMap", newObjectNode());
     node.set("stringMap", newObjectNode());
     node.set("bytesMap", newObjectNode());
-    // node.set("anyMap", newObjectNode()); TODO
+    node.set("anyMap", newObjectNode());
     node.set("durationMap", newObjectNode());
     node.set("fieldMaskMap", newObjectNode());
     node.set("listValueMap", newObjectNode());
@@ -213,7 +227,7 @@ public class AllMapValuesTest {
     node.set("boolMap", NullNode.getInstance());
     node.set("stringMap", NullNode.getInstance());
     node.set("bytesMap", NullNode.getInstance());
-    // node.set("anyMap", NullNode.getInstance()); TODO
+    node.set("anyMap", NullNode.getInstance());
     node.set("durationMap", NullNode.getInstance());
     node.set("fieldMaskMap", NullNode.getInstance());
     node.set("listValueMap", NullNode.getInstance());
