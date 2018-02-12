@@ -98,7 +98,7 @@ message HasAllMapValues {
   map<string, bool> bool_map = 13;
   map<string, string> string_map = 14;
   map<string, bytes> bytes_map = 15;
-  // map<string, google.protobuf.Any> any_map = 16; TODO
+  map<string, google.protobuf.Any> any_map = 16;
   map<string, google.protobuf.Duration> duration_map = 17;
   map<string, google.protobuf.FieldMask> field_mask_map = 18;
   map<string, google.protobuf.ListValue> list_value_map = 19;
