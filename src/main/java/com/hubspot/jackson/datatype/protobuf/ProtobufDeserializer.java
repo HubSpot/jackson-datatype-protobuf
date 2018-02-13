@@ -141,24 +141,22 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
         try {
           return NumberInput.parseInt(fieldName.trim());
         } catch (IllegalArgumentException iae) {
-          Number number = (Number) context.handleWeirdStringValue(
-                  _valueClass,
+          throw context.weirdStringException(
                   fieldName.trim(),
+                  Integer.TYPE,
                   "not a valid int value"
           );
-          return number == null ? 0 : number.intValue();
         }
       case LONG:
         // lifted from StdDeserializer since there's no method to call
         try {
           return NumberInput.parseLong(fieldName.trim());
         } catch (IllegalArgumentException iae) {
-          Number number = (Number) context.handleWeirdStringValue(
-                  _valueClass,
+          throw context.weirdStringException(
                   fieldName.trim(),
+                  Long.TYPE,
                   "not a valid long value"
           );
-          return number == null ? 0L : number.longValue();
         }
       case BOOLEAN:
         // lifted from StdDeserializer since there's no method to call
@@ -169,12 +167,11 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
         if ("false".equals(text) || "False".equals(text)) {
           return false;
         }
-        Boolean b = (Boolean) context.handleWeirdStringValue(
-                _valueClass,
-                text,
+        throw context.weirdStringException(
+                fieldName.trim(),
+                Boolean.TYPE,
                 "only \"true\" or \"false\" recognized"
         );
-        return Boolean.TRUE.equals(b);
       case STRING:
         return fieldName;
       case ENUM:

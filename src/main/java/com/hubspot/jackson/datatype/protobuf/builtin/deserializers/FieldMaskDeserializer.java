@@ -29,6 +29,6 @@ public class FieldMaskDeserializer extends StdDeserializer<FieldMask> {
 
   // TODO share this?
   private static String wrongTokenMessage(DeserializationContext context) {
-    return "Can not deserialize instance of com.google.protobuf.FieldMask out of " + context.getParser().currentToken() + " token";
+    return "Can not deserialize instance of com.google.protobuf.FieldMask out of " + context.getParser().getCurrentToken() + " token";
   }
 }

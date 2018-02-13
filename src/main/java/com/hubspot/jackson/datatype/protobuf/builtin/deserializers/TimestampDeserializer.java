@@ -34,6 +34,6 @@ public class TimestampDeserializer extends StdDeserializer<Timestamp> {
 
   // TODO share this?
   private static String wrongTokenMessage(DeserializationContext context) {
-    return "Can not deserialize instance of com.google.protobuf.Timestamp out of " + context.getParser().currentToken() + " token";
+    return "Can not deserialize instance of com.google.protobuf.Timestamp out of " + context.getParser().getCurrentToken() + " token";
   }
 }
