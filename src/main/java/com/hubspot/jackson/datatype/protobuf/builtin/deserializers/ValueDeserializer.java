@@ -50,7 +50,7 @@ public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder
         return;
       default:
         String message = "Can not deserialize instance of com.google.protobuf.Value out of " + parser.currentToken() + " token";
-        context.reportInputMismatch(Value.class, message);
+        context.mappingException(message);
         // the previous method should have thrown
         throw new AssertionError();
     }

@@ -26,7 +26,7 @@ public class DurationDeserializer extends StdDeserializer<Duration> {
           throw context.weirdStringException(parser.getText(), Duration.class, e.getMessage());
         }
       default:
-        context.reportWrongTokenException(Duration.class, JsonToken.VALUE_STRING, wrongTokenMessage(context));
+        context.reportWrongTokenException(parser, JsonToken.VALUE_STRING, wrongTokenMessage(context));
         // the previous method should have thrown
         throw new AssertionError();
     }
