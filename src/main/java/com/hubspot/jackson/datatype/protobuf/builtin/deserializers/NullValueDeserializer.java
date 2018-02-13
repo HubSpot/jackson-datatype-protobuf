@@ -33,6 +33,6 @@ public class NullValueDeserializer extends StdDeserializer<NullValue> {
 
   // TODO share this?
   private static String wrongTokenMessage(DeserializationContext context) {
-    return "Can not deserialize instance of com.google.protobuf.NullValue out of " + context.getParser().currentToken() + " token";
+    return "Can not deserialize instance of com.google.protobuf.NullValue out of " + context.getParser().getCurrentToken() + " token";
   }
 }

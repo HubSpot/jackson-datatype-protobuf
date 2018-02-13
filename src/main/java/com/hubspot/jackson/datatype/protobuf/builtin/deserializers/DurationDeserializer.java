@@ -34,6 +34,6 @@ public class DurationDeserializer extends StdDeserializer<Duration> {
 
   // TODO share this?
   private static String wrongTokenMessage(DeserializationContext context) {
-    return "Can not deserialize instance of com.google.protobuf.Duration out of " + context.getParser().currentToken() + " token";
+    return "Can not deserialize instance of com.google.protobuf.Duration out of " + context.getParser().getCurrentToken() + " token";
   }
 }
