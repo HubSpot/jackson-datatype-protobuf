@@ -107,41 +107,21 @@
             <plugins>
                 <plugin>
                     <groupId>com.hubspot.maven.plugins</groupId>
-                    <artifactId>copy-protos-maven-plugin</artifactId>
-                    <version>0.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>com.comoyo.maven.plugins</groupId>
                     <artifactId>protoc-bundled-plugin</artifactId>
-                    <version>1.4-hubspot-SNAPSHOT</version>
+                    <version>1.4</version>
                     <configuration>
                         <protobufVersion>${dep.protobuf-java.version}</protobufVersion>
-                        <testImportDirectories>
-                            <testImportDirectory>${project.build.directory}/generated-resources/dependency-protobufs/com/google/protobuf/protobuf-java</testImportDirectory>
-                        </testImportDirectories>
+                        <testImportDependencies>
+                            <testImportDependency>com.google.protobuf:protobuf-java</testImportDependency>
+                        </testImportDependencies>
                     </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
 
         <plugins>
-            <!-- Needs to come before the protoc-bundled-plugin :/ -->
             <plugin>
                 <groupId>com.hubspot.maven.plugins</groupId>
-                <artifactId>copy-protos-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependency-protos</id>
-                        <goals>
-                            <goal>copy-protos</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Needs to come after the copy-protos-maven-plugin :/ -->
-            <plugin>
-                <groupId>com.comoyo.maven.plugins</groupId>
                 <artifactId>protoc-bundled-plugin</artifactId>
                 <executions>
                     <execution>
