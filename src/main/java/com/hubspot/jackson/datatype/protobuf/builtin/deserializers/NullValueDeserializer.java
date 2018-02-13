@@ -20,7 +20,7 @@ public class NullValueDeserializer extends StdDeserializer<NullValue> {
       case VALUE_NULL:
         return NullValue.NULL_VALUE;
       default:
-        context.reportWrongTokenException(NullValue.class, JsonToken.VALUE_NULL, wrongTokenMessage(context));
+        context.reportWrongTokenException(parser, JsonToken.VALUE_NULL, wrongTokenMessage(context));
         // the previous method should have thrown
         throw new AssertionError();
     }
