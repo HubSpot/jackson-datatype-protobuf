@@ -21,9 +21,7 @@ public class FieldMaskDeserializer extends StdDeserializer<FieldMask> {
       case VALUE_STRING:
         return FieldMaskUtil.fromJsonString(parser.getText());
       default:
-        context.reportWrongTokenException(parser, JsonToken.VALUE_STRING, wrongTokenMessage(context));
-        // the previous method should have thrown
-        throw new AssertionError();
+        throw context.wrongTokenException(parser, JsonToken.VALUE_STRING, wrongTokenMessage(context));
     }
   }
 

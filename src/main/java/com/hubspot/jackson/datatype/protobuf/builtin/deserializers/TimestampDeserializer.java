@@ -26,9 +26,7 @@ public class TimestampDeserializer extends StdDeserializer<Timestamp> {
           throw context.weirdStringException(parser.getText(), Timestamp.class, e.getMessage());
         }
       default:
-        context.reportWrongTokenException(parser, JsonToken.VALUE_STRING, wrongTokenMessage(context));
-        // the previous method should have thrown
-        throw new AssertionError();
+        throw context.wrongTokenException(parser, JsonToken.VALUE_STRING, wrongTokenMessage(context));
     }
   }
 

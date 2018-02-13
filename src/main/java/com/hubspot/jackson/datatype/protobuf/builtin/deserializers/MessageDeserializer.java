@@ -161,8 +161,6 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
           DeserializationContext context,
           String message
   ) throws JsonMappingException {
-    context.reportWrongTokenException(parser, expected, message);
-    // the previous method should have thrown
-    throw new AssertionError();
+    throw context.wrongTokenException(parser, expected, message);
   }
 }
