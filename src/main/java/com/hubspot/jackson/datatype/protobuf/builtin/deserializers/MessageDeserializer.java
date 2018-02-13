@@ -69,7 +69,7 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
 
     do {
       if (!token.equals(JsonToken.FIELD_NAME)) {
-        throw reportWrongToken(JsonToken.FIELD_NAME, context, "");
+        throw reportWrongToken(parser, JsonToken.FIELD_NAME, context, "");
       }
 
       String name = parser.getCurrentName();
@@ -146,7 +146,7 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
           } else if (context.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)) {
             builder.addRepeatedField(field, value);
           } else {
-            throw reportInputMismatch(context, "Expected JSON array for repeated field " + field.getFullName());
+            throw context.mappingException("Expected JSON array for repeated field " + field.getFullName());
           }
         } else {
           builder.setField(field, value);
@@ -155,21 +155,13 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
     }
   }
 
-  private AssertionError reportInputMismatch(
-          DeserializationContext context,
-          String message
-  ) throws JsonMappingException {
-    context.reportInputMismatch(this, message);
-    // the previous method should have thrown
-    throw new AssertionError();
-  }
-
   private AssertionError reportWrongToken(
+          JsonParser parser,
           JsonToken expected,
           DeserializationContext context,
           String message
   ) throws JsonMappingException {
-    context.reportWrongTokenException(this, expected, message);
+    context.reportWrongTokenException(parser, expected, message);
     // the previous method should have thrown
     throw new AssertionError();
   }
