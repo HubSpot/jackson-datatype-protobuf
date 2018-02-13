@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
+import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.google.protobuf.Descriptors.Descriptor;
@@ -41,7 +42,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     generator.writeStartObject();
 
     boolean proto3 = message.getDescriptorForType().getFile().getSyntax() == Syntax.PROTO3;
-    Include include = serializerProvider.getConfig().getSerializationInclusion();
+    Include include = serializationInclusion(serializerProvider.getConfig());
     boolean writeDefaultValues = proto3 && include != Include.NON_DEFAULT;
     boolean writeEmptyCollections = include != Include.NON_DEFAULT && include != Include.NON_EMPTY;
     PropertyNamingStrategyBase namingStrategy =
@@ -84,6 +85,15 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     }
 
     generator.writeEndObject();
+  }
+
+  private static Include serializationInclusion(SerializationConfig config) {
+    // trying to tell if inclusion is set to null, in which case we want USE_DEFAULTS instead of ALWAYS
+    if (config.withSerializationInclusion(null) == config) {
+      return Include.USE_DEFAULTS;
+    } else {
+      return config.getSerializationInclusion();
+    }
   }
 
   private static boolean supportsFieldPresence(FieldDescriptor field) {
