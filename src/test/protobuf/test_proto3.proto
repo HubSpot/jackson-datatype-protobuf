@@ -68,3 +68,15 @@ enum EnumProto3 {
   FIRST = 1;
   SECOND = 2;
 }
+
+message Custom {
+  int32 value = 1;
+}
+
+message CustomMessageWrapper {
+  Custom custom = 1;
+}
+
+message RepeatedCustomWrapper {
+  repeated Custom custom = 1;
+}
