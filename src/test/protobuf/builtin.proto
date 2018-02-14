@@ -119,3 +119,11 @@ message HasAllMapValues {
   map<string, AllFields> proto2_message_map = 34;
   map<string, AllFieldsProto3> proto3_message_map = 35;
 }
+
+message RepeatedValue {
+  repeated google.protobuf.Value values = 1;
+}
+
+message RepeatedListValue {
+  repeated google.protobuf.ListValue list_values = 1;
+}
