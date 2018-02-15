@@ -23,8 +23,8 @@ There are separate versions based on which version of Jackson you are using, as 
 
 | | Jackson <= 2.6.x | Jackson 2.7.x | Jackson 2.8.x | Jackson 2.9.x |
 | ----- | ---------- | ------------- | ------------- | ------------- |
-| Protobuf 2.x | 0.9.8-preJackson2.7-proto2 | 0.9.8-jackson2.7-proto2 | 0.9.8-jackson2.8-proto2 | 0.9.8-jackson2.9-proto2 |
-| Protobuf 3.x | 0.9.8-preJackson2.7-proto3 | 0.9.8-jackson2.7-proto3 | 0.9.8-jackson2.8-proto3 | 0.9.8-jackson2.9-proto3 |
+| Protobuf 2.x | 0.9.9-preJackson2.7-proto2 | 0.9.9-jackson2.7-proto2 | 0.9.9-jackson2.8-proto2 | 0.9.9-jackson2.9-proto2 |
+| Protobuf 3.x | 0.9.9-preJackson2.7-proto3 | 0.9.9-jackson2.7-proto3 | 0.9.9-jackson2.8-proto3 | 0.9.9-jackson2.9-proto3 |
 
 ### Protobuf 3 Support
 
