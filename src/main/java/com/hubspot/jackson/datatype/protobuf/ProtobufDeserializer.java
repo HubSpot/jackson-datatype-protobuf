@@ -206,11 +206,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
         }
       }
 
-      if (field.isRepeated()) {
-        return readArray(builder, field, defaultInstance, parser, context);
-      } else {
-        throw mappingException(field, context);
-      }
+      throw mappingException(field, context);
     }
 
     if (parser.getCurrentToken() == JsonToken.VALUE_NULL) {
