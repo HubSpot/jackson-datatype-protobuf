@@ -212,11 +212,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
         }
       }
 
-      if (field.isRepeated()) {
-        return readArray(builder, field, defaultInstance, parser, context);
-      } else {
-        throw reportInputMismatch(context, "Encountered START_ARRAY token for non-repeated field " + field.getFullName());
-      }
+      throw reportInputMismatch(context, "Encountered START_ARRAY token for non-repeated field " + field.getFullName());
     }
 
     if (parser.getCurrentToken() == JsonToken.VALUE_NULL) {
