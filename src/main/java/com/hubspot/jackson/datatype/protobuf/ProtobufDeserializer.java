@@ -309,23 +309,28 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
           JsonParser parser,
           DeserializationContext context
   ) throws IOException {
-    if (parser.getCurrentToken() != JsonToken.START_ARRAY) {
-      throw reportWrongToken(
-              JsonToken.START_ARRAY,
-              context,
-              "Can't parse repeated field out of " + parser.currentToken() + " token"
-      );
-    }
+    switch (parser.getCurrentToken()) {
+      case START_ARRAY:
+        List<Object> values = Lists.newArrayList();
+        while (parser.nextToken() != JsonToken.END_ARRAY) {
+          Object value = readValue(builder, field, defaultInstance, parser, context);
 
-    List<Object> values = Lists.newArrayList();
-    while (parser.nextToken() != JsonToken.END_ARRAY) {
-      Object value = readValue(builder, field, defaultInstance, parser, context);
-
-      if (value != null) {
-        values.add(value);
-      }
+          if (value != null) {
+            values.add(value);
+          }
+        }
+        return values;
+      case VALUE_NULL:
+        // Seems like we should treat null as an empty list rather than fail?
+        return Collections.emptyList();
+      default:
+        if (context.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)) {
+          Object value = readValue(builder, field, defaultInstance, parser, context);
+          return Collections.singletonList(value);
+        } else {
+          throw reportInputMismatch(context, "Expected JSON array for repeated field " + field.getFullName());
+        }
     }
-    return values;
   }
 
   private JsonDeserializer<Object> getMessageDeserializer(
