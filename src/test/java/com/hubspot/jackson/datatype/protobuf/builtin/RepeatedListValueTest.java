@@ -13,9 +13,9 @@ import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.RepeatedListV
 
 public class RepeatedListValueTest {
   private static final Value NESTED = Value.newBuilder().setStringValue("nested").build();
-  private static final Value LIST = Value
+  private static final ListValue LIST = ListValue
           .newBuilder()
-          .setListValue(ListValue.newBuilder().addValues(NESTED).build())
+          .addValues(NESTED)
           .build();
 
   @Test
