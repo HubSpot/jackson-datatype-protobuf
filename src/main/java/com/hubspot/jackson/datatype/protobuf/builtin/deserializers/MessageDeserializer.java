@@ -9,7 +9,6 @@ import java.util.Map;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.google.protobuf.Descriptors.Descriptor;
@@ -135,17 +134,7 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
         builder.addRepeatedField(field, entry);
       }
     } else if (field.isRepeated()) {
-      final List<Object> values;
-      if (parser.getCurrentToken() == JsonToken.START_ARRAY) {
-        values = readArray(builder, field, defaultInstance, parser, context);
-      } else if (parser.getCurrentToken() == JsonToken.VALUE_NULL) {
-        // Seems like we should treat null as an empty list rather than fail?
-        values = Collections.emptyList();
-      } else if (context.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)) {
-        values = Collections.singletonList(readValue(builder, field, defaultInstance, parser, context));
-      } else {
-        throw context.mappingException("Expected JSON array for repeated field " + field.getFullName());
-      }
+      List<Object> values = readArray(builder, field, defaultInstance, parser, context);
 
       for (Object value : values) {
         builder.addRepeatedField(field, value);
