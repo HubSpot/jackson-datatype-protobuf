@@ -134,23 +134,27 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
       for (Message entry : entries) {
         builder.addRepeatedField(field, entry);
       }
+    } else if (field.isRepeated()) {
+      final List<Object> values;
+      if (parser.getCurrentToken() == JsonToken.START_ARRAY) {
+        values = readArray(builder, field, defaultInstance, parser, context);
+      } else if (parser.getCurrentToken() == JsonToken.VALUE_NULL) {
+        // Seems like we should treat null as an empty list rather than fail?
+        values = Collections.emptyList();
+      } else if (context.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)) {
+        values = Collections.singletonList(readValue(builder, field, defaultInstance, parser, context));
+      } else {
+        throw context.mappingException("Expected JSON array for repeated field " + field.getFullName());
+      }
+
+      for (Object value : values) {
+        builder.addRepeatedField(field, value);
+      }
     } else {
       Object value = readValue(builder, field, defaultInstance, parser, context);
 
       if (value != null) {
-        if (field.isRepeated()) {
-          if (value instanceof Iterable) {
-            for (Object subValue : (Iterable<?>) value) {
-              builder.addRepeatedField(field, subValue);
-            }
-          } else if (context.isEnabled(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)) {
-            builder.addRepeatedField(field, value);
-          } else {
-            throw context.mappingException("Expected JSON array for repeated field " + field.getFullName());
-          }
-        } else {
-          builder.setField(field, value);
-        }
+        builder.setField(field, value);
       }
     }
   }
