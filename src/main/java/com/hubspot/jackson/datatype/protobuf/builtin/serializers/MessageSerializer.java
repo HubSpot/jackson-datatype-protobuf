@@ -19,18 +19,27 @@ import com.google.protobuf.GeneratedMessageV3.ExtendableMessageOrBuilder;
 import com.google.protobuf.MessageOrBuilder;
 import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
 import com.hubspot.jackson.datatype.protobuf.PropertyNamingStrategyWrapper;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   @SuppressFBWarnings(value="SE_BAD_FIELD")
-  private final ExtensionRegistryWrapper extensionRegistry;
+  private final ProtobufJacksonConfig config;
 
+  /**
+   * @deprecated use {@link #MessageSerializer(ProtobufJacksonConfig)} instead
+   */
+  @Deprecated
   public MessageSerializer(ExtensionRegistryWrapper extensionRegistry) {
+    this(ProtobufJacksonConfig.builder().extensionRegistry(extensionRegistry).build());
+  }
+
+  public MessageSerializer(ProtobufJacksonConfig config) {
     super(MessageOrBuilder.class);
 
-    this.extensionRegistry = extensionRegistry;
+    this.config = config;
   }
 
   @Override
@@ -51,7 +60,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     Descriptor descriptor = message.getDescriptorForType();
     List<FieldDescriptor> fields = new ArrayList<>(descriptor.getFields());
     if (message instanceof ExtendableMessageOrBuilder<?>) {
-      for (ExtensionInfo extensionInfo : extensionRegistry.getExtensionsByDescriptor(descriptor)) {
+      for (ExtensionInfo extensionInfo : config.extensionRegistry().getExtensionsByDescriptor(descriptor)) {
         fields.add(extensionInfo.descriptor);
       }
     }
