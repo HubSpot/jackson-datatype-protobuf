@@ -25,7 +25,7 @@ public class ProtobufJacksonConfig {
 
   public static class Builder {
     private ExtensionRegistryWrapper extensionRegistry = ExtensionRegistryWrapper.empty();
-    private boolean acceptLiteralFieldnames = true;
+    private boolean acceptLiteralFieldnames = false;
 
     private Builder() {}
 
