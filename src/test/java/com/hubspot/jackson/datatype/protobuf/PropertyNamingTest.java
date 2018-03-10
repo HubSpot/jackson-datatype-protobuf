@@ -1,22 +1,22 @@
 package com.hubspot.jackson.datatype.protobuf;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
-import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
-import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingCamelCased;
-import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingSnakeCased;
-
-import org.junit.Test;
-
-import java.util.List;
-
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.toTree;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.underscore;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.junit.Test;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingCamelCased;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingSnakeCased;
 
 public class PropertyNamingTest {
 
@@ -104,7 +104,7 @@ public class PropertyNamingTest {
   }
 
   @Test
-  public void testMultipleSillCamelCase() {
+  public void testMultipleStillCamelCase() {
     List<PropertyNamingCamelCased> messages = ProtobufCreator.create(PropertyNamingCamelCased.class, 10);
 
     @SuppressWarnings("serial")
@@ -131,4 +131,15 @@ public class PropertyNamingTest {
     }
   }
 
+  /**
+   * If the protobuf property is underscore, we expect the JSON field name to be camelcase.
+   * But if the JSON field name is already underscore, we should still accept it.
+   */
+  @Test
+  public void itAcceptsUnderscoreNameForCamelcaseProperty() throws IOException {
+    String json = "{\"string_attribute\":\"test\"}";
+    PropertyNamingSnakeCased message = camelCase().readValue(json, PropertyNamingSnakeCased.class);
+
+    assertThat(message.getStringAttribute()).isEqualTo("test");
+  }
 }
