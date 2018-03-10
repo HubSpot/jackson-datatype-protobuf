@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingCamelCased;
@@ -131,14 +132,23 @@ public class PropertyNamingTest {
     }
   }
 
+  @Test(expected = UnrecognizedPropertyException.class)
+  public void itDoesntAcceptUnderscoreNameForCamelcasePropertyByDefault() throws IOException {
+    String json = "{\"string_attribute\":\"test\"}";
+    camelCase().readValue(json, PropertyNamingSnakeCased.class);
+  }
+
   /**
    * If the protobuf property is underscore, we expect the JSON field name to be camelcase.
-   * But if the JSON field name is already underscore, we should still accept it.
+   * But if the JSON field name is already underscore, we should still accept it if you enable the feature
    */
   @Test
-  public void itAcceptsUnderscoreNameForCamelcaseProperty() throws IOException {
+  public void itAcceptsUnderscoreNameForCamelcasePropertyIfYouEnableIt() throws IOException {
+    ProtobufJacksonConfig config = ProtobufJacksonConfig.builder().acceptLiteralFieldnames(true).build();
+    ObjectMapper mapper = new ObjectMapper().registerModules(new ProtobufModule(config));
+
     String json = "{\"string_attribute\":\"test\"}";
-    PropertyNamingSnakeCased message = camelCase().readValue(json, PropertyNamingSnakeCased.class);
+    PropertyNamingSnakeCased message = mapper.readValue(json, PropertyNamingSnakeCased.class);
 
     assertThat(message.getStringAttribute()).isEqualTo("test");
   }
