@@ -50,14 +50,22 @@ import com.hubspot.jackson.datatype.protobuf.builtin.serializers.WrappedPrimitiv
  * Register with Jackson via {@link com.fasterxml.jackson.databind.ObjectMapper#registerModule}
  */
 public class ProtobufModule extends Module {
-  private final ExtensionRegistryWrapper extensionRegistry;
+  private final ProtobufJacksonConfig config;
 
   public ProtobufModule() {
-    this.extensionRegistry = ExtensionRegistryWrapper.empty();
+    this(ProtobufJacksonConfig.builder().build());
   }
 
+  /**
+   * @deprecated use {@link #ProtobufModule(ProtobufJacksonConfig)} instead
+   */
+  @Deprecated
   public ProtobufModule(ExtensionRegistry extensionRegistry) {
-    this.extensionRegistry = ExtensionRegistryWrapper.wrap(extensionRegistry);
+    this(ProtobufJacksonConfig.builder().extensionRegistry(extensionRegistry).build());
+  }
+
+  public ProtobufModule(ProtobufJacksonConfig config) {
+    this.config = config;
   }
 
   @Override
@@ -73,7 +81,7 @@ public class ProtobufModule extends Module {
   @Override
   public void setupModule(SetupContext context) {
     SimpleSerializers serializers = new SimpleSerializers();
-    serializers.addSerializer(new MessageSerializer(extensionRegistry));
+    serializers.addSerializer(new MessageSerializer(config));
     serializers.addSerializer(new DurationSerializer());
     serializers.addSerializer(new FieldMaskSerializer());
     serializers.addSerializer(new ListValueSerializer());
@@ -93,7 +101,7 @@ public class ProtobufModule extends Module {
 
     context.addSerializers(serializers);
 
-    context.addDeserializers(new MessageDeserializerFactory(extensionRegistry));
+    context.addDeserializers(new MessageDeserializerFactory(config));
     SimpleDeserializers deserializers = new SimpleDeserializers();
     deserializers.addDeserializer(Duration.class, new DurationDeserializer());
     deserializers.addDeserializer(FieldMask.class, new FieldMaskDeserializer());

@@ -20,17 +20,26 @@ import com.google.protobuf.Message.Builder;
 import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
 import com.hubspot.jackson.datatype.protobuf.PropertyNamingStrategyWrapper;
 import com.hubspot.jackson.datatype.protobuf.ProtobufDeserializer;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class MessageDeserializer<T extends Message, V extends Builder> extends ProtobufDeserializer<T, V> {
   @SuppressFBWarnings(value="SE_BAD_FIELD")
-  private final ExtensionRegistryWrapper extensionRegistry;
+  private final ProtobufJacksonConfig config;
 
+  /**
+   * @deprecated use {@link #MessageDeserializer(Class, ProtobufJacksonConfig)} instead
+   */
+  @Deprecated
   public MessageDeserializer(Class<T> messageType, ExtensionRegistryWrapper extensionRegistry) {
+    this(messageType, ProtobufJacksonConfig.builder().extensionRegistry(extensionRegistry).build());
+  }
+
+  public MessageDeserializer(Class<T> messageType, ProtobufJacksonConfig config) {
     super(messageType);
 
-    this.extensionRegistry = extensionRegistry;
+    this.config = config;
   }
 
   @Override
@@ -103,6 +112,14 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
       fieldLookup.put(namingStrategy.translate(field.getName()), field);
     }
 
+    if (config.acceptLiteralFieldnames()) {
+      for (FieldDescriptor field : descriptor.getFields()) {
+        if (!fieldLookup.containsKey(field.getName())) {
+          fieldLookup.put(field.getName(), field);
+        }
+      }
+    }
+
     return fieldLookup;
   }
 
@@ -111,7 +128,7 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
             new PropertyNamingStrategyWrapper(context.getConfig().getPropertyNamingStrategy());
 
     Map<String, ExtensionInfo> extensionLookup = new HashMap<>();
-    for (ExtensionInfo extensionInfo : extensionRegistry.getExtensionsByDescriptor(descriptor)) {
+    for (ExtensionInfo extensionInfo : config.extensionRegistry().getExtensionsByDescriptor(descriptor)) {
       extensionLookup.put(namingStrategy.translate(extensionInfo.descriptor.getName()), extensionInfo);
     }
 

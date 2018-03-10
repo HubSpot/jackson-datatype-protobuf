@@ -13,11 +13,19 @@ import com.google.protobuf.Message;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.MessageDeserializer;
 
 public class MessageDeserializerFactory extends Deserializers.Base {
-  private final ExtensionRegistryWrapper extensionRegistry;
+  private final ProtobufJacksonConfig config;
   private final ConcurrentMap<Class<? extends Message>, ProtobufDeserializer<?, ?>> deserializerCache;
 
+  /**
+   * @deprecated use {@link #MessageDeserializerFactory(ProtobufJacksonConfig)} instead
+   */
+  @Deprecated
   public MessageDeserializerFactory(ExtensionRegistryWrapper extensionRegistry) {
-    this.extensionRegistry = extensionRegistry;
+    this(ProtobufJacksonConfig.builder().extensionRegistry(extensionRegistry).build());
+  }
+
+  public MessageDeserializerFactory(ProtobufJacksonConfig config) {
+    this.config = config;
     this.deserializerCache = new ConcurrentHashMap<>();
   }
 
@@ -38,7 +46,7 @@ public class MessageDeserializerFactory extends Deserializers.Base {
   private <T extends Message> ProtobufDeserializer<T, ?> getDeserializer(Class<T> messageType) {
     ProtobufDeserializer<?, ?> deserializer = deserializerCache.get(messageType);
     if (deserializer == null) {
-      ProtobufDeserializer<T, ?> newDeserializer = new MessageDeserializer<>(messageType, extensionRegistry);
+      ProtobufDeserializer<T, ?> newDeserializer = new MessageDeserializer<>(messageType, config);
       ProtobufDeserializer<?, ?> previousDeserializer = deserializerCache.putIfAbsent(messageType, newDeserializer);
       deserializer = previousDeserializer == null ? newDeserializer : previousDeserializer;
     }
