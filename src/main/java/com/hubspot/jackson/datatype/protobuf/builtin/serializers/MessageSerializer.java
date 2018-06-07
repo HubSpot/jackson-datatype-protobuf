@@ -1,14 +1,23 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser.NumberType;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
@@ -93,6 +102,18 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     }
 
     generator.writeEndObject();
+  }
+
+  @Override
+  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, com.fasterxml.jackson.databind.JavaType typeHint) throws JsonMappingException {
+    // TODO
+    visitor.expectObjectFormat(typeHint);
+  }
+
+  @Override
+  public JsonNode getSchema(SerializerProvider provider, Type typeHint) throws JsonMappingException {
+    // TODO
+    return createSchemaNode("object", true);
   }
 
   private static boolean supportsFieldPresence(FieldDescriptor field) {
