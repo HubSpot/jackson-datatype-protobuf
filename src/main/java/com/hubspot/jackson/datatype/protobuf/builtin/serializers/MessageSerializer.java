@@ -113,7 +113,6 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
   @Override
   public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, com.fasterxml.jackson.databind.JavaType typeHint) throws JsonMappingException {
-    // TODO
     Class<?> messageOrBuilderType = typeHint.getRawClass();
 
     final Class<?> messageType;
