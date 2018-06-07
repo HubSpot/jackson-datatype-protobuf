@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonMapFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.MapType;
+import com.google.common.base.CaseFormat;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
@@ -235,7 +236,8 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
         return String.class;
       case ENUM:
         // Hacky but I don't see an easier way to find exact enum class
-        String getterName = "get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
+        String camelCaseName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, field.getName());
+        String getterName = "get" + camelCaseName;
 
         try {
           final Method getterMethod;
