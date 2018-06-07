@@ -33,6 +33,8 @@
         <dep.jackson.version>2.7.9</dep.jackson.version>
         <dep.jackson-databind.version>2.7.9.2</dep.jackson-databind.version>
         <dep.protobuf-java.version>3.3.0</dep.protobuf-java.version>
+        <dep.scala.version>2.12.4</dep.scala.version>
+        <dep.javax-validation.version>2.0.1.Final</dep.javax-validation.version>
     </properties>
 
     <dependencyManagement>
@@ -46,6 +48,25 @@
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java-util</artifactId>
                 <version>${dep.protobuf-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kjetland</groupId>
+                <artifactId>mbknor-jackson-jsonschema_2.12</artifactId>
+                <version>1.0.29</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-annotations</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -87,6 +108,11 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.kjetland</groupId>
+            <artifactId>mbknor-jackson-jsonschema_2.12</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

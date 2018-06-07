@@ -75,7 +75,7 @@ public class ProtobufModule extends Module {
 
   @Override
   public Version version() {
-    return ModuleVersion.instance.version();
+    return Version.unknownVersion();
   }
 
   @Override

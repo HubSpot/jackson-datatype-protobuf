@@ -55,9 +55,9 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   }
 
   protected abstract void populate(
-          V builder,
-          JsonParser parser,
-          DeserializationContext context
+      V builder,
+      JsonParser parser,
+      DeserializationContext context
   ) throws IOException;
 
   public JsonDeserializer<T> buildAtEnd() {
@@ -86,15 +86,15 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   private void checkNullReturn(FieldDescriptor field, DeserializationContext context) throws JsonProcessingException {
     if (context.isEnabled(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)) {
       throw context.mappingException("Can not map JSON null into primitive field " + field.getFullName()
-              + " (set DeserializationConfig.DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES to 'false' to allow)");
+          + " (set DeserializationConfig.DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES to 'false' to allow)");
     }
   }
 
   protected List<Message> readMap(
-          Message.Builder builder,
-          FieldDescriptor field,
-          JsonParser parser,
-          DeserializationContext context
+      Message.Builder builder,
+      FieldDescriptor field,
+      JsonParser parser,
+      DeserializationContext context
   ) throws IOException {
     if (parser.getCurrentToken() == JsonToken.VALUE_NULL) {
       // Seems like we should treat null as an empty map rather than fail?
@@ -126,9 +126,9 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
    * _parseIntPrimitive blow up when the current JsonToken is FIELD_NAME
    */
   private Object readKey(
-          FieldDescriptor field,
-          JsonParser parser,
-          DeserializationContext context
+      FieldDescriptor field,
+      JsonParser parser,
+      DeserializationContext context
   ) throws IOException {
     if (parser.getCurrentToken() != JsonToken.FIELD_NAME) {
       throw mappingException(field, context);
@@ -142,9 +142,9 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
           return NumberInput.parseInt(fieldName.trim());
         } catch (IllegalArgumentException iae) {
           throw context.weirdStringException(
-                  fieldName.trim(),
-                  Integer.TYPE,
-                  "not a valid int value"
+              fieldName.trim(),
+              Integer.TYPE,
+              "not a valid int value"
           );
         }
       case LONG:
@@ -153,9 +153,9 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
           return NumberInput.parseLong(fieldName.trim());
         } catch (IllegalArgumentException iae) {
           throw context.weirdStringException(
-                  fieldName.trim(),
-                  Long.TYPE,
-                  "not a valid long value"
+              fieldName.trim(),
+              Long.TYPE,
+              "not a valid long value"
           );
         }
       case BOOLEAN:
@@ -168,9 +168,9 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
           return false;
         }
         throw context.weirdStringException(
-                fieldName.trim(),
-                Boolean.TYPE,
-                "only \"true\" or \"false\" recognized"
+            fieldName.trim(),
+            Boolean.TYPE,
+            "only \"true\" or \"false\" recognized"
         );
       case STRING:
         return fieldName;
@@ -179,7 +179,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
 
         if (enumValueDescriptor == null && !ignorableEnum(parser.getText().trim(), context)) {
           throw context.weirdStringException(parser.getText(), field.getEnumType().getClass(),
-                  "value not one of declared Enum instance names");
+              "value not one of declared Enum instance names");
         }
 
         return enumValueDescriptor;
@@ -189,17 +189,17 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   }
 
   protected Object readValue(
-          Message.Builder builder,
-          FieldDescriptor field,
-          Message defaultInstance,
-          JsonParser parser,
-          DeserializationContext context
+      Message.Builder builder,
+      FieldDescriptor field,
+      Message defaultInstance,
+      JsonParser parser,
+      DeserializationContext context
   ) throws IOException {
     if (parser.getCurrentToken() == JsonToken.START_ARRAY) {
       if (field.getJavaType() == FieldDescriptor.JavaType.MESSAGE) {
         // might have a custom serializer/deserializer registered
         JsonDeserializer<Object> deserializer =
-                getMessageDeserializer(builder, field, defaultInstance, context);
+            getMessageDeserializer(builder, field, defaultInstance, context);
         if (!isDefaultMessageDeserializer(deserializer)) {
           return deserializer.deserialize(parser, context);
         }
@@ -265,7 +265,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
 
             if (enumValueDescriptor == null && !ignorableEnum(parser.getText().trim(), context)) {
               throw context.weirdStringException(parser.getText(), field.getEnumType().getClass(),
-                      "value not one of declared Enum instance names");
+                  "value not one of declared Enum instance names");
             }
 
             return enumValueDescriptor;
@@ -275,20 +275,20 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
 
               if (enumValueDescriptor == null && !ignoreUnknownEnums(context)) {
                 throw context.weirdNumberException(parser.getIntValue(), field.getEnumType().getClass(),
-                        "index value outside legal index range " + indexRange(field.getEnumType()));
+                    "index value outside legal index range " + indexRange(field.getEnumType()));
               }
 
               return enumValueDescriptor;
             } else {
               throw context.mappingException("Not allowed to deserialize Enum value out of JSON number " +
-                      "(disable DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS to allow)");
+                  "(disable DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS to allow)");
             }
           default:
             throw mappingException(field, context);
         }
       case MESSAGE:
         JsonDeserializer<Object> deserializer =
-                getMessageDeserializer(builder, field, defaultInstance, context);
+            getMessageDeserializer(builder, field, defaultInstance, context);
         return deserializer.deserialize(parser, context);
       default:
         throw new IllegalArgumentException("Unrecognized field type: " + field.getJavaType());
@@ -296,11 +296,11 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   }
 
   protected List<Object> readArray(
-          Message.Builder builder,
-          FieldDescriptor field,
-          Message defaultInstance,
-          JsonParser parser,
-          DeserializationContext context
+      Message.Builder builder,
+      FieldDescriptor field,
+      Message defaultInstance,
+      JsonParser parser,
+      DeserializationContext context
   ) throws IOException {
     switch (parser.getCurrentToken()) {
       case START_ARRAY:
@@ -327,10 +327,10 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   }
 
   private JsonDeserializer<Object> getMessageDeserializer(
-          Message.Builder builder,
-          FieldDescriptor field,
-          Message defaultInstance,
-          DeserializationContext context
+      Message.Builder builder,
+      FieldDescriptor field,
+      Message defaultInstance,
+      DeserializationContext context
   ) throws IOException {
     JsonDeserializer<Object> deserializer = deserializerCache.get(field);
     if (deserializer == null) {
@@ -393,7 +393,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   }
 
   private static JsonMappingException mappingException(FieldDescriptor field, DeserializationContext context)
-          throws IOException {
+      throws IOException {
     JsonToken token = context.getParser().getCurrentToken();
     String message = "Can not deserialize instance of " + field.getJavaType() + " out of " + token + " token";
     throw context.mappingException(message);

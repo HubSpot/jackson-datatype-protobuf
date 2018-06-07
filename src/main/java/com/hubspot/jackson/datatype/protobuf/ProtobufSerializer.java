@@ -3,15 +3,19 @@ package com.hubspot.jackson.datatype.protobuf;
 import static java.lang.String.format;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.Descriptor;
@@ -31,6 +35,12 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
 
     this.serializerCache = new ConcurrentHashMap<>();
   }
+
+  @Override
+  public abstract void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, com.fasterxml.jackson.databind.JavaType typeHint) throws JsonMappingException;
+
+  @Override
+  public abstract JsonNode getSchema(SerializerProvider provider, Type typeHint) throws JsonMappingException;
 
   @SuppressWarnings("unchecked")
   protected void writeMap(
@@ -82,7 +92,7 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
         EnumValueDescriptor enumDescriptor = (EnumValueDescriptor) value;
 
         // special-case NullValue
-        if (NULL_VALUE_FULL_NAME.equals(enumDescriptor.getType().getFullName())) {
+        if (isNullValue(enumDescriptor)) {
           generator.writeNull();
         } else if (writeEnumsUsingIndex(serializerProvider)) {
           generator.writeNumber(enumDescriptor.getNumber());
@@ -109,7 +119,11 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
     }
   }
 
-  private static boolean writeEnumsUsingIndex(SerializerProvider config) {
+  protected static boolean isNullValue(EnumValueDescriptor enumDescriptor) {
+    return NULL_VALUE_FULL_NAME.equals(enumDescriptor.getType().getFullName());
+  }
+
+  protected static boolean writeEnumsUsingIndex(SerializerProvider config) {
     return config.isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX);
   }
 
