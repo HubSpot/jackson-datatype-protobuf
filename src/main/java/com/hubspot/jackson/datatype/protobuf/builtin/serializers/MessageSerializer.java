@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -15,9 +16,13 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonMapFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
+import com.fasterxml.jackson.databind.type.ArrayType;
+import com.fasterxml.jackson.databind.type.MapType;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
@@ -139,52 +144,57 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
       String fieldName = namingStrategy.translate(field.getName());
       final com.fasterxml.jackson.databind.JavaType fieldType =
           visitor.getProvider().constructType(fieldClass(defaultInstance, field));
+      final JsonFormatVisitable fieldVisitable = new MessageFieldVisitable(field, fieldType);
       if (field.isMapField()) {
-        // TODO
-      } else if (field.isRepeated()) {
-        // TODO
-      } else {
+        Message defaultMapEntry = defaultInstance.toBuilder().newBuilderForField(field).getDefaultInstanceForType();
+        Descriptor entryDescriptor = defaultMapEntry.getDescriptorForType();
+
+        final FieldDescriptor keyDescriptor = entryDescriptor.findFieldByName("key");
+        final com.fasterxml.jackson.databind.JavaType keyType =
+            visitor.getProvider().constructType(fieldClass(defaultMapEntry, keyDescriptor));
+
+        final FieldDescriptor valueDescriptor = entryDescriptor.findFieldByName("value");
+        final com.fasterxml.jackson.databind.JavaType valueType;
+        // TODO this doesn't really work for enums
+        if (valueDescriptor.getJavaType() == JavaType.ENUM) {
+          valueType = visitor.getProvider().constructType(String.class);
+        } else {
+          valueType = visitor.getProvider().constructType(fieldClass(defaultMapEntry, valueDescriptor));
+        }
+
+        final MapType mapType =
+            visitor.getProvider().getTypeFactory().constructMapType(Map.class, keyType, valueType);
         v2.optionalProperty(fieldName, new JsonFormatVisitable() {
 
           @Override
-          public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, com.fasterxml.jackson.databind.JavaType typeHint) throws JsonMappingException {
-            switch (field.getJavaType()) {
-              case INT:
-                visitIntFormat(visitor, fieldType, NumberType.INT);
-                break;
-              case LONG:
-                visitIntFormat(visitor, fieldType, NumberType.LONG);
-                break;
-              case FLOAT:
-                visitFloatFormat(visitor, fieldType, NumberType.FLOAT);
-                break;
-              case DOUBLE:
-                visitFloatFormat(visitor, fieldType, NumberType.DOUBLE);
-                break;
-              case BOOLEAN:
-                visitor.expectBooleanFormat(fieldType);
-                break;
-              case STRING:
-              case BYTE_STRING:
-                visitor.expectStringFormat(fieldType);
-                break;
-              case ENUM:
-                if (fieldType.getRawClass() == NullValue.class) {
-                  visitor.expectNullFormat(fieldType);
-                } else if (writeEnumsUsingIndex(visitor.getProvider())) {
-                  visitor.expectIntegerFormat(fieldType);
-                } else {
-                  visitor.expectStringFormat(fieldType);
-                }
-                break;
-              case MESSAGE:
-                JsonSerializer<Object> serializer =
-                    visitor.getProvider().findValueSerializer(fieldType.getRawClass(), null);
-                serializer.acceptJsonFormatVisitor(visitor, fieldType);
-                break;
+          public void acceptJsonFormatVisitor(
+              JsonFormatVisitorWrapper visitor,
+              com.fasterxml.jackson.databind.JavaType typeHint
+          ) throws JsonMappingException {
+            JsonMapFormatVisitor v2 = visitor.expectMapFormat(mapType);
+            if (v2 != null) {
+              v2.keyFormat(new MessageFieldVisitable(keyDescriptor, keyType), keyType);
+              v2.valueFormat(new MessageFieldVisitable(valueDescriptor, valueType), valueType);
             }
           }
-        }, fieldType);
+        }, mapType);
+      } else if (field.isRepeated()) {
+        final ArrayType listType = visitor.getProvider().getTypeFactory().constructArrayType(fieldType);
+        v2.optionalProperty(fieldName, new JsonFormatVisitable() {
+
+          @Override
+          public void acceptJsonFormatVisitor(
+              JsonFormatVisitorWrapper visitor,
+              com.fasterxml.jackson.databind.JavaType typeHint
+          ) throws JsonMappingException {
+            JsonArrayFormatVisitor v2 = visitor.expectArrayFormat(listType);
+            if (v2 != null) {
+              v2.itemsFormat(fieldVisitable, fieldType);
+            }
+          }
+        }, listType);
+      } else {
+        v2.optionalProperty(fieldName, fieldVisitable, fieldType);
       }
     }
   }
@@ -225,8 +235,14 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
         String getterName = "get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
 
         try {
-          Method getterMethod = defaultInstance.getClass().getMethod(getterName);
-          return getterMethod.invoke(defaultInstance).getClass();
+          final Method getterMethod;
+          if (field.isRepeated()) {
+            // for repeated fields it takes an int index argument
+            getterMethod = defaultInstance.getClass().getMethod(getterName, Integer.TYPE);
+          } else {
+            getterMethod = defaultInstance.getClass().getMethod(getterName);
+          }
+          return getterMethod.getReturnType();
         } catch (ReflectiveOperationException e) {
           throw new RuntimeException(e);
         }
@@ -249,5 +265,60 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
   private static boolean writeSingleElementArraysUnwrapped(SerializerProvider config) {
     return config.isEnabled(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
+  }
+
+  private class MessageFieldVisitable implements JsonFormatVisitable {
+    private final FieldDescriptor field;
+    private final com.fasterxml.jackson.databind.JavaType fieldType;
+
+    public MessageFieldVisitable(
+        FieldDescriptor field,
+        com.fasterxml.jackson.databind.JavaType fieldType
+    ) {
+      this.field = field;
+      this.fieldType = fieldType;
+    }
+
+    @Override
+    public void acceptJsonFormatVisitor(
+        JsonFormatVisitorWrapper visitor,
+        com.fasterxml.jackson.databind.JavaType typeHint
+    ) throws JsonMappingException {
+      switch (field.getJavaType()) {
+        case INT:
+          visitIntFormat(visitor, fieldType, NumberType.INT);
+          break;
+        case LONG:
+          visitIntFormat(visitor, fieldType, NumberType.LONG);
+          break;
+        case FLOAT:
+          visitFloatFormat(visitor, fieldType, NumberType.FLOAT);
+          break;
+        case DOUBLE:
+          visitFloatFormat(visitor, fieldType, NumberType.DOUBLE);
+          break;
+        case BOOLEAN:
+          visitor.expectBooleanFormat(fieldType);
+          break;
+        case STRING:
+        case BYTE_STRING:
+          visitor.expectStringFormat(fieldType);
+          break;
+        case ENUM:
+          if (fieldType.getRawClass() == NullValue.class) {
+            visitor.expectNullFormat(fieldType);
+          } else if (writeEnumsUsingIndex(visitor.getProvider())) {
+            visitor.expectIntegerFormat(fieldType);
+          } else {
+            visitor.expectStringFormat(fieldType);
+          }
+          break;
+        case MESSAGE:
+          JsonSerializer<Object> serializer =
+              visitor.getProvider().findValueSerializer(fieldType.getRawClass(), null);
+          serializer.acceptJsonFormatVisitor(visitor, fieldType);
+          break;
+      }
+    }
   }
 }
