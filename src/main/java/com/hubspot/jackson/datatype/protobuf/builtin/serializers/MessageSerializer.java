@@ -127,6 +127,10 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
     JsonObjectFormatVisitor v2 = visitor.expectObjectFormat(typeHint);
 
+    if (v2 == null) {
+      return;
+    }
+
     final Message defaultInstance = defaultInstance(messageType);
     Descriptor descriptor = defaultInstance.getDescriptorForType();
     PropertyNamingStrategyBase namingStrategy =
