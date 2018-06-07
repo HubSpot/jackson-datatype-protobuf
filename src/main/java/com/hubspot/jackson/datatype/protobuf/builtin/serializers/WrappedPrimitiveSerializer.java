@@ -35,28 +35,25 @@ public class WrappedPrimitiveSerializer<T extends MessageOrBuilder> extends Prot
   public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
     switch (handledType().getSimpleName()) {
       case "StringValue":
-        visitor.expectStringFormat(typeHint);
+      case "BytesValue":
+        visitor.expectStringFormat(visitor.getProvider().constructType(String.class));
         break;
       case "BoolValue":
-        visitor.expectBooleanFormat(typeHint);
+        visitor.expectBooleanFormat(visitor.getProvider().constructType(Boolean.class));
         break;
       case "DoubleValue":
-        visitFloatFormat(visitor, typeHint, NumberType.DOUBLE);
+        visitFloatFormat(visitor, visitor.getProvider().constructType(Double.class), NumberType.DOUBLE);
         break;
       case "FloatValue":
-        visitFloatFormat(visitor, typeHint, NumberType.FLOAT);
+        visitFloatFormat(visitor, visitor.getProvider().constructType(Float.class), NumberType.FLOAT);
         break;
       case "Int64Value":
       case "UInt64Value":
-        visitIntFormat(visitor, typeHint, NumberType.LONG);
+        visitIntFormat(visitor, visitor.getProvider().constructType(Long.class), NumberType.LONG);
         break;
       case "Int32Value":
       case "UInt32Value":
-        visitIntFormat(visitor, typeHint, NumberType.INT);
-        break;
-      case "BytesValue":
-        // is this right?
-        visitor.expectStringFormat(typeHint);
+        visitIntFormat(visitor, visitor.getProvider().constructType(Integer.class), NumberType.INT);
         break;
       default:
         throw new IllegalStateException("Unexpected wrapper type: " + handledType());
@@ -67,6 +64,7 @@ public class WrappedPrimitiveSerializer<T extends MessageOrBuilder> extends Prot
   public JsonNode getSchema(SerializerProvider provider, Type typeHint) {
     switch (handledType().getSimpleName()) {
       case "StringValue":
+      case "BytesValue":
         return createSchemaNode("string", true);
       case "BoolValue":
         return createSchemaNode("boolean", true);
@@ -78,9 +76,6 @@ public class WrappedPrimitiveSerializer<T extends MessageOrBuilder> extends Prot
       case "Int32Value":
       case "UInt32Value":
         return createSchemaNode("integer", true);
-      case "BytesValue":
-        // is this right?
-        return createSchemaNode("string", true);
       default:
         throw new IllegalStateException("Unexpected wrapper type: " + handledType());
     }

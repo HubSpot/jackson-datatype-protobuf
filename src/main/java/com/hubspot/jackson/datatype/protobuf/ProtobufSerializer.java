@@ -92,7 +92,7 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
         EnumValueDescriptor enumDescriptor = (EnumValueDescriptor) value;
 
         // special-case NullValue
-        if (NULL_VALUE_FULL_NAME.equals(enumDescriptor.getType().getFullName())) {
+        if (isNullValue(enumDescriptor)) {
           generator.writeNull();
         } else if (writeEnumsUsingIndex(serializerProvider)) {
           generator.writeNumber(enumDescriptor.getNumber());
@@ -119,7 +119,11 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
     }
   }
 
-  private static boolean writeEnumsUsingIndex(SerializerProvider config) {
+  protected static boolean isNullValue(EnumValueDescriptor enumDescriptor) {
+    return NULL_VALUE_FULL_NAME.equals(enumDescriptor.getType().getFullName());
+  }
+
+  protected static boolean writeEnumsUsingIndex(SerializerProvider config) {
     return config.isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX);
   }
 
