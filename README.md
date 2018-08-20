@@ -19,12 +19,12 @@ To use module on Maven-based projects, use following dependency:
 
 ### Versions
 
-There are separate versions based on which version of Jackson you are using, as well as which version of protobuf (proto2 vs. proto3). The follow table shows which version to use based on these factors:
+There are separate versions based on which version of Jackson you are using, as well as which version of protobuf (proto2 vs. proto3). The follow table shows which version to use based on these criteria:
 
 | | Jackson <= 2.6.x | Jackson 2.7.x | Jackson 2.8.x | Jackson 2.9.x |
 | ----- | ---------- | ------------- | ------------- | ------------- |
-| Protobuf 2.x | 0.9.9-preJackson2.7-proto2 | 0.9.9-jackson2.7-proto2 | 0.9.9-jackson2.8-proto2 | 0.9.9-jackson2.9-proto2 |
-| Protobuf 3.x | 0.9.9-preJackson2.7-proto3 | 0.9.9-jackson2.7-proto3 | 0.9.9-jackson2.8-proto3 | 0.9.9-jackson2.9-proto3 |
+| Protobuf 2.x | 0.9.10-preJackson2.7-proto2 | 0.9.10-jackson2.7-proto2 | 0.9.10-jackson2.8-proto2 | 0.9.10-jackson2.9-proto2 |
+| Protobuf 3.x | 0.9.10-preJackson2.7-proto3 | 0.9.10-jackson2.7-proto3 | 0.9.10-jackson2.8-proto3 | 0.9.10-jackson2.9-proto3 |
 
 ### Protobuf 3 Support
 
