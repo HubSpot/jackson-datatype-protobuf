@@ -44,3 +44,10 @@ mapper.registerModule(new ProtobufModule());
 ```
 
 after which functionality is available for all normal Jackson operations.
+
+### Gotchas
+
+This library assumes that field names in proto files will be lowercase with underscores, as is recommended in the protobuf style guide: https://developers.google.com/protocol-buffers/docs/style#message-and-field-names
+> Use underscore_separated_names for field names – for example, song_name.
+
+If your field names don't match this convention, you may need to set a `PropertyNamingStrategy` on your `ObjectMapper` for things to work as expected. For example, if your proto field names are camel case, you could configure your `ObjectMapper` to use `PropertyNamingStrategy.LOWER_CAMEL_CASE`.
