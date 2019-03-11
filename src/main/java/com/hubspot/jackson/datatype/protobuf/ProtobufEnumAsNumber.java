@@ -36,7 +36,7 @@ public final class ProtobufEnumAsNumber {
     }
   }
 
-  @SuppressFBWarnings("SE_TRANSIENT_FIELD_NOT_RESTORED")
+  @SuppressFBWarnings({"SE_TRANSIENT_FIELD_NOT_RESTORED", "SE_NO_SERIALVERSIONID"})
   public static class Deserializer extends StdDeserializer<ProtocolMessageEnum> implements ContextualDeserializer {
 
     private final transient Class<?> enumClass;
