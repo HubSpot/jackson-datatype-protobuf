@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.google.common.base.Preconditions;
 import com.google.protobuf.ProtocolMessageEnum;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public final class ProtobufEnumAsNumber {
