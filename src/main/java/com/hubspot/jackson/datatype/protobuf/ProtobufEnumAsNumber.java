@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.google.common.base.Preconditions;
 import com.google.protobuf.ProtocolMessageEnum;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public final class ProtobufEnumAsNumber {
 
@@ -35,10 +36,11 @@ public final class ProtobufEnumAsNumber {
     }
   }
 
+  @SuppressFBWarnings("SE_TRANSIENT_FIELD_NOT_RESTORED")
   public static class Deserializer extends StdDeserializer<ProtocolMessageEnum> implements ContextualDeserializer {
 
-    private final Class<?> enumClass;
-    private final Method forNumberMethod;
+    private final transient Class<?> enumClass;
+    private final transient Method forNumberMethod;
 
     protected Deserializer() {
       this(null, null);
