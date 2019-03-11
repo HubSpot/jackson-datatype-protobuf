@@ -2,6 +2,7 @@ package com.hubspot.jackson.datatype.protobuf;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -35,19 +37,21 @@ public final class ProtobufEnumAsNumber {
 
   public static class Deserializer extends StdDeserializer<ProtocolMessageEnum> implements ContextualDeserializer {
 
-    private final JavaType javaType;
+    private final Class<?> enumClass;
+    private final Method forNumberMethod;
 
     protected Deserializer() {
-      this(null);
+      this(null, null);
     }
 
-    protected Deserializer(JavaType javaType) {
+    protected Deserializer(Class<?> enumClass, Method forNumberMethod) {
       super(ProtocolMessageEnum.class);
-      this.javaType = javaType;
+      this.enumClass = enumClass;
+      this.forNumberMethod = forNumberMethod;
     }
 
     @Override
-    public JsonDeserializer<?> createContextual(DeserializationContext context, BeanProperty beanProperty) {
+    public JsonDeserializer<?> createContextual(DeserializationContext context, BeanProperty beanProperty) throws JsonMappingException {
       // beanProperty is null when the type to deserialize is the top-level type or a generic type, not a type of a bean property
       JavaType javaType = context.getContextualType();
 
@@ -55,16 +59,34 @@ public final class ProtobufEnumAsNumber {
         javaType = beanProperty.getMember().getType();
       }
 
-      return new Deserializer(javaType);
+      Class<?> enumClass = javaType.getRawClass();
+
+      if (enumClass == this.enumClass
+          && this.forNumberMethod != null) {
+        // short circuit if this instance is already correctly configured
+        return this;
+      }
+
+      Method forNumberMethod;
+
+      try {
+        forNumberMethod = enumClass.getMethod("forNumber", int.class);
+      } catch (NoSuchMethodException e) {
+        context.reportBadDefinition(javaType, "Could not find a static forNumber(int) method on this type");
+        // the previous method should have thrown
+        throw new AssertionError();
+      }
+
+      return new Deserializer(enumClass, forNumberMethod);
     }
 
     @Override
     public ProtocolMessageEnum deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
       int intValue = jsonParser.getIntValue();
-      Class<?> enumClass = Preconditions.checkNotNull(javaType, "javaType").getRawClass();
+      // Class<?> enumClass = Preconditions.checkNotNull(javaType, "javaType").getRawClass();
       try {
-        return (ProtocolMessageEnum) enumClass.getMethod("forNumber", int.class).invoke(null, intValue);
-      } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        return (ProtocolMessageEnum) Preconditions.checkNotNull(forNumberMethod, "forNumberMethod").invoke(null, intValue);
+      } catch (IllegalAccessException | InvocationTargetException e) {
         context.reportWrongTokenException(ProtocolMessageEnum.class, JsonToken.VALUE_NUMBER_INT, wrongTokenMessage(context));
         // the previous method should have thrown
         throw new AssertionError();
