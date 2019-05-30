@@ -1,136 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.hubspot</groupId>
-        <artifactId>basepom</artifactId>
-        <version>18.2</version>
-    </parent>
+  <parent>
+    <groupId>com.hubspot</groupId>
+    <artifactId>basepom</artifactId>
+    <version>25.4</version>
+  </parent>
 
-    <groupId>com.hubspot.jackson</groupId>
-    <artifactId>jackson-datatype-protobuf</artifactId>
-    <version>0.9.11-jackson2.9-proto3-SNAPSHOT</version>
-    <description>Jackson Module that adds support for reading/writing protobufs</description>
-    <url>https://github.com/HubSpot/jackson-datatype-protobuf</url>
+  <groupId>com.hubspot.jackson</groupId>
+  <artifactId>jackson-datatype-protobuf</artifactId>
+  <version>0.9.11-jackson2.9-SNAPSHOT</version>
+  <description>Jackson Module that adds support for reading/writing protobufs</description>
 
-    <scm>
-        <connection>scm:git:git@github.com:HubSpot/jackson-datatype-protobuf.git</connection>
-        <developerConnection>scm:git:git@github.com:HubSpot/jackson-datatype-protobuf.git</developerConnection>
-        <url>git@github.com:HubSpot/jackson-datatype-protobuf.git</url>
-      <tag>HEAD</tag>
+  <properties>
+    <basepom.check.skip-dependency-versions-check>true</basepom.check.skip-dependency-versions-check>
+
+    <dep.jackson.version>2.9.9</dep.jackson.version>
+    <dep.jackson-databind.version>2.9.9</dep.jackson-databind.version>
+    <dep.protobuf-java.version>3.8.0</dep.protobuf-java.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java-util</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <targetPath>com/hubspot/jackson/datatype/protobuf</targetPath>
+        <filtering>true</filtering>
+        <directory>src/main/version</directory>
+        <includes>
+          <include>VERSION.txt</include>
+        </includes>
+      </resource>
+    </resources>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.xolstice.maven.plugins</groupId>
+          <artifactId>protobuf-maven-plugin</artifactId>
+          <version>0.6.1</version>
+          <configuration>
+            <protocArtifact>com.google.protobuf:protoc:${dep.protobuf-java.version}:exe:${os.detected.classifier}</protocArtifact>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.xolstice.maven.plugins</groupId>
+        <artifactId>protobuf-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    <extensions>
+      <extension>
+        <groupId>kr.motd.maven</groupId>
+        <artifactId>os-maven-plugin</artifactId>
+        <version>1.6.2</version>
+      </extension>
+    </extensions>
+  </build>
+
+  <developers>
+    <developer>
+      <name>Jonathan Haber</name>
+      <email>jhaber@hubspot.com</email>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git@github.com:HubSpot/jackson-datatype-protobuf.git</connection>
+    <developerConnection>scm:git:git@github.com:HubSpot/jackson-datatype-protobuf.git</developerConnection>
+    <url>git@github.com:HubSpot/jackson-datatype-protobuf.git</url>
+    <tag>HEAD</tag>
   </scm>
-
-    <developers>
-        <developer>
-            <name>Jonathan Haber</name>
-            <email>jhaber@hubspot.com</email>
-        </developer>
-    </developers>
-
-    <properties>
-        <dep.guava.version>20.0</dep.guava.version>
-        <dep.jackson.version>2.9.4</dep.jackson.version>
-        <dep.jackson-databind.version>2.9.4</dep.jackson-databind.version>
-        <dep.protobuf-java.version>3.3.0</dep.protobuf-java.version>
-    </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.google.protobuf</groupId>
-                <artifactId>protobuf-java</artifactId>
-                <version>${dep.protobuf-java.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.protobuf</groupId>
-                <artifactId>protobuf-java-util</artifactId>
-                <version>${dep.protobuf-java.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java-util</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>annotations</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <resources>
-            <resource>
-                <targetPath>com/hubspot/jackson/datatype/protobuf</targetPath>
-                <filtering>true</filtering>
-                <directory>src/main/version</directory>
-                <includes>
-                    <include>VERSION.txt</include>
-                </includes>
-            </resource>
-        </resources>
-
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.hubspot.maven.plugins</groupId>
-                    <artifactId>protoc-bundled-plugin</artifactId>
-                    <version>1.4</version>
-                    <configuration>
-                        <protobufVersion>${dep.protobuf-java.version}</protobufVersion>
-                        <testImportDependencies>
-                            <testImportDependency>com.google.protobuf:protobuf-java</testImportDependency>
-                        </testImportDependencies>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
-        <plugins>
-            <plugin>
-                <groupId>com.hubspot.maven.plugins</groupId>
-                <artifactId>protoc-bundled-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>
