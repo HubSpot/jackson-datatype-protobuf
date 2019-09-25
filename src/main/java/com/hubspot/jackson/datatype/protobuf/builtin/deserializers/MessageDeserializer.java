@@ -109,7 +109,8 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
 
     Map<String, FieldDescriptor> fieldLookup = new HashMap<>();
     for (FieldDescriptor field : descriptor.getFields()) {
-      fieldLookup.put(namingStrategy.translate(field.getName()), field);
+      String fieldName = field.toProto().hasJsonName() ? field.getJsonName() : field.getName();
+      fieldLookup.put(namingStrategy.translate(fieldName), field);
     }
 
     if (config.acceptLiteralFieldnames()) {
