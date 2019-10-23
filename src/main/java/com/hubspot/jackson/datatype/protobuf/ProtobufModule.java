@@ -105,11 +105,11 @@ public class ProtobufModule extends Module {
     SimpleDeserializers deserializers = new SimpleDeserializers();
     deserializers.addDeserializer(Duration.class, new DurationDeserializer());
     deserializers.addDeserializer(FieldMask.class, new FieldMaskDeserializer());
-    deserializers.addDeserializer(ListValue.class, new ListValueDeserializer().buildAtEnd());
+    deserializers.addDeserializer(ListValue.class, new ListValueDeserializer(config).buildAtEnd());
     deserializers.addDeserializer(NullValue.class, new NullValueDeserializer());
-    deserializers.addDeserializer(Struct.class, new StructDeserializer().buildAtEnd());
+    deserializers.addDeserializer(Struct.class, new StructDeserializer(config).buildAtEnd());
     deserializers.addDeserializer(Timestamp.class, new TimestampDeserializer());
-    deserializers.addDeserializer(Value.class, new ValueDeserializer().buildAtEnd());
+    deserializers.addDeserializer(Value.class, new ValueDeserializer(config).buildAtEnd());
     deserializers.addDeserializer(DoubleValue.class, wrappedPrimitiveDeserializer(DoubleValue.class));
     deserializers.addDeserializer(FloatValue.class, wrappedPrimitiveDeserializer(FloatValue.class));
     deserializers.addDeserializer(Int64Value.class, wrappedPrimitiveDeserializer(Int64Value.class));
@@ -123,8 +123,8 @@ public class ProtobufModule extends Module {
     context.setMixInAnnotations(MessageOrBuilder.class, MessageOrBuilderMixin.class);
   }
 
-  private static <T extends Message> JsonDeserializer<T> wrappedPrimitiveDeserializer(Class<T> type) {
-    return new WrappedPrimitiveDeserializer<>(type).buildAtEnd();
+  private <T extends Message> JsonDeserializer<T> wrappedPrimitiveDeserializer(Class<T> type) {
+    return new WrappedPrimitiveDeserializer<>(type, config).buildAtEnd();
   }
 
   @JsonAutoDetect(getterVisibility = Visibility.NONE,

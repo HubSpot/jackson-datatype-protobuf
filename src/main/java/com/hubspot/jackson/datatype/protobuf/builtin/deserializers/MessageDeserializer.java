@@ -22,11 +22,8 @@ import com.hubspot.jackson.datatype.protobuf.PropertyNamingStrategyWrapper;
 import com.hubspot.jackson.datatype.protobuf.ProtobufDeserializer;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 public class MessageDeserializer<T extends Message, V extends Builder> extends ProtobufDeserializer<T, V> {
-  @SuppressFBWarnings(value="SE_BAD_FIELD")
-  private final ProtobufJacksonConfig config;
+
 
   /**
    * @deprecated use {@link #MessageDeserializer(Class, ProtobufJacksonConfig)} instead
@@ -37,9 +34,7 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
   }
 
   public MessageDeserializer(Class<T> messageType, ProtobufJacksonConfig config) {
-    super(messageType);
-
-    this.config = config;
+    super(messageType, config);
   }
 
   @Override

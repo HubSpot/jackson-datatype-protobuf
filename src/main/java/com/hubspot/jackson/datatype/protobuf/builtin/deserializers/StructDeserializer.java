@@ -9,12 +9,13 @@ import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.Struct;
 import com.hubspot.jackson.datatype.protobuf.ProtobufDeserializer;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 
 public class StructDeserializer extends ProtobufDeserializer<Struct, Struct.Builder> {
   private static final FieldDescriptor FIELDS_FIELD = Struct.getDescriptor().findFieldByName("fields");
 
-  public StructDeserializer() {
-    super(Struct.class);
+  public StructDeserializer(ProtobufJacksonConfig config) {
+    super(Struct.class, config);
   }
 
   @Override

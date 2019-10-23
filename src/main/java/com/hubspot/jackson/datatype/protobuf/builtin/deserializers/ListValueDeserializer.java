@@ -8,12 +8,13 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ListValue;
 import com.hubspot.jackson.datatype.protobuf.ProtobufDeserializer;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 
 public class ListValueDeserializer extends ProtobufDeserializer<ListValue, ListValue.Builder> {
   private static final FieldDescriptor VALUES_FIELD = ListValue.getDescriptor().findFieldByName("values");
 
-  public ListValueDeserializer() {
-    super(ListValue.class);
+  public ListValueDeserializer(ProtobufJacksonConfig config) {
+    super(ListValue.class, config);
   }
 
   @Override

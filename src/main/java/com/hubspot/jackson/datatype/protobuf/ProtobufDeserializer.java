@@ -41,9 +41,13 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   @SuppressFBWarnings(value="SE_BAD_FIELD")
   private final Map<FieldDescriptor, JsonDeserializer<Object>> deserializerCache;
 
+  @SuppressFBWarnings(value="SE_BAD_FIELD")
+  protected final ProtobufJacksonConfig config;
+
   @SuppressWarnings("unchecked")
-  public ProtobufDeserializer(Class<T> messageType) {
+  public ProtobufDeserializer(Class<T> messageType, ProtobufJacksonConfig config) {
     super(messageType);
+    this.config = config;
 
     try {
       this.defaultInstance = (T) messageType.getMethod("getDefaultInstance").invoke(null);
@@ -183,6 +187,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
         return fieldName;
       case ENUM:
         EnumValueDescriptor enumValueDescriptor = field.getEnumType().findValueByName(parser.getText());
+        config.getEnumProcessingHook().ifPresent(consumer -> consumer.accept(enumValueDescriptor.getClass()));
 
         if (enumValueDescriptor == null && !ignorableEnum(parser.getText().trim(), context)) {
           throw context.weirdStringException(parser.getText(), field.getEnumType().getClass(),
@@ -269,6 +274,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
         switch (parser.getCurrentToken()) {
           case VALUE_STRING:
             enumValueDescriptor = field.getEnumType().findValueByName(parser.getText());
+            config.getEnumProcessingHook().ifPresent(consumer -> consumer.accept(enumValueDescriptor.getClass()));
 
             if (enumValueDescriptor == null && !ignorableEnum(parser.getText().trim(), context)) {
               throw context.weirdStringException(parser.getText(), field.getEnumType().getClass(),

@@ -8,13 +8,14 @@ import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.NullValue;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.ProtobufDeserializer;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 
 public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder> {
   private static final FieldDescriptor STRUCT_FIELD = Value.getDescriptor().findFieldByName("struct_value");
   private static final FieldDescriptor LIST_FIELD = Value.getDescriptor().findFieldByName("list_value");
 
-  public ValueDeserializer() {
-    super(Value.class);
+  public ValueDeserializer(ProtobufJacksonConfig config) {
+    super(Value.class, config);
   }
 
   @Override

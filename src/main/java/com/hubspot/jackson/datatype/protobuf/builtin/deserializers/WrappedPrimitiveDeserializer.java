@@ -8,11 +8,12 @@ import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.Message.Builder;
 import com.hubspot.jackson.datatype.protobuf.ProtobufDeserializer;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 
 public class WrappedPrimitiveDeserializer<T extends Message, V extends Builder> extends ProtobufDeserializer<T, V> {
 
-  public WrappedPrimitiveDeserializer(Class<T> wrapperType) {
-    super(wrapperType);
+  public WrappedPrimitiveDeserializer(Class<T> wrapperType, ProtobufJacksonConfig config) {
+    super(wrapperType, config);
   }
 
   @Override
