@@ -1,12 +1,12 @@
 language: java
 
 jdk:
-  - oraclejdk8
+  - openjdk8
+  - openjdk11
 
 sudo: false
 
-install: mvn -DskipTests=true -Dbasepom.check.skip-all=true -Dmaven.javadoc.skip=true -B install
-script: mvn -B verify
+script: mvn -B -q verify
 
 cache:
   directories:
