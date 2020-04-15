@@ -67,6 +67,9 @@
   <build>
     <resources>
       <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
         <targetPath>com/hubspot/jackson/datatype/protobuf</targetPath>
         <filtering>true</filtering>
         <directory>src/main/version</directory>
