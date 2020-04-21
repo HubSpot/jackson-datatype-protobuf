@@ -46,6 +46,10 @@ message RepeatedFields {
   extensions 18 to 34;
 }
 
+message PropertyNamingCustomName {
+    optional string custom_name = 1 [json_name = "custom-name"];
+}
+
 message PropertyNamingSnakeCased {
   optional string string_attribute = 1;
 }

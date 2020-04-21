@@ -65,18 +65,19 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     }
 
     for (FieldDescriptor field : fields) {
+      String fieldName = field.toProto().hasJsonName() ? field.getJsonName() : field.getName();
       if (field.isRepeated()) {
         List<?> valueList = (List<?>) message.getField(field);
 
         if (!valueList.isEmpty() || writeEmptyCollections) {
           if (field.isMapField()) {
-            generator.writeFieldName(namingStrategy.translate(field.getName()));
+            generator.writeFieldName(namingStrategy.translate(fieldName));
             writeMap(field, valueList, generator, serializerProvider);
           } else if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
-            generator.writeFieldName(namingStrategy.translate(field.getName()));
+            generator.writeFieldName(namingStrategy.translate(fieldName));
             writeValue(field, valueList.get(0), generator, serializerProvider);
           } else {
-            generator.writeArrayFieldStart(namingStrategy.translate(field.getName()));
+            generator.writeArrayFieldStart(namingStrategy.translate(fieldName));
             for (Object subValue : valueList) {
               writeValue(field, subValue, generator, serializerProvider);
             }
@@ -84,10 +85,10 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
           }
         }
       } else if (message.hasField(field) || (writeDefaultValues && !supportsFieldPresence(field) && field.getContainingOneof() == null)) {
-        generator.writeFieldName(namingStrategy.translate(field.getName()));
+        generator.writeFieldName(namingStrategy.translate(fieldName));
         writeValue(field, message.getField(field), generator, serializerProvider);
       } else if (include == Include.ALWAYS && field.getContainingOneof() == null) {
-        generator.writeFieldName(namingStrategy.translate(field.getName()));
+        generator.writeFieldName(namingStrategy.translate(fieldName));
         generator.writeNull();
       }
     }

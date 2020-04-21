@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingCamelCased;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingCustomName;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingSnakeCased;
 
 public class PropertyNamingTest {
@@ -151,5 +152,15 @@ public class PropertyNamingTest {
     PropertyNamingSnakeCased message = mapper.readValue(json, PropertyNamingSnakeCased.class);
 
     assertThat(message.getStringAttribute()).isEqualTo("test");
+  }
+
+  @Test
+  public void itRespectsCustomJsonPropertyNames() throws IOException {
+    ObjectMapper mapper = new ObjectMapper().registerModules(new ProtobufModule());
+    String json = "{\"custom-name\":\"test\"}";
+    PropertyNamingCustomName message = mapper.readValue(json, PropertyNamingCustomName.class);
+
+    assertThat(message.getCustomName()).isEqualTo("test");
+    assertThat(mapper.writeValueAsString(message)).isEqualTo(json);
   }
 }
