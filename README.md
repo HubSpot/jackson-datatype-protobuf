@@ -19,11 +19,13 @@ To use module on Maven-based projects, use following dependency:
 
 ### Versions
 
-There are separate versions based on which version of Jackson you are using, see the table below:
+Starting with version 0.9.12, only Jackson 2.9+ is supported. If you're using Jackson 2.9 or newer, you can use the latest version of this library in Maven Central ([link](https://search.maven.org/artifact/com.hubspot.jackson/jackson-datatype-protobuf)).
 
-| Jackson 2.7.x | Jackson 2.8.x | Jackson 2.9.x |
-| ------------- | ------------- | ------------- |
-| 0.9.11-jackson2.7 | 0.9.11-jackson2.8 | 0.9.11-jackson2.9 |
+If you're using a version of Jackson prior to 2.9, you can use the last release before support was dropped:
+
+| Jackson 2.7.x | Jackson 2.8.x |
+| ------------- | ------------- |
+| 0.9.11-jackson2.7 | 0.9.11-jackson2.8 
 
 ### Registering module
 
