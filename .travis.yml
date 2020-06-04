@@ -8,6 +8,11 @@ sudo: false
 
 script: mvn -B -q verify
 
+env:
+  - # use Jackson versions from POM
+  - JACKSON_VERSIONS="-Ddep.jackson.version=2.9.10 -Ddep.jackson-databind.version=2.9.10.4"
+  - JACKSON_VERSIONS="-Ddep.jackson.version=2.10.4 -Ddep.jackson-databind.version=2.10.4"
+
 cache:
   directories:
   - $HOME/.m2
