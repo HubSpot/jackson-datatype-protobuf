@@ -2,10 +2,9 @@ package com.hubspot.jackson.datatype.protobuf.builtin.deserializers;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.core.exc.InputCoercionException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.NullValue;
@@ -77,12 +76,8 @@ public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder
           "Number %d can not be represented as a double without loss of precision",
           longValue
       );
-      throw new InputCoercionException(
-          context.getParser(),
-          message,
-          JsonToken.VALUE_NUMBER_INT,
-          Double.TYPE
-      );
+
+      throw new JsonParseException(context.getParser(), message);
     }
   }
 }

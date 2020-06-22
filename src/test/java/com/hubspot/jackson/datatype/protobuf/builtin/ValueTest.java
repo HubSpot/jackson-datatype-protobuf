@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.exc.InputCoercionException;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.protobuf.ListValue;
 import com.google.protobuf.NullValue;
@@ -184,7 +184,7 @@ public class ValueTest {
     Throwable t = catchThrowable(() -> camelCase().readValue(json, HasValue.class));
 
     assertThat(t)
-        .isInstanceOf(InputCoercionException.class)
+        .isInstanceOf(JsonParseException.class)
         .hasMessageContaining("-8747832031878802303");
   }
 
