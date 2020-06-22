@@ -177,7 +177,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itThrowsOnOutOfBounds() throws IOException {
+  public void itThrowsOnOutOfBounds() {
     // this number can't be represented exactly by a Java double
     String json = "{\"value\":-8747832031878802303}";
 
