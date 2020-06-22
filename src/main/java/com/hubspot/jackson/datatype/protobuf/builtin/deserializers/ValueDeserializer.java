@@ -3,6 +3,9 @@ package com.hubspot.jackson.datatype.protobuf.builtin.deserializers;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.exc.InputCoercionException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.NullValue;
@@ -36,8 +39,11 @@ public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder
         builder.setStringValue(parser.getText());
         return;
       case VALUE_NUMBER_INT:
+        long longValue = parser.getLongValue();
+        builder.setNumberValue(safeCast(longValue, context));
+        return;
       case VALUE_NUMBER_FLOAT:
-        builder.setNumberValue(parser.getValueAsDouble());
+        builder.setNumberValue(parser.getDoubleValue());
         return;
       case VALUE_TRUE:
         builder.setBoolValue(true);
@@ -59,5 +65,24 @@ public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder
   @Override
   public Value.Builder getNullValue(DeserializationContext ctxt) {
     return Value.newBuilder().setNullValue(NullValue.NULL_VALUE);
+  }
+
+  double safeCast(long longValue, DeserializationContext context) throws JsonProcessingException {
+    double doubleValue = (double) longValue;
+
+    if (Double.valueOf(doubleValue).longValue() == longValue) {
+      return doubleValue;
+    } else {
+      String message = String.format(
+          "Number %d can not be represented as a double without loss of precision",
+          longValue
+      );
+      throw new InputCoercionException(
+          context.getParser(),
+          message,
+          JsonToken.VALUE_NUMBER_INT,
+          Double.TYPE
+      );
+    }
   }
 }
