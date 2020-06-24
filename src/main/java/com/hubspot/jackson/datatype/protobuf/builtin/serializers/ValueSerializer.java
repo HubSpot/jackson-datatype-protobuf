@@ -1,5 +1,6 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,8 +13,8 @@ import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 
 public class ValueSerializer extends ProtobufSerializer<Value> {
 
-  public ValueSerializer() {
-    super(Value.class);
+  public ValueSerializer(ProtobufJacksonConfig config) {
+    super(Value.class, config);
   }
 
   @Override

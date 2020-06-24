@@ -1,5 +1,6 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -10,8 +11,8 @@ import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 
 public class TimestampSerializer extends ProtobufSerializer<Timestamp> {
 
-  public TimestampSerializer() {
-    super(Timestamp.class);
+  public TimestampSerializer(ProtobufJacksonConfig config) {
+    super(Timestamp.class, config);
   }
 
   @Override
