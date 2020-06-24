@@ -5,10 +5,13 @@ import com.google.protobuf.ExtensionRegistry;
 public class ProtobufJacksonConfig {
   private final ExtensionRegistryWrapper extensionRegistry;
   private final boolean acceptLiteralFieldnames;
+  private final UnknownEnumSerializationStrategy unknownEnumSerializationStrategy;
 
-  private ProtobufJacksonConfig(ExtensionRegistryWrapper extensionRegistry, boolean acceptLiteralFieldnames) {
+  private ProtobufJacksonConfig(ExtensionRegistryWrapper extensionRegistry, boolean acceptLiteralFieldnames,
+      UnknownEnumSerializationStrategy unknownEnumSerializationStrategy) {
     this.extensionRegistry = extensionRegistry;
     this.acceptLiteralFieldnames = acceptLiteralFieldnames;
+    this.unknownEnumSerializationStrategy = unknownEnumSerializationStrategy;
   }
 
   public static Builder builder() {
@@ -23,9 +26,14 @@ public class ProtobufJacksonConfig {
     return acceptLiteralFieldnames;
   }
 
+  public UnknownEnumSerializationStrategy unknownEnumSerializationStrategy() {
+    return unknownEnumSerializationStrategy;
+  }
+
   public static class Builder {
     private ExtensionRegistryWrapper extensionRegistry = ExtensionRegistryWrapper.empty();
     private boolean acceptLiteralFieldnames = false;
+    private UnknownEnumSerializationStrategy unknownEnumSerializationStrategy = UnknownEnumSerializationStrategy.SERIALIZE;
 
     private Builder() {}
 
@@ -43,8 +51,13 @@ public class ProtobufJacksonConfig {
       return this;
     }
 
+    public Builder unknownEnumSerializationStrategy(UnknownEnumSerializationStrategy unknownEnumSerializationStrategy) {
+      this.unknownEnumSerializationStrategy = unknownEnumSerializationStrategy;
+      return this;
+    }
+
     public ProtobufJacksonConfig build() {
-      return new ProtobufJacksonConfig(extensionRegistry, acceptLiteralFieldnames);
+      return new ProtobufJacksonConfig(extensionRegistry, acceptLiteralFieldnames, unknownEnumSerializationStrategy);
     }
   }
 }

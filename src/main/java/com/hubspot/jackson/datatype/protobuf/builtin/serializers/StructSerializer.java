@@ -1,5 +1,6 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -11,8 +12,8 @@ import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 public class StructSerializer extends ProtobufSerializer<Struct> {
   private static final FieldDescriptor FIELDS_FIELD = Struct.getDescriptor().findFieldByName("fields");
 
-  public StructSerializer() {
-    super(Struct.class);
+  public StructSerializer(ProtobufJacksonConfig config) {
+    super(Struct.class, config);
   }
 
   @Override
