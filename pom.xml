@@ -8,7 +8,7 @@
     <version>25.4</version>
   </parent>
 
-  <groupId>com.hubspot.jackson</groupId>
+  <groupId>gg.pragma</groupId>
   <artifactId>jackson-datatype-protobuf</artifactId>
   <version>0.9.13-SNAPSHOT</version>
   <description>Jackson Module that adds support for reading/writing protobufs</description>
