@@ -116,15 +116,19 @@
 
   <developers>
     <developer>
-      <name>Jonathan Haber</name>
+      <name>Jonathan Haber (Original author)</name>
       <email>jhaber@hubspot.com</email>
+    </developer>
+    <developer>
+      <name>Pragma</name>
+      <email>it@pragma.gg</email>
     </developer>
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:HubSpot/jackson-datatype-protobuf.git</connection>
-    <developerConnection>scm:git:git@github.com:HubSpot/jackson-datatype-protobuf.git</developerConnection>
-    <url>git@github.com:HubSpot/jackson-datatype-protobuf.git</url>
+    <connection>scm:git:git@github.com:pragmaplatform/jackson-datatype-protobuf.git</connection>
+    <developerConnection>scm:git:git@github.com:pragmaplatform/jackson-datatype-protobuf.git</developerConnection>
+    <url>git@github.com:pragmaplatform/jackson-datatype-protobuf.git</url>
     <tag>HEAD</tag>
   </scm>
 </project>
