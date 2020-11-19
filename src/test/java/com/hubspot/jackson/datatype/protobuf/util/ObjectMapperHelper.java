@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.MessageOrBuilder;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 
 public class ObjectMapperHelper {
@@ -38,6 +39,10 @@ public class ObjectMapperHelper {
 
   public static ObjectMapper underscore(ExtensionRegistry extensionRegistry) {
     return create(PropertyNamingStrategy.SNAKE_CASE, extensionRegistry);
+  }
+
+  public static ObjectMapper serializeLongsAsStrings(){
+    return create(true).setSerializationInclusion(Include.NON_DEFAULT);
   }
 
   public static JsonNode toTree(ObjectMapper mapper, Object value) {
@@ -85,5 +90,11 @@ public class ObjectMapperHelper {
 
   private static ObjectMapper create() {
     return new ObjectMapper().registerModule(new ProtobufModule());
+  }
+
+  private static ObjectMapper create(boolean serializeLongsAsStrings) {
+    ProtobufJacksonConfig protobufJacksonConfig = ProtobufJacksonConfig.builder().serializeLongsAsStrings(serializeLongsAsStrings).build();
+    ProtobufModule module = new ProtobufModule(protobufJacksonConfig);
+    return new ObjectMapper().registerModule(module);
   }
 }

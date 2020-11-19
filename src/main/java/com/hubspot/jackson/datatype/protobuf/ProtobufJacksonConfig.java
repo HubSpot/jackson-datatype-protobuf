@@ -5,10 +5,12 @@ import com.google.protobuf.ExtensionRegistry;
 public class ProtobufJacksonConfig {
   private final ExtensionRegistryWrapper extensionRegistry;
   private final boolean acceptLiteralFieldnames;
+  private final boolean serializeLongsAsStrings;
 
-  private ProtobufJacksonConfig(ExtensionRegistryWrapper extensionRegistry, boolean acceptLiteralFieldnames) {
+  private ProtobufJacksonConfig(ExtensionRegistryWrapper extensionRegistry, boolean acceptLiteralFieldnames, boolean serializeLongsAsStrings) {
     this.extensionRegistry = extensionRegistry;
     this.acceptLiteralFieldnames = acceptLiteralFieldnames;
+    this.serializeLongsAsStrings = serializeLongsAsStrings;
   }
 
   public static Builder builder() {
@@ -23,9 +25,14 @@ public class ProtobufJacksonConfig {
     return acceptLiteralFieldnames;
   }
 
+  public boolean serializeLongsAsStrings() {
+    return serializeLongsAsStrings;
+  }
+
   public static class Builder {
     private ExtensionRegistryWrapper extensionRegistry = ExtensionRegistryWrapper.empty();
     private boolean acceptLiteralFieldnames = false;
+    private boolean serializeLongsAsStrings = false;
 
     private Builder() {}
 
@@ -43,8 +50,13 @@ public class ProtobufJacksonConfig {
       return this;
     }
 
+    public Builder serializeLongsAsStrings(boolean serializeLongsAsStrings) {
+      this.serializeLongsAsStrings = serializeLongsAsStrings;
+      return this;
+    }
+
     public ProtobufJacksonConfig build() {
-      return new ProtobufJacksonConfig(extensionRegistry, acceptLiteralFieldnames);
+      return new ProtobufJacksonConfig(extensionRegistry, acceptLiteralFieldnames, serializeLongsAsStrings);
     }
   }
 }

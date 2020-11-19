@@ -383,25 +383,37 @@ public class OneofTest {
   }
 
   private ObjectNode nullProto3Message() {
+    return nullProto3Message(false);
+  }
+
+  private ObjectNode nullProto3Message(boolean serializeLongsAsStrings) {
     ObjectNode node = camelCase().createObjectNode();
     node
             .put("double", 0.0d)
             .put("float", 0.0d)
             .put("int32", 0)
-            .put("int64", 0)
             .put("uint32", 0)
-            .put("uint64", 0)
             .put("sint32", 0)
-            .put("sint64", 0)
             .put("fixed32", 0)
-            .put("fixed64", 0)
             .put("sfixed32", 0)
-            .put("sfixed64", 0)
             .put("bool", false)
             .put("string", "")
             .put("bytes", "")
             .put("enum", "DEFAULT")
             .set("nested", NullNode.getInstance());
+    if(serializeLongsAsStrings){
+      node.put("int64", "0");
+      node.put("uint64", "0");
+      node.put("sint64", "0");
+      node.put("fixed64", "0");
+      node.put("sfixed64", "0");
+    } else {
+      node.put("int64", 0);
+      node.put("uint64", 0);
+      node.put("sint64", 0);
+      node.put("fixed64", 0);
+      node.put("sfixed64", 0);
+    }
     return node;
   }
 }

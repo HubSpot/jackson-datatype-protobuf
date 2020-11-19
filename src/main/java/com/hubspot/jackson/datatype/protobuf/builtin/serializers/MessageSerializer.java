@@ -25,7 +25,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   @SuppressFBWarnings(value="SE_BAD_FIELD")
-  private final ProtobufJacksonConfig config;
 
   /**
    * @deprecated use {@link #MessageSerializer(ProtobufJacksonConfig)} instead
@@ -36,9 +35,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   }
 
   public MessageSerializer(ProtobufJacksonConfig config) {
-    super(MessageOrBuilder.class);
-
-    this.config = config;
+    super(MessageOrBuilder.class, config);
   }
 
   @Override
