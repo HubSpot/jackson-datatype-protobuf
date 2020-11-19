@@ -24,11 +24,17 @@ import com.google.protobuf.NullValue;
 public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends StdSerializer<T> {
   private static final String NULL_VALUE_FULL_NAME = NullValue.getDescriptor().getFullName();
 
+  protected final ProtobufJacksonConfig config;
   private final Map<Class<?>, JsonSerializer<Object>> serializerCache;
 
   public ProtobufSerializer(Class<T> protobufType) {
+    this(protobufType, ProtobufJacksonConfig.builder().build());
+  }
+
+  public ProtobufSerializer(Class<T> protobufType, ProtobufJacksonConfig config) {
     super(protobufType);
 
+    this.config = config;
     this.serializerCache = new ConcurrentHashMap<>();
   }
 
@@ -64,7 +70,11 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
         generator.writeNumber((Integer) value);
         break;
       case LONG:
-        generator.writeNumber((Long) value);
+        if(config.serializeLongsAsStrings()) {
+          generator.writeString(((Long) value).toString());
+        } else {
+          generator.writeNumber((Long) value);
+        }
         break;
       case FLOAT:
         generator.writeNumber((Float) value);

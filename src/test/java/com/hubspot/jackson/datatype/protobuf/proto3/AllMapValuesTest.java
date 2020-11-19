@@ -1,10 +1,12 @@
 package com.hubspot.jackson.datatype.protobuf.proto3;
 
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.serializeLongsAsStrings;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -74,6 +76,25 @@ public class AllMapValuesTest {
     assertThat(message).isEqualTo(HasAllMapValues.getDefaultInstance());
   }
 
+  @Test
+  public void itWritesAllMapValuesWhenPopulatedWhenSerializingLongsAsStrings() throws IOException {
+    HasAllMapValues message = hasAllMapValues();
+    ObjectMapper objectMapper = serializeLongsAsStrings();
+    String json = objectMapper.writeValueAsString(message);
+    JsonNode node = objectMapper.readTree(json);
+    assertThat(node).isEqualTo(hasAllMapValuesNode(true));
+    assertThat(node).isEqualTo(objectMapper.readTree(objectMapper.writeValueAsString(node)));
+  }
+
+  @Test
+  public void itReadsAllMapValuesWhenPopulatedWhenSerializingLongsAsStrings() throws IOException {
+    ObjectMapper objectMapper = serializeLongsAsStrings();
+    String json = objectMapper.writeValueAsString(hasAllMapValuesNode(true));
+    HasAllMapValues message = objectMapper.readValue(json, HasAllMapValues.class);
+    assertThat(message).isEqualTo(hasAllMapValues());
+    assertThat(message).isEqualTo(objectMapper.readValue(objectMapper.writeValueAsString(message), HasAllMapValues.class));
+  }
+
   private static HasAllMapValues hasAllMapValues() {
     Value value = Value.newBuilder().setStringValue("test").build();
     ByteString byteString = ByteString.copyFromUtf8("test");
@@ -123,19 +144,35 @@ public class AllMapValuesTest {
   }
 
   private static ObjectNode hasAllMapValuesNode() {
+    return hasAllMapValuesNode(false);
+  }
+
+  private static ObjectNode hasAllMapValuesNode(boolean serializeLongsAsStrings) {
     ObjectNode node = newObjectNode();
     node.set("doubleMap", newObjectNode().put("double", 1.5d));
     node.set("floatMap", newObjectNode().put("float", 2.5d));
     node.set("int32Map", newObjectNode().put("int32", 1));
-    node.set("int64Map", newObjectNode().put("int64", 2));
     node.set("uint32Map", newObjectNode().put("uint32", 3));
-    node.set("uint64Map", newObjectNode().put("uint64", 4));
     node.set("sint32Map", newObjectNode().put("sint32", 5));
-    node.set("sint64Map", newObjectNode().put("sint64", 6));
     node.set("fixed32Map", newObjectNode().put("fixed32", 7));
-    node.set("fixed64Map", newObjectNode().put("fixed64", 8));
     node.set("sfixed32Map", newObjectNode().put("sfixed32", 9));
-    node.set("sfixed64Map", newObjectNode().put("sfixed64", 10));
+    if(serializeLongsAsStrings) {
+      node.set("int64Map", newObjectNode().put("int64", "2"));
+      node.set("uint64Map", newObjectNode().put("uint64", "4"));
+      node.set("sint64Map", newObjectNode().put("sint64", "6"));
+      node.set("fixed64Map", newObjectNode().put("fixed64", "8"));
+      node.set("sfixed64Map", newObjectNode().put("sfixed64", "10"));
+      node.set("int64WrapperMap", newObjectNode().put("int64_wrapper", "12"));
+      node.set("uint64WrapperMap", newObjectNode().put("uint64_wrapper", "14"));
+    } else {
+      node.set("int64Map", newObjectNode().put("int64", 2));
+      node.set("uint64Map", newObjectNode().put("uint64", 4));
+      node.set("sint64Map", newObjectNode().put("sint64", 6));
+      node.set("fixed64Map", newObjectNode().put("fixed64", 8));
+      node.set("sfixed64Map", newObjectNode().put("sfixed64", 10));
+      node.set("int64WrapperMap", newObjectNode().put("int64_wrapper", 12));
+      node.set("uint64WrapperMap", newObjectNode().put("uint64_wrapper", 14));
+    }
     node.set("boolMap", newObjectNode().put("bool", true));
     node.set("stringMap", newObjectNode().put("string", "test"));
     node.set("bytesMap", newObjectNode().put("bytes", "dGVzdA=="));
@@ -150,9 +187,7 @@ public class AllMapValuesTest {
     node.set("doubleWrapperMap", newObjectNode().put("double_wrapper", 3.5d));
     node.set("floatWrapperMap", newObjectNode().put("float_wrapper", 4.5d));
     node.set("int32WrapperMap", newObjectNode().put("int32_wrapper", 11));
-    node.set("int64WrapperMap", newObjectNode().put("int64_wrapper", 12));
     node.set("uint32WrapperMap", newObjectNode().put("uint32_wrapper", 13));
-    node.set("uint64WrapperMap", newObjectNode().put("uint64_wrapper", 14));
     node.set("boolWrapperMap", newObjectNode().put("bool_wrapper", true));
     node.set("stringWrapperMap", newObjectNode().put("string_wrapper", "test"));
     node.set("bytesWrapperMap", newObjectNode().put("bytes_wrapper", "dGVzdA=="));

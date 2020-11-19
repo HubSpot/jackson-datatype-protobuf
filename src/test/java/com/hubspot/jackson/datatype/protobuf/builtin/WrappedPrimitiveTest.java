@@ -1,6 +1,7 @@
 package com.hubspot.jackson.datatype.protobuf.builtin;
 
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.serializeLongsAsStrings;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.BytesValue;
@@ -195,35 +197,105 @@ public class WrappedPrimitiveTest {
     assertThat(message.hasBytesWrapper()).isFalse();
   }
 
+  @Test
+  public void itSetsFieldsWhenPresentInJsonWhenSerializingLongsAsStrings() throws IOException {
+    ObjectMapper objectMapper = serializeLongsAsStrings();
+    String json = objectMapper.writeValueAsString(fullyPopulatedJsonNode(objectMapper, true));
+    HasWrappedPrimitives message = objectMapper.readValue(json, HasWrappedPrimitives.class);
+    assertThat(message.hasDoubleWrapper()).isTrue();
+    assertThat(message.getDoubleWrapper()).isEqualTo(DOUBLE_WRAPPER);
+    assertThat(message.hasFloatWrapper()).isTrue();
+    assertThat(message.getFloatWrapper()).isEqualTo(FLOAT_WRAPPER);
+    assertThat(message.hasInt64Wrapper()).isTrue();
+    assertThat(message.getInt64Wrapper()).isEqualTo(INT64_WRAPPER);
+    assertThat(message.hasUint64Wrapper()).isTrue();
+    assertThat(message.getUint64Wrapper()).isEqualTo(UINT64_WRAPPER);
+    assertThat(message.hasInt32Wrapper()).isTrue();
+    assertThat(message.getInt32Wrapper()).isEqualTo(INT32_WRAPPER);
+    assertThat(message.hasUint32Wrapper()).isTrue();
+    assertThat(message.getUint32Wrapper()).isEqualTo(UINT32_WRAPPER);
+    assertThat(message.hasBoolWrapper()).isTrue();
+    assertThat(message.getBoolWrapper()).isEqualTo(BOOL_WRAPPER);
+    assertThat(message.hasStringWrapper()).isTrue();
+    assertThat(message.getStringWrapper()).isEqualTo(STRING_WRAPPER);
+    assertThat(message.hasBytesWrapper()).isTrue();
+    assertThat(message.getBytesWrapper()).isEqualTo(BYTES_WRAPPER);
+  }
+
+  @Test
+  public void itSetsFieldsWhenZeroInJsonWhenSerializingLongsAsStrings() throws IOException {
+    ObjectMapper objectMapper = serializeLongsAsStrings();
+    String json = objectMapper.writeValueAsString(defaultPopulatedJsonNode(objectMapper, true));
+    HasWrappedPrimitives message = objectMapper.readValue(json, HasWrappedPrimitives.class);
+    assertThat(message.hasDoubleWrapper()).isTrue();
+    assertThat(message.getDoubleWrapper()).isEqualTo(DoubleValue.getDefaultInstance());
+    assertThat(message.hasFloatWrapper()).isTrue();
+    assertThat(message.getFloatWrapper()).isEqualTo(FloatValue.getDefaultInstance());
+    assertThat(message.hasInt64Wrapper()).isTrue();
+    assertThat(message.getInt64Wrapper()).isEqualTo(Int64Value.getDefaultInstance());
+    assertThat(message.hasUint64Wrapper()).isTrue();
+    assertThat(message.getUint64Wrapper()).isEqualTo(UInt64Value.getDefaultInstance());
+    assertThat(message.hasInt32Wrapper()).isTrue();
+    assertThat(message.getInt32Wrapper()).isEqualTo(Int32Value.getDefaultInstance());
+    assertThat(message.hasUint32Wrapper()).isTrue();
+    assertThat(message.getUint32Wrapper()).isEqualTo(UInt32Value.getDefaultInstance());
+    assertThat(message.hasBoolWrapper()).isTrue();
+    assertThat(message.getBoolWrapper()).isEqualTo(BoolValue.getDefaultInstance());
+    assertThat(message.hasStringWrapper()).isTrue();
+    assertThat(message.getStringWrapper()).isEqualTo(StringValue.getDefaultInstance());
+    assertThat(message.hasBytesWrapper()).isTrue();
+    assertThat(message.getBytesWrapper()).isEqualTo(BytesValue.getDefaultInstance());
+  }
+
   private static JsonNode toNode(HasWrappedPrimitives message, ObjectMapper mapper) throws IOException {
     String json = mapper.writeValueAsString(message);
     return mapper.readTree(json);
   }
 
   private static JsonNode fullyPopulatedJsonNode(ObjectMapper mapper) {
-    return mapper.createObjectNode()
+    return fullyPopulatedJsonNode(mapper, false);
+  }
+
+  private static JsonNode fullyPopulatedJsonNode(ObjectMapper mapper, boolean serializeLongsAsStrings) {
+    ObjectNode node = mapper.createObjectNode()
             .put("doubleWrapper", 1.0)
             .put("floatWrapper", 2.0)
-            .put("int64Wrapper", 3)
-            .put("uint64Wrapper", 4)
             .put("int32Wrapper", 5)
             .put("uint32Wrapper", 6)
             .put("boolWrapper", true)
             .put("stringWrapper", "test_string")
             .put("bytesWrapper", "dGVzdF9ieXRlcw==");
+    if(serializeLongsAsStrings){
+      node.put("int64Wrapper", "3");
+      node.put("uint64Wrapper", "4");
+    } else {
+      node.put("int64Wrapper", 3);
+      node.put("uint64Wrapper", 4);
+    }
+    return node;
   }
 
   private static JsonNode defaultPopulatedJsonNode(ObjectMapper mapper) {
-    return mapper.createObjectNode()
+    return defaultPopulatedJsonNode(mapper, false);
+  }
+
+  private static JsonNode defaultPopulatedJsonNode(ObjectMapper mapper, boolean serializeLongsAsStrings) {
+    ObjectNode node = mapper.createObjectNode()
             .put("doubleWrapper", 0.0)
             .put("floatWrapper", 0.0)
-            .put("int64Wrapper", 0)
-            .put("uint64Wrapper", 0)
             .put("int32Wrapper", 0)
             .put("uint32Wrapper", 0)
             .put("boolWrapper", false)
             .put("stringWrapper", "")
             .put("bytesWrapper", "");
+    if(serializeLongsAsStrings){
+      node.put("int64Wrapper", "0");
+      node.put("uint64Wrapper", "0");
+    } else {
+      node.put("int64Wrapper", 0);
+      node.put("uint64Wrapper", 0);
+    }
+    return node;
   }
 
   private static JsonNode nullPopulatedJsonNode(ObjectMapper mapper) {

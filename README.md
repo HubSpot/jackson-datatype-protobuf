@@ -41,7 +41,13 @@ after which functionality is available for all normal Jackson operations.
 ### Interop with Protobuf 3 Canonical JSON Representation
 
 Protobuf 3 specifies a canonical JSON representation (available [here](https://developers.google.com/protocol-buffers/docs/proto3#json)). This library conforms to that representation with a few exceptions:
-- int64, fixed64, uint64 are written as JSON numbers instead of strings
+- int64, fixed64, uint64 are written as JSON numbers instead of strings **by default**
+  - ProtobufJacksonConfig now has a field to allow for serialization of these types as strings. See [ProtobufJacksonConfig#L8](src/main/java/com/hubspot/jackson/datatype/protobuf/ProtobufJacksonConfig.java#L8)
+  - This can be set by:
+  ```
+  ObjectMapper mapper = new ObjectMapper();
+  mapper.registerModule(new ProtobufModule(ProtobufJacksonConfig.builder().serializeLongsAsStrings(true).build()));
+  ```
 - `Any` objects don't have any special handling, so the value will be a base64 string, and the type URL field name is `typeUrl` instead of `@type`
 
 ### Protobuf 2 Support
