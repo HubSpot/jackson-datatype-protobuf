@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -50,7 +51,11 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     super(MessageOrBuilder.class);
     this.config = config;
     this.unwrappingSerializer = unwrappingSerializer;
-    this.nameTransformer = nameTransformer;
+    if (nameTransformer == null) {
+      this.nameTransformer = NameTransformer.NOP;
+    } else {
+      this.nameTransformer = nameTransformer;
+    }
   }
 
   @Override
@@ -68,17 +73,17 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     boolean writeDefaultValues = proto3 && include != Include.NON_DEFAULT;
     boolean writeEmptyCollections = include != Include.NON_DEFAULT && include != Include.NON_EMPTY;
 
-    PropertyNamingStrategyBase namingStrategy;
-    if (nameTransformer != null) {
-      namingStrategy = new PropertyNamingStrategyWrapper(new PropertyNamingStrategyBase() {
-        @Override
-        public String translate(String fieldName) {
-          return nameTransformer.transform(fieldName);
-        }
-      });
-    } else {
-      namingStrategy = new PropertyNamingStrategyWrapper(serializerProvider.getConfig().getPropertyNamingStrategy());
-    }
+    //If NamingTransformer is provided (in case of UnwrappingSerializer), we chain it on top of
+    // the namingStrategy.
+    final PropertyNamingStrategyBase namingStrategy = new PropertyNamingStrategyBase() {
+      @Override
+      public String translate(String fieldName) {
+        PropertyNamingStrategyBase configuredNamingStrategy =
+                new PropertyNamingStrategyWrapper(serializerProvider.getConfig().getPropertyNamingStrategy());
+        return nameTransformer.transform(configuredNamingStrategy.translate(fieldName));
+      }
+    };
+
 
     Descriptor descriptor = message.getDescriptorForType();
     List<FieldDescriptor> fields = new ArrayList<>(descriptor.getFields());
@@ -94,13 +99,13 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
         if (!valueList.isEmpty() || writeEmptyCollections) {
           if (field.isMapField()) {
-            generator.writeFieldName(namingStrategy.translate(field.getName()));
+            generator.writeFieldName(nameTransformer.transform(namingStrategy.translate(field.getName())));
             writeMap(field, valueList, generator, serializerProvider);
           } else if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
-            generator.writeFieldName(namingStrategy.translate(field.getName()));
+            generator.writeFieldName(nameTransformer.transform(namingStrategy.translate(field.getName())));
             writeValue(field, valueList.get(0), generator, serializerProvider);
           } else {
-            generator.writeArrayFieldStart(namingStrategy.translate(field.getName()));
+            generator.writeArrayFieldStart(nameTransformer.transform(namingStrategy.translate(field.getName())));
             for (Object subValue : valueList) {
               writeValue(field, subValue, generator, serializerProvider);
             }
@@ -108,10 +113,10 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
           }
         }
       } else if (message.hasField(field) || (writeDefaultValues && !supportsFieldPresence(field) && field.getContainingOneof() == null)) {
-        generator.writeFieldName(namingStrategy.translate(field.getName()));
+        generator.writeFieldName(nameTransformer.transform(namingStrategy.translate(field.getName())));
         writeValue(field, message.getField(field), generator, serializerProvider);
       } else if (include == Include.ALWAYS && field.getContainingOneof() == null) {
-        generator.writeFieldName(namingStrategy.translate(field.getName()));
+        generator.writeFieldName(nameTransformer.transform(namingStrategy.translate(field.getName())));
         generator.writeNull();
       }
     }
