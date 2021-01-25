@@ -6,9 +6,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.util.NameTransformer;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
@@ -26,6 +28,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   @SuppressFBWarnings(value="SE_BAD_FIELD")
   private final ProtobufJacksonConfig config;
+  private final boolean unwrappingSerializer;
+  private final NameTransformer nameTransformer;
 
   /**
    * @deprecated use {@link #MessageSerializer(ProtobufJacksonConfig)} instead
@@ -36,9 +40,22 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   }
 
   public MessageSerializer(ProtobufJacksonConfig config) {
-    super(MessageOrBuilder.class);
+    this(config, false);
+  }
 
+  public MessageSerializer(ProtobufJacksonConfig config, boolean unwrappingSerializer) {
+    this(config, null, unwrappingSerializer);
+  }
+
+  public MessageSerializer(ProtobufJacksonConfig config, NameTransformer nameTransformer, boolean unwrappingSerializer) {
+    super(MessageOrBuilder.class);
     this.config = config;
+    this.unwrappingSerializer = unwrappingSerializer;
+    if (nameTransformer == null) {
+      this.nameTransformer = NameTransformer.NOP;
+    } else {
+      this.nameTransformer = nameTransformer;
+    }
   }
 
   @Override
@@ -47,14 +64,26 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
           JsonGenerator generator,
           SerializerProvider serializerProvider
   ) throws IOException {
-    generator.writeStartObject();
+    if (!isUnwrappingSerializer()) {
+      generator.writeStartObject();
+    }
 
     boolean proto3 = message.getDescriptorForType().getFile().getSyntax() == Syntax.PROTO3;
     Include include = serializerProvider.getConfig().getDefaultPropertyInclusion().getValueInclusion();
     boolean writeDefaultValues = proto3 && include != Include.NON_DEFAULT;
     boolean writeEmptyCollections = include != Include.NON_DEFAULT && include != Include.NON_EMPTY;
-    PropertyNamingStrategyBase namingStrategy =
-            new PropertyNamingStrategyWrapper(serializerProvider.getConfig().getPropertyNamingStrategy());
+
+    //If NamingTransformer is provided (in case of UnwrappingSerializer), we chain it on top of
+    // the namingStrategy.
+    final PropertyNamingStrategyBase namingStrategy = new PropertyNamingStrategyBase() {
+      @Override
+      public String translate(String fieldName) {
+        PropertyNamingStrategyBase configuredNamingStrategy =
+                new PropertyNamingStrategyWrapper(serializerProvider.getConfig().getPropertyNamingStrategy());
+        return nameTransformer.transform(configuredNamingStrategy.translate(fieldName));
+      }
+    };
+
 
     Descriptor descriptor = message.getDescriptorForType();
     List<FieldDescriptor> fields = new ArrayList<>(descriptor.getFields());
@@ -70,13 +99,13 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
         if (!valueList.isEmpty() || writeEmptyCollections) {
           if (field.isMapField()) {
-            generator.writeFieldName(namingStrategy.translate(field.getName()));
+            generator.writeFieldName(nameTransformer.transform(namingStrategy.translate(field.getName())));
             writeMap(field, valueList, generator, serializerProvider);
           } else if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
-            generator.writeFieldName(namingStrategy.translate(field.getName()));
+            generator.writeFieldName(nameTransformer.transform(namingStrategy.translate(field.getName())));
             writeValue(field, valueList.get(0), generator, serializerProvider);
           } else {
-            generator.writeArrayFieldStart(namingStrategy.translate(field.getName()));
+            generator.writeArrayFieldStart(nameTransformer.transform(namingStrategy.translate(field.getName())));
             for (Object subValue : valueList) {
               writeValue(field, subValue, generator, serializerProvider);
             }
@@ -84,15 +113,27 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
           }
         }
       } else if (message.hasField(field) || (writeDefaultValues && !supportsFieldPresence(field) && field.getContainingOneof() == null)) {
-        generator.writeFieldName(namingStrategy.translate(field.getName()));
+        generator.writeFieldName(nameTransformer.transform(namingStrategy.translate(field.getName())));
         writeValue(field, message.getField(field), generator, serializerProvider);
       } else if (include == Include.ALWAYS && field.getContainingOneof() == null) {
-        generator.writeFieldName(namingStrategy.translate(field.getName()));
+        generator.writeFieldName(nameTransformer.transform(namingStrategy.translate(field.getName())));
         generator.writeNull();
       }
     }
 
-    generator.writeEndObject();
+    if (!isUnwrappingSerializer()) {
+      generator.writeEndObject();
+    }
+  }
+
+  @Override
+  public boolean isUnwrappingSerializer() {
+    return unwrappingSerializer;
+  }
+
+  @Override
+  public MessageSerializer unwrappingSerializer(NameTransformer nameTransformer) {
+    return new MessageSerializer(config, nameTransformer, true);
   }
 
   private static boolean supportsFieldPresence(FieldDescriptor field) {
