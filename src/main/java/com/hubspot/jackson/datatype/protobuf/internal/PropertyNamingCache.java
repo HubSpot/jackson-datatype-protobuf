@@ -64,7 +64,7 @@ public class PropertyNamingCache {
 
     Map<FieldDescriptor, String> tempMap = new HashMap<>();
     for (FieldDescriptor field : descriptor.getFields()) {
-      tempMap.put(field, namingStrategy.translate(field.getName()));
+      tempMap.put(field, getFieldName(field, namingStrategy));
     }
 
     ImmutableMap<FieldDescriptor, String> fieldLookup = ImmutableMap.copyOf(tempMap);
@@ -83,7 +83,7 @@ public class PropertyNamingCache {
 
     Map<String, FieldDescriptor> tempMap = new HashMap<>();
     for (FieldDescriptor field : descriptor.getFields()) {
-      tempMap.put(namingStrategy.translate(field.getName()), field);
+      tempMap.put(getFieldName(field, namingStrategy), field);
     }
 
     if (config.acceptLiteralFieldnames()) {
@@ -96,5 +96,12 @@ public class PropertyNamingCache {
 
     Map<String, FieldDescriptor> fieldLookup = ImmutableMap.copyOf(tempMap);
     return fieldLookup::get;
+  }
+
+  private static String getFieldName(
+      FieldDescriptor field, PropertyNamingStrategyBase namingStrategy) {
+    return field.toProto().hasJsonName()
+        ? field.getJsonName()
+        : namingStrategy.translate(field.getName());
   }
 }
