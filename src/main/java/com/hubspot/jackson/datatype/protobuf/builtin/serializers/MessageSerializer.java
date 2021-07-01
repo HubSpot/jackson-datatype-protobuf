@@ -65,18 +65,21 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     }
 
     for (FieldDescriptor field : fields) {
+      String fieldName = field.toProto().hasJsonName()
+          ? field.getJsonName()
+          : namingStrategy.translate(field.getName());
       if (field.isRepeated()) {
         List<?> valueList = (List<?>) message.getField(field);
 
         if (!valueList.isEmpty() || writeEmptyCollections) {
           if (field.isMapField()) {
-            generator.writeFieldName(namingStrategy.translate(field.getName()));
+            generator.writeFieldName(fieldName);
             writeMap(field, valueList, generator, serializerProvider);
           } else if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
-            generator.writeFieldName(namingStrategy.translate(field.getName()));
+            generator.writeFieldName(fieldName);
             writeValue(field, valueList.get(0), generator, serializerProvider);
           } else {
-            generator.writeArrayFieldStart(namingStrategy.translate(field.getName()));
+            generator.writeArrayFieldStart(fieldName);
             for (Object subValue : valueList) {
               writeValue(field, subValue, generator, serializerProvider);
             }
@@ -84,10 +87,10 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
           }
         }
       } else if (message.hasField(field) || (writeDefaultValues && !supportsFieldPresence(field) && field.getContainingOneof() == null)) {
-        generator.writeFieldName(namingStrategy.translate(field.getName()));
+        generator.writeFieldName(fieldName);
         writeValue(field, message.getField(field), generator, serializerProvider);
       } else if (include == Include.ALWAYS && field.getContainingOneof() == null) {
-        generator.writeFieldName(namingStrategy.translate(field.getName()));
+        generator.writeFieldName(fieldName);
         generator.writeNull();
       }
     }
