@@ -1,3 +1,6 @@
+## Fork
+This is a fork of the original jackson-datatype-protobuf. A [pull request](https://github.com/HubSpot/jackson-datatype-protobuf/pull/77) was never merged in, so we forked it to solve [issue 76](https://github.com/HubSpot/jackson-datatype-protobuf/issues/76).
+
 ## Overview
 
 Jackson module that adds support for serializing and deserializing Google's 
@@ -11,21 +14,11 @@ To use module on Maven-based projects, use following dependency:
 
 ```xml
 <dependency>
-  <groupId>com.hubspot.jackson</groupId>
+  <groupId>gg.pragma</groupId>
   <artifactId>jackson-datatype-protobuf</artifactId>
-  <version><!-- see table below --></version>
+  <version>0.9.13-LongsAsStrings</version>
 </dependency>
 ```
-
-### Versions
-
-Starting with version 0.9.12, only Jackson 2.9+ is supported. If you're using Jackson 2.9 or newer, you can use the latest version of this library in Maven Central ([link](https://search.maven.org/artifact/com.hubspot.jackson/jackson-datatype-protobuf)).
-
-If you're using a version of Jackson prior to 2.9, you can use the last release before support was dropped:
-
-| Jackson 2.7.x | Jackson 2.8.x |
-| ------------- | ------------- |
-| 0.9.11-jackson2.7 | 0.9.11-jackson2.8 
 
 ### Registering module
 
@@ -49,14 +42,6 @@ Protobuf 3 specifies a canonical JSON representation (available [here](https://d
   mapper.registerModule(new ProtobufModule(ProtobufJacksonConfig.builder().serializeLongsAsStrings(true).build()));
   ```
 - `Any` objects don't have any special handling, so the value will be a base64 string, and the type URL field name is `typeUrl` instead of `@type`
-
-### Protobuf 2 Support
-
-Support has been dropped for `com.google.protobuf:protobuf-java:2.x`, but you can use an older release if necessary:
-- 0.9.10-jackson2.9-proto2
-- 0.9.10-jackson2.8-proto2
-- 0.9.10-jackson2.7-proto2
-- 0.9.10-preJackson2.7-proto2
 
 ### Gotchas
 
