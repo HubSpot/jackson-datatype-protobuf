@@ -4,6 +4,7 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.came
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -355,6 +356,17 @@ public class OneofTest {
         break;
       default:
         fail("Unexpected oneof set: " + message.getOneofCase());
+    }
+  }
+
+  @Test(expected = MismatchedInputException.class)
+  public void itThrowsExceptionWhenMultipleOneOfsSet() throws IOException {
+    String json = "{\"enum\":\"DEFAULT\", \"string\":\"test\"}";
+    try {
+      camelCase().readValue(json, HasOneof.class);
+    } catch (MismatchedInputException e){
+      assertThat(e.getMessage()).contains("Multiple values provided for oneOf field: com.hubspot.jackson.datatype.protobuf.util.HasOneof.oneof");
+      throw e;
     }
   }
 
