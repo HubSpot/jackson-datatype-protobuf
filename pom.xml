@@ -10,7 +10,7 @@
 
   <groupId>gg.pragma</groupId>
   <artifactId>jackson-datatype-protobuf</artifactId>
-  <version>0.9.13-LongsAsStrings</version>
+  <version>0.9.14</version>
   <description>Jackson Module that adds support for reading/writing protobufs</description>
 
   <properties>
