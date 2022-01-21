@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -21,12 +22,14 @@ import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
 import com.hubspot.jackson.datatype.protobuf.PropertyNamingStrategyWrapper;
 import com.hubspot.jackson.datatype.protobuf.ProtobufDeserializer;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
+import com.hubspot.jackson.datatype.protobuf.internal.PropertyNamingCache;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class MessageDeserializer<T extends Message, V extends Builder> extends ProtobufDeserializer<T, V> {
   @SuppressFBWarnings(value="SE_BAD_FIELD")
   private final ProtobufJacksonConfig config;
+  private final PropertyNamingCache propertyNamingCache;
 
   /**
    * @deprecated use {@link #MessageDeserializer(Class, ProtobufJacksonConfig)} instead
@@ -40,6 +43,7 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
     super(messageType);
 
     this.config = config;
+    this.propertyNamingCache = PropertyNamingCache.forDescriptor(getDescriptor(), config);
   }
 
   @Override
@@ -67,7 +71,8 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
     }
 
     final Descriptor descriptor = builder.getDescriptorForType();
-    final Map<String, FieldDescriptor> fieldLookup = buildFieldLookup(descriptor, context);
+    final Function<String, FieldDescriptor> fieldLookup =
+        propertyNamingCache.forDeserialization(context.getConfig().getPropertyNamingStrategy());
     final Map<String, ExtensionInfo> extensionLookup;
     if (builder instanceof ExtendableMessageOrBuilder<?>) {
       extensionLookup = buildExtensionLookup(descriptor, context);
@@ -81,7 +86,7 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
       }
 
       String name = parser.getCurrentName();
-      FieldDescriptor field = fieldLookup.get(name);
+      FieldDescriptor field = fieldLookup.apply(name);
       Message defaultInstance = null;
       if (field == null) {
         ExtensionInfo extensionInfo = extensionLookup.get(name);
@@ -101,26 +106,6 @@ public class MessageDeserializer<T extends Message, V extends Builder> extends P
       parser.nextToken();
       setField(builder, field, defaultInstance, parser, context);
     } while ((token = parser.nextToken()) != JsonToken.END_OBJECT);
-  }
-
-  private Map<String, FieldDescriptor> buildFieldLookup(Descriptor descriptor, DeserializationContext context) {
-    PropertyNamingStrategyBase namingStrategy =
-            new PropertyNamingStrategyWrapper(context.getConfig().getPropertyNamingStrategy());
-
-    Map<String, FieldDescriptor> fieldLookup = new HashMap<>();
-    for (FieldDescriptor field : descriptor.getFields()) {
-      fieldLookup.put(namingStrategy.translate(field.getName()), field);
-    }
-
-    if (config.acceptLiteralFieldnames()) {
-      for (FieldDescriptor field : descriptor.getFields()) {
-        if (!fieldLookup.containsKey(field.getName())) {
-          fieldLookup.put(field.getName(), field);
-        }
-      }
-    }
-
-    return fieldLookup;
   }
 
   private Map<String, ExtensionInfo> buildExtensionLookup(Descriptor descriptor, DeserializationContext context) {
