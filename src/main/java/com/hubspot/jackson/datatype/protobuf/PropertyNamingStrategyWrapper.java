@@ -1,5 +1,6 @@
 package com.hubspot.jackson.datatype.protobuf;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies.NamingBase;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.google.common.base.CaseFormat;
@@ -14,6 +15,8 @@ public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
   public PropertyNamingStrategyWrapper(PropertyNamingStrategy delegate) {
     if (delegate instanceof PropertyNamingStrategyBase) {
       this.delegate = (PropertyNamingStrategyBase) delegate;
+    } else if (NamingBaseAdapter.extendsNamingBase(delegate)) {
+      this.delegate = new NamingBaseAdapter((NamingBase) delegate);
     } else if (delegate == PropertyNamingStrategy.LOWER_CAMEL_CASE) {
       this.delegate = NO_OP;
     } else {
@@ -40,6 +43,32 @@ public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
     @Override
     public String translate(String fieldName) {
       return fieldName;
+    }
+  }
+
+  private static class NamingBaseAdapter extends PropertyNamingStrategyBase {
+    private static final Class<?> NAMING_BASE = tryToLoadNamingBase();
+    private final NamingBase delegate;
+
+    private NamingBaseAdapter(NamingBase delegate) {
+      this.delegate = delegate;
+    }
+
+    public static boolean extendsNamingBase(PropertyNamingStrategy namingStrategy) {
+      return NAMING_BASE != null && NAMING_BASE.isInstance(namingStrategy);
+    }
+
+    @Override
+    public String translate(String fieldName) {
+      return delegate.translate(fieldName);
+    }
+
+    private static Class<?> tryToLoadNamingBase() {
+      try {
+        return Class.forName("com.fasterxml.jackson.databind.PropertyNamingStrategies$NamingBase");
+      } catch (ClassNotFoundException e) {
+        return null;
+      }
     }
   }
 }
