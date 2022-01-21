@@ -15,4 +15,4 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn -B package -Ddep.jackson.version=2.10.5 -Ddep.jackson-databind.version=2.10.5.1
+        run: mvn -B package -Ddep.jackson.version=2.10.5 -Ddep.jackson-databind.version=2.10.5.1 -Dbasepom.git-id.skip
