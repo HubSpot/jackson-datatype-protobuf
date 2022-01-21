@@ -154,11 +154,7 @@ public class RepeatedFieldsTest {
   }
 
   private static <T> List<T> parseList(ObjectMapper mapper, Class<T> type, JsonNode json) {
-    try {
-      return mapper.treeToValue(json, mapper.getTypeFactory().constructCollectionType(List.class, type));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    return mapper.convertValue(json, mapper.getTypeFactory().constructCollectionType(List.class, type));
   }
 
   private static List<RepeatedFields> build(List<RepeatedFields.Builder> builders) {
