@@ -39,7 +39,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   }
 
   public MessageSerializer(ProtobufJacksonConfig config) {
-    super(MessageOrBuilder.class);
+    super(MessageOrBuilder.class, config);
 
     this.config = config;
     this.propertyNamingCache = new ConcurrentHashMap<>();

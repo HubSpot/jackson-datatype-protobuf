@@ -1,5 +1,6 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -12,8 +13,8 @@ import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 public class ListValueSerializer extends ProtobufSerializer<ListValue> {
   private static final FieldDescriptor VALUES_FIELD = ListValue.getDescriptor().findFieldByName("values");
 
-  public ListValueSerializer() {
-    super(ListValue.class);
+  public ListValueSerializer(ProtobufJacksonConfig config) {
+    super(ListValue.class, config);
   }
 
   @Override

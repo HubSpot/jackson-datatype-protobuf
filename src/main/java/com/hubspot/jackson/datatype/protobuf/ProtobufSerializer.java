@@ -25,9 +25,11 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
   private static final String NULL_VALUE_FULL_NAME = NullValue.getDescriptor().getFullName();
 
   private final Map<Class<?>, JsonSerializer<Object>> serializerCache;
+  private final ProtobufJacksonConfig config;
 
-  public ProtobufSerializer(Class<T> protobufType) {
+  public ProtobufSerializer(Class<T> protobufType, ProtobufJacksonConfig config) {
     super(protobufType);
+    this.config = config;
 
     this.serializerCache = new ConcurrentHashMap<>();
   }
@@ -84,10 +86,16 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
         // special-case NullValue
         if (NULL_VALUE_FULL_NAME.equals(enumDescriptor.getType().getFullName())) {
           generator.writeNull();
-        } else if (writeEnumsUsingIndex(serializerProvider)) {
-          generator.writeNumber(enumDescriptor.getNumber());
         } else {
-          generator.writeString(enumDescriptor.getName());
+          if (isUnknownEnumValue(enumDescriptor)) {
+            enumDescriptor = config.unknownEnumSerializationStrategy().handleUnknownEnumValue(enumDescriptor);
+          }
+
+          if (writeEnumsUsingIndex(serializerProvider)) {
+            generator.writeNumber(enumDescriptor.getNumber());
+          } else {
+            generator.writeString(enumDescriptor.getName());
+          }
         }
         break;
       case BYTE_STRING:
@@ -111,6 +119,10 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
 
   private static boolean writeEnumsUsingIndex(SerializerProvider config) {
     return config.isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX);
+  }
+
+  private static boolean isUnknownEnumValue(EnumValueDescriptor descriptor) {
+    return descriptor.getType().findValueByNumber(descriptor.getNumber()) == null;
   }
 
   private static IOException unrecognizedType(FieldDescriptor field, JsonGenerator generator) throws IOException {
