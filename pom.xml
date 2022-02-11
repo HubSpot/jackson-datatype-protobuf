@@ -35,6 +35,7 @@
         <dep.protobuf-java.version>3.3.0</dep.protobuf-java.version>
         <dep.scala.version>2.12.4</dep.scala.version>
         <dep.javax-validation.version>2.0.1.Final</dep.javax-validation.version>
+        <dep.plugin.findbugs.version>3.0.4</dep.plugin.findbugs.version>
     </properties>
 
     <dependencyManagement>
