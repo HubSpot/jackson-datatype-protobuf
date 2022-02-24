@@ -66,7 +66,7 @@ public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
     @Override
     public String translate(String fieldName) {
       try {
-        return (String) TRANSLATE_METHOD.invokeExact(delegate, fieldName);
+        return (String) TRANSLATE_METHOD.invoke(delegate, fieldName);
       } catch (Throwable e) {
         throw new RuntimeException("Unable to invoke translate method", e);
       }
