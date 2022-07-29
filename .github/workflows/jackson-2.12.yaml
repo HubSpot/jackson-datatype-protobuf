@@ -1,0 +1,18 @@
+name: Jackson-2.12
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B verify -Ddep.jackson.version=2.12.6 -Ddep.jackson-databind.version=2.12.6 -Dbasepom.git-id.skip

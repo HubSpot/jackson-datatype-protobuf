@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ExtensionRegistry;
@@ -18,14 +19,19 @@ import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 
 public class ObjectMapperHelper {
   private static final ObjectMapper DEFAULT = create();
-  private static final ObjectMapper UNDERSCORE = create(PropertyNamingStrategy.SNAKE_CASE);
+  private static final ObjectMapper OLD_UNDERSCORE = create(PropertyNamingStrategy.SNAKE_CASE);
+  private static final ObjectMapper NEW_UNDERSCORE = create(newUnderscoreStrategy());
 
   public static ObjectMapper camelCase() {
     return DEFAULT;
   }
 
-  public static ObjectMapper underscore() {
-    return UNDERSCORE;
+  public static ObjectMapper oldUnderscore() {
+    return OLD_UNDERSCORE;
+  }
+
+  public static ObjectMapper newUnderscore() {
+    return NEW_UNDERSCORE;
   }
 
   public static ObjectMapper camelCase(Include inclusion) {
@@ -36,8 +42,12 @@ public class ObjectMapperHelper {
     return create(extensionRegistry);
   }
 
-  public static ObjectMapper underscore(ExtensionRegistry extensionRegistry) {
+  public static ObjectMapper oldUnderscore(ExtensionRegistry extensionRegistry) {
     return create(PropertyNamingStrategy.SNAKE_CASE, extensionRegistry);
+  }
+
+  public static ObjectMapper newUnderscore(ExtensionRegistry extensionRegistry) {
+    return create(newUnderscoreStrategy(), extensionRegistry);
   }
 
   public static JsonNode toTree(ObjectMapper mapper, Object value) {
@@ -85,5 +95,13 @@ public class ObjectMapperHelper {
 
   private static ObjectMapper create() {
     return new ObjectMapper().registerModule(new ProtobufModule());
+  }
+
+  private static PropertyNamingStrategy newUnderscoreStrategy() {
+    try {
+      return PropertyNamingStrategies.SNAKE_CASE;
+    } catch (Throwable t) {
+      return PropertyNamingStrategy.SNAKE_CASE;
+    }
   }
 }

@@ -54,6 +54,10 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
     this.deserializerCache = new ConcurrentHashMap<>();
   }
 
+  protected Descriptor getDescriptor() {
+    return defaultInstance.getDescriptorForType();
+  }
+
   protected abstract void populate(
           V builder,
           JsonParser parser,
