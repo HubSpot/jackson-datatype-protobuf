@@ -1,0 +1,4 @@
+enabled: true
+
+env:
+  MAVEN_TEST_HEAP: 1536m

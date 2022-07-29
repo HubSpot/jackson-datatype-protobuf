@@ -46,9 +46,11 @@ public class MessageDeserializerFactory extends Deserializers.Base {
   private <T extends Message> ProtobufDeserializer<T, ?> getDeserializer(Class<T> messageType) {
     ProtobufDeserializer<?, ?> deserializer = deserializerCache.get(messageType);
     if (deserializer == null) {
-      ProtobufDeserializer<T, ?> newDeserializer = new MessageDeserializer<>(messageType, config);
-      ProtobufDeserializer<?, ?> previousDeserializer = deserializerCache.putIfAbsent(messageType, newDeserializer);
-      deserializer = previousDeserializer == null ? newDeserializer : previousDeserializer;
+      // use computeIfAbsent as a fallback because it allocates
+      deserializer = deserializerCache.computeIfAbsent(
+          messageType,
+          ignored -> new MessageDeserializer<>(messageType, config)
+      );
     }
 
     return (ProtobufDeserializer<T, ?>) deserializer;
