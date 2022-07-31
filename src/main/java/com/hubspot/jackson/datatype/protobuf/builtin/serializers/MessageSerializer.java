@@ -44,11 +44,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     this(config, false);
   }
 
-  public MessageSerializer(ProtobufJacksonConfig config, boolean unwrappingSerializer) {
-    this(config, null, unwrappingSerializer);
-  }
-
-  public MessageSerializer(ProtobufJacksonConfig config, NameTransformer nameTransformer, boolean unwrappingSerializer) {
+  private MessageSerializer(ProtobufJacksonConfig config, boolean unwrappingSerializer) {
     super(MessageOrBuilder.class);
     this.config = config;
     this.unwrappingSerializer = unwrappingSerializer;
@@ -123,7 +119,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
   @Override
   public MessageSerializer unwrappingSerializer(NameTransformer nameTransformer) {
-    return new MessageSerializer(config, nameTransformer, true);
+    return new MessageSerializer(config, true);
   }
 
   private Function<FieldDescriptor, String> getPropertyNaming(Descriptor descriptor, SerializerProvider serializerProvider) {
