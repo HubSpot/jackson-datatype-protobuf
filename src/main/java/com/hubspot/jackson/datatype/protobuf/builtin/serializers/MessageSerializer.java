@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.util.NameTransformer;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
@@ -28,6 +29,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   @SuppressFBWarnings(value="SE_BAD_FIELD")
   private final ProtobufJacksonConfig config;
+  private final boolean unwrappingSerializer;
   private final Map<Descriptor, PropertyNamingCache> propertyNamingCache;
 
   /**
@@ -39,9 +41,13 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   }
 
   public MessageSerializer(ProtobufJacksonConfig config) {
-    super(MessageOrBuilder.class);
+    this(config, false);
+  }
 
+  private MessageSerializer(ProtobufJacksonConfig config, boolean unwrappingSerializer) {
+    super(MessageOrBuilder.class);
     this.config = config;
+    this.unwrappingSerializer = unwrappingSerializer;
     this.propertyNamingCache = new ConcurrentHashMap<>();
   }
 
@@ -51,7 +57,9 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
           JsonGenerator generator,
           SerializerProvider serializerProvider
   ) throws IOException {
-    generator.writeStartObject();
+    if (!isUnwrappingSerializer()) {
+      generator.writeStartObject();
+    }
 
     boolean proto3 = message.getDescriptorForType().getFile().getSyntax() == Syntax.PROTO3;
     Include include = serializerProvider.getConfig().getDefaultPropertyInclusion().getValueInclusion();
@@ -99,7 +107,19 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
       }
     }
 
-    generator.writeEndObject();
+    if (!isUnwrappingSerializer()) {
+      generator.writeEndObject();
+    }
+  }
+
+  @Override
+  public boolean isUnwrappingSerializer() {
+    return unwrappingSerializer;
+  }
+
+  @Override
+  public MessageSerializer unwrappingSerializer(NameTransformer nameTransformer) {
+    return new MessageSerializer(config, true);
   }
 
   private Function<FieldDescriptor, String> getPropertyNaming(Descriptor descriptor, SerializerProvider serializerProvider) {
