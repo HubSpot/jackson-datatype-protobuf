@@ -1,27 +1,23 @@
 package com.hubspot.jackson.datatype.protobuf;
 
+import com.google.protobuf.Descriptors.Descriptor;
+import com.google.protobuf.ExtensionRegistry;
+import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.google.protobuf.Descriptors.Descriptor;
-import com.google.protobuf.ExtensionRegistry;
-import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
+import java.util.function.Function;
 
 public class ExtensionRegistryWrapper {
   private final Function<Descriptor, Set<ExtensionInfo>> extensionFunction;
 
   private ExtensionRegistryWrapper() {
-    this.extensionFunction = new Function<Descriptor, Set<ExtensionInfo>>() {
-
-      @Override
-      public Set<ExtensionInfo> apply(Descriptor descriptor) {
-        return Collections.emptySet();
-      }
-    };
+    this.extensionFunction = descriptor -> Collections.emptySet();
   }
 
   private ExtensionRegistryWrapper(final ExtensionRegistry extensionRegistry) {
@@ -30,20 +26,13 @@ public class ExtensionRegistryWrapper {
 
       @Override
       public Set<ExtensionInfo> apply(Descriptor descriptor) {
-        Set<ExtensionInfo> cached = extensionCache.get(descriptor);
-        if (cached != null) {
-          return cached;
-        }
-
-        Set<ExtensionInfo> extensions =
-                extensionRegistry.getAllImmutableExtensionsByExtendedType(descriptor.getFullName());
-        extensionCache.put(descriptor, extensions);
-        return extensions;
+        return extensionCache.computeIfAbsent(descriptor, key -> extensionRegistry.getAllImmutableExtensionsByExtendedType(descriptor.getFullName()));
       }
     };
   }
 
   public static ExtensionRegistryWrapper wrap(ExtensionRegistry extensionRegistry) {
+    Objects.requireNonNull(extensionRegistry, "extensionRegistry should not be null!");
     return new ExtensionRegistryWrapper(extensionRegistry);
   }
 
@@ -61,9 +50,5 @@ public class ExtensionRegistryWrapper {
 
   public Set<ExtensionInfo> getExtensionsByDescriptor(Descriptor descriptor) {
     return extensionFunction.apply(descriptor);
-  }
-
-  private interface Function<T, V> {
-    V apply(T t);
   }
 }

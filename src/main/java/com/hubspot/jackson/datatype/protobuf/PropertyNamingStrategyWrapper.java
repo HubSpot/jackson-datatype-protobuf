@@ -1,12 +1,14 @@
 package com.hubspot.jackson.datatype.protobuf;
 
-import java.lang.reflect.Method;
-
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.google.common.base.CaseFormat;
 
-@SuppressWarnings("serial")
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+
+@SuppressWarnings("deprecation")
 public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
   private static final PropertyNamingStrategyBase SNAKE_TO_CAMEL = new SnakeToCamelNamingStrategy();
   private static final PropertyNamingStrategyBase NO_OP = new NoOpNamingStrategy();
@@ -49,7 +51,7 @@ public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
 
   private static class NamingBaseAdapter extends PropertyNamingStrategyBase {
     private static final Class<?> NAMING_BASE = tryToLoadNamingBase();
-    private static final Method TRANSLATE_METHOD = tryToLoadTranslateMethod(NAMING_BASE);
+    private static final MethodHandle TRANSLATE_METHOD = tryToLoadTranslateMethod(NAMING_BASE);
 
     private final PropertyNamingStrategy delegate;
 
@@ -65,7 +67,7 @@ public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
     public String translate(String fieldName) {
       try {
         return (String) TRANSLATE_METHOD.invoke(delegate, fieldName);
-      } catch (ReflectiveOperationException e) {
+      } catch (Throwable e) {
         throw new RuntimeException("Unable to invoke translate method", e);
       }
     }
@@ -78,13 +80,13 @@ public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
       }
     }
 
-    private static Method tryToLoadTranslateMethod(Class<?> namingBase) {
+    private static MethodHandle tryToLoadTranslateMethod(Class<?> namingBase) {
       if (namingBase == null) {
         return null;
       } else {
         try {
-          return namingBase.getMethod("translate", String.class);
-        } catch (NoSuchMethodException e) {
+          return MethodHandles.publicLookup().findVirtual(namingBase, "translate", MethodType.methodType(String.class, String.class));
+        } catch (NoSuchMethodException | IllegalAccessException e) {
           throw new RuntimeException("Unable to find translate method on class: " + namingBase);
         }
       }

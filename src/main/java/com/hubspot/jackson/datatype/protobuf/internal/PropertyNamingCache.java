@@ -1,30 +1,38 @@
 package com.hubspot.jackson.datatype.protobuf.internal;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.WeakHashMap;
-import java.util.function.Function;
-
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.MapMaker;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.hubspot.jackson.datatype.protobuf.PropertyNamingStrategyWrapper;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.function.Function;
+
 public class PropertyNamingCache {
+
+  private static final int DEFAULT_CONCURRENCY_LEVEL = Math.min(Runtime.getRuntime().availableProcessors(), 16);
   private final Descriptor descriptor;
   private final ProtobufJacksonConfig config;
   private final Map<PropertyNamingStrategy, Function<FieldDescriptor, String>> serializationCache;
   private final Map<PropertyNamingStrategy, Function<String, FieldDescriptor>> deserializationCache;
 
+  private static <K, V> ConcurrentMap<K, V> buildWeakMap() {
+    return new MapMaker().concurrencyLevel(DEFAULT_CONCURRENCY_LEVEL).weakKeys().makeMap();
+  }
+
   private PropertyNamingCache(Descriptor descriptor, ProtobufJacksonConfig config) {
     this.descriptor = descriptor;
     this.config = config;
-    this.serializationCache = Collections.synchronizedMap(new WeakHashMap<>());
-    this.deserializationCache = Collections.synchronizedMap(new WeakHashMap<>());
+    this.serializationCache = buildWeakMap();
+    this.deserializationCache = buildWeakMap();
   }
 
   public static PropertyNamingCache forDescriptor(Descriptor descriptor, ProtobufJacksonConfig config) {
@@ -32,31 +40,14 @@ public class PropertyNamingCache {
   }
 
   public Function<FieldDescriptor, String> forSerialization(PropertyNamingStrategy propertyNamingStrategy) {
-    Function<FieldDescriptor, String> cached = serializationCache.get(propertyNamingStrategy);
-    if (cached != null) {
-      return cached;
-    } else {
-      Function<FieldDescriptor, String> function = buildSerializationFunction(descriptor, propertyNamingStrategy);
-      serializationCache.put(propertyNamingStrategy, function);
-
-      return function;
-    }
+    return serializationCache.computeIfAbsent(propertyNamingStrategy, this::buildSerializationFunction);
   }
 
   public Function<String, FieldDescriptor> forDeserialization(PropertyNamingStrategy propertyNamingStrategy) {
-    Function<String, FieldDescriptor> cached = deserializationCache.get(propertyNamingStrategy);
-    if (cached != null) {
-      return cached;
-    } else {
-      Function<String, FieldDescriptor> function = buildDeserializationFunction(descriptor, propertyNamingStrategy);
-      deserializationCache.put(propertyNamingStrategy, function);
-
-      return function;
-    }
+    return deserializationCache.computeIfAbsent(propertyNamingStrategy,this::buildDeserializationFunction);
   }
 
   private Function<FieldDescriptor, String> buildSerializationFunction(
-      Descriptor descriptor,
       PropertyNamingStrategy originalNamingStrategy
   ) {
     PropertyNamingStrategyBase namingStrategy =
@@ -75,7 +66,6 @@ public class PropertyNamingCache {
   }
 
   private Function<String, FieldDescriptor> buildDeserializationFunction(
-      Descriptor descriptor,
       PropertyNamingStrategy originalNamingStrategy
   ) {
     PropertyNamingStrategyBase namingStrategy =
