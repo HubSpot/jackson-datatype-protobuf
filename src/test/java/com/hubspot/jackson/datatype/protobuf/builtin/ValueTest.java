@@ -2,8 +2,8 @@ package com.hubspot.jackson.datatype.protobuf.builtin;
 
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.Assertions.entry;
-import static org.assertj.core.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.Map;
@@ -11,11 +11,13 @@ import java.util.Map.Entry;
 
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.protobuf.ListValue;
 import com.google.protobuf.NullValue;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
+import com.google.protobuf.Value.KindCase;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasValue;
 
 public class ValueTest {
@@ -148,13 +150,8 @@ public class ValueTest {
     assertThat(valueWrapper.hasValue()).isTrue();
 
     Value value = valueWrapper.getValue();
-    switch (value.getKindCase()) {
-      case NULL_VALUE:
-        assertThat(value.getNullValue()).isEqualTo(NullValue.NULL_VALUE);
-        break;
-      default:
-        fail("Unexpected value kind: " + value.getKindCase());
-    }
+    assertThat(value.getKindCase()).isEqualTo(KindCase.NULL_VALUE);
+    assertThat(value.getNullValue()).isEqualTo(NullValue.NULL_VALUE);
   }
 
   @Test
@@ -164,13 +161,8 @@ public class ValueTest {
     assertThat(valueWrapper.hasValue()).isTrue();
 
     Value value = valueWrapper.getValue();
-    switch (value.getKindCase()) {
-      case NUMBER_VALUE:
-        assertThat(value.getNumberValue()).isEqualTo(1.0d);
-        break;
-      default:
-        fail("Unexpected value kind: " + value.getKindCase());
-    }
+    assertThat(value.getKindCase()).isEqualTo(KindCase.NUMBER_VALUE);
+    assertThat(value.getNumberValue()).isEqualTo(1.0d);
   }
 
   @Test
@@ -180,13 +172,20 @@ public class ValueTest {
     assertThat(valueWrapper.hasValue()).isTrue();
 
     Value value = valueWrapper.getValue();
-    switch (value.getKindCase()) {
-      case NUMBER_VALUE:
-        assertThat(value.getNumberValue()).isEqualTo(1.5d);
-        break;
-      default:
-        fail("Unexpected value kind: " + value.getKindCase());
-    }
+    assertThat(value.getKindCase()).isEqualTo(KindCase.NUMBER_VALUE);
+    assertThat(value.getNumberValue()).isEqualTo(1.5d);
+  }
+
+  @Test
+  public void itThrowsOnOutOfBounds() {
+    // this number can't be represented exactly by a Java double
+    String json = "{\"value\":-8747832031878802303}";
+
+    Throwable t = catchThrowable(() -> camelCase().readValue(json, HasValue.class));
+
+    assertThat(t)
+        .isInstanceOf(JsonParseException.class)
+        .hasMessageContaining("-8747832031878802303");
   }
 
   @Test
@@ -196,13 +195,8 @@ public class ValueTest {
     assertThat(valueWrapper.hasValue()).isTrue();
 
     Value value = valueWrapper.getValue();
-    switch (value.getKindCase()) {
-      case STRING_VALUE:
-        assertThat(value.getStringValue()).isEqualTo("test");
-        break;
-      default:
-        fail("Unexpected value kind: " + value.getKindCase());
-    }
+    assertThat(value.getKindCase()).isEqualTo(KindCase.STRING_VALUE);
+    assertThat(value.getStringValue()).isEqualTo("test");
   }
 
   @Test
@@ -212,13 +206,8 @@ public class ValueTest {
     assertThat(valueWrapper.hasValue()).isTrue();
 
     Value value = valueWrapper.getValue();
-    switch (value.getKindCase()) {
-      case BOOL_VALUE:
-        assertThat(value.getBoolValue()).isTrue();
-        break;
-      default:
-        fail("Unexpected value kind: " + value.getKindCase());
-    }
+    assertThat(value.getKindCase()).isEqualTo(KindCase.BOOL_VALUE);
+    assertThat(value.getBoolValue()).isTrue();
   }
 
   @Test
@@ -228,14 +217,10 @@ public class ValueTest {
     assertThat(valueWrapper.hasValue()).isTrue();
 
     Value value = valueWrapper.getValue();
-    switch (value.getKindCase()) {
-      case STRUCT_VALUE:
-        Entry<String, Value> entry = entry("key", Value.newBuilder().setStringValue("value").build());
-        assertThat(value.getStructValue().getFieldsMap()).containsExactly(entry);
-        break;
-      default:
-        fail("Unexpected value kind: " + value.getKindCase());
-    }
+    assertThat(value.getKindCase()).isEqualTo(KindCase.STRUCT_VALUE);
+
+    Entry<String, Value> entry = entry("key", Value.newBuilder().setStringValue("value").build());
+    assertThat(value.getStructValue().getFieldsMap()).containsExactly(entry);
   }
 
   @Test
@@ -245,14 +230,10 @@ public class ValueTest {
     assertThat(valueWrapper.hasValue()).isTrue();
 
     Value value = valueWrapper.getValue();
+    assertThat(value.getKindCase()).isEqualTo(KindCase.LIST_VALUE);
+
     ListValue list = ListValue.newBuilder().addValues(Value.newBuilder().setStringValue("test").build()).build();
-    switch (value.getKindCase()) {
-      case LIST_VALUE:
-        assertThat(value.getListValue()).isEqualTo(list);
-        break;
-      default:
-        fail("Unexpected value kind: " + value.getKindCase());
-    }
+    assertThat(value.getListValue()).isEqualTo(list);
   }
 
   @Test
@@ -261,23 +242,19 @@ public class ValueTest {
     HasValue message = camelCase().readValue(json, HasValue.class);
     assertThat(message.hasValue()).isTrue();
     Value value = message.getValue();
-    switch (value.getKindCase()) {
-      case STRUCT_VALUE:
-        Map<String, Value> map = value.getStructValue().getFieldsMap();
-        Value nested = Value.newBuilder().setStringValue("nested").build();
-        Struct nestedStruct = Struct.newBuilder().putFields("key", nested).build();
-        ListValue list = ListValue.newBuilder().addValues(nested).build();
-        assertThat(map.size()).isEqualTo(6);
-        assertThat(map.get("null")).isEqualTo(Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build());
-        assertThat(map.get("number")).isEqualTo(Value.newBuilder().setNumberValue(1.5).build());
-        assertThat(map.get("string")).isEqualTo(Value.newBuilder().setStringValue("test").build());
-        assertThat(map.get("boolean")).isEqualTo(Value.newBuilder().setBoolValue(true).build());
-        assertThat(map.get("struct")).isEqualTo(Value.newBuilder().setStructValue(nestedStruct).build());
-        assertThat(map.get("list")).isEqualTo(Value.newBuilder().setListValue(list).build());
-        break;
-      default:
-        fail("Unexpected value kind: " + value.getKindCase());
-    }
+    assertThat(value.getKindCase()).isEqualTo(KindCase.STRUCT_VALUE);
+
+    Map<String, Value> map = value.getStructValue().getFieldsMap();
+    Value nested = Value.newBuilder().setStringValue("nested").build();
+    Struct nestedStruct = Struct.newBuilder().putFields("key", nested).build();
+    ListValue list = ListValue.newBuilder().addValues(nested).build();
+    assertThat(map.size()).isEqualTo(6);
+    assertThat(map.get("null")).isEqualTo(Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build());
+    assertThat(map.get("number")).isEqualTo(Value.newBuilder().setNumberValue(1.5).build());
+    assertThat(map.get("string")).isEqualTo(Value.newBuilder().setStringValue("test").build());
+    assertThat(map.get("boolean")).isEqualTo(Value.newBuilder().setBoolValue(true).build());
+    assertThat(map.get("struct")).isEqualTo(Value.newBuilder().setStructValue(nestedStruct).build());
+    assertThat(map.get("list")).isEqualTo(Value.newBuilder().setListValue(list).build());
   }
 
   @Test
@@ -286,22 +263,18 @@ public class ValueTest {
     HasValue message = camelCase().readValue(json, HasValue.class);
     assertThat(message.hasValue()).isTrue();
     Value value = message.getValue();
-    switch (value.getKindCase()) {
-      case LIST_VALUE:
-        ListValue list = value.getListValue();
-        Value nested = Value.newBuilder().setStringValue("nested").build();
-        Struct struct = Struct.newBuilder().putFields("key", nested).build();
-        ListValue nestedList = ListValue.newBuilder().addValues(nested).build();
-        assertThat(list.getValuesCount()).isEqualTo(6);
-        assertThat(list.getValues(0)).isEqualTo(Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build());
-        assertThat(list.getValues(1)).isEqualTo(Value.newBuilder().setNumberValue(1.5).build());
-        assertThat(list.getValues(2)).isEqualTo(Value.newBuilder().setStringValue("test").build());
-        assertThat(list.getValues(3)).isEqualTo(Value.newBuilder().setBoolValue(true).build());
-        assertThat(list.getValues(4)).isEqualTo(Value.newBuilder().setStructValue(struct).build());
-        assertThat(list.getValues(5)).isEqualTo(Value.newBuilder().setListValue(nestedList).build());
-        break;
-      default:
-        fail("Unexpected value kind: " + value.getKindCase());
-    }
+    assertThat(value.getKindCase()).isEqualTo(KindCase.LIST_VALUE);
+
+    ListValue list = value.getListValue();
+    Value nested = Value.newBuilder().setStringValue("nested").build();
+    Struct struct = Struct.newBuilder().putFields("key", nested).build();
+    ListValue nestedList = ListValue.newBuilder().addValues(nested).build();
+    assertThat(list.getValuesCount()).isEqualTo(6);
+    assertThat(list.getValues(0)).isEqualTo(Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build());
+    assertThat(list.getValues(1)).isEqualTo(Value.newBuilder().setNumberValue(1.5).build());
+    assertThat(list.getValues(2)).isEqualTo(Value.newBuilder().setStringValue("test").build());
+    assertThat(list.getValues(3)).isEqualTo(Value.newBuilder().setBoolValue(true).build());
+    assertThat(list.getValues(4)).isEqualTo(Value.newBuilder().setStructValue(struct).build());
+    assertThat(list.getValues(5)).isEqualTo(Value.newBuilder().setListValue(nestedList).build());
   }
 }

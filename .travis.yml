@@ -6,7 +6,7 @@ jdk:
 
 sudo: false
 
-script: mvn -B -q verify
+script: mvn -B -q verify $JACKSON_VERSIONS
 
 env:
   - # use Jackson versions from POM
