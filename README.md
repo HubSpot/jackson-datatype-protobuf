@@ -1,6 +1,9 @@
 ## UPDATE
 We are in the process of decommissioning this repository. We are moving this code into pragma-engine/platform (see https://github.com/pragmaplatform/pragma-engine/tree/updatePom2023) and will no longer be publishing this artifact to nexus. Once this process is complete, any further changes to this library should be made in pragma-engine/platform/jackson-datatype-protobuf.
 
+### History of Publishing to Maven Central
+https://docs.google.com/document/d/1PhF2tb51l3j-VqnRcLkpmLXPkIHH0jPA6qMe8nSCTVw/edit
+
 ## Fork
 This is a fork of the original jackson-datatype-protobuf. A [pull request](https://github.com/HubSpot/jackson-datatype-protobuf/pull/77) was never merged in, so we forked it to solve [issue 76](https://github.com/HubSpot/jackson-datatype-protobuf/issues/76).
 
