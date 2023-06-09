@@ -20,15 +20,18 @@ import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.NullValue;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends StdSerializer<T> {
   private static final String NULL_VALUE_FULL_NAME = NullValue.getDescriptor().getFullName();
 
+  @SuppressFBWarnings(value="SE_BAD_FIELD")
+  protected final ProtobufJacksonConfig config;
   private final Map<Class<?>, JsonSerializer<Object>> serializerCache;
 
-  public ProtobufSerializer(Class<T> protobufType) {
+  public ProtobufSerializer(Class<T> protobufType, ProtobufJacksonConfig config) {
     super(protobufType);
-
+    this.config = config;
     this.serializerCache = new ConcurrentHashMap<>();
   }
 
@@ -64,7 +67,7 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
         generator.writeNumber((Integer) value);
         break;
       case LONG:
-        generator.writeNumber((Long) value);
+        config.longWriter().write(generator, (Long) value);
         break;
       case FLOAT:
         generator.writeNumber((Float) value);

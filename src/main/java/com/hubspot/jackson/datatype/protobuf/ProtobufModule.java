@@ -82,22 +82,22 @@ public class ProtobufModule extends Module {
   public void setupModule(SetupContext context) {
     SimpleSerializers serializers = new SimpleSerializers();
     serializers.addSerializer(new MessageSerializer(config));
-    serializers.addSerializer(new DurationSerializer());
-    serializers.addSerializer(new FieldMaskSerializer());
-    serializers.addSerializer(new ListValueSerializer());
+    serializers.addSerializer(new DurationSerializer(config));
+    serializers.addSerializer(new FieldMaskSerializer(config));
+    serializers.addSerializer(new ListValueSerializer(config));
     serializers.addSerializer(new NullValueSerializer());
-    serializers.addSerializer(new StructSerializer());
-    serializers.addSerializer(new TimestampSerializer());
-    serializers.addSerializer(new ValueSerializer());
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(DoubleValue.class));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(FloatValue.class));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(Int64Value.class));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(UInt64Value.class));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(Int32Value.class));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(UInt32Value.class));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(BoolValue.class));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(StringValue.class));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(BytesValue.class));
+    serializers.addSerializer(new StructSerializer(config));
+    serializers.addSerializer(new TimestampSerializer(config));
+    serializers.addSerializer(new ValueSerializer(config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(DoubleValue.class, config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(FloatValue.class, config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(Int64Value.class, config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(UInt64Value.class, config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(Int32Value.class, config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(UInt32Value.class, config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(BoolValue.class, config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(StringValue.class, config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(BytesValue.class, config));
 
     context.addSerializers(serializers);
 

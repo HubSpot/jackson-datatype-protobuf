@@ -41,7 +41,11 @@ after which functionality is available for all normal Jackson operations.
 ### Interop with Protobuf 3 Canonical JSON Representation
 
 Protobuf 3 specifies a canonical JSON representation (available [here](https://developers.google.com/protocol-buffers/docs/proto3#json)). This library conforms to that representation with a few exceptions:
-- int64, fixed64, uint64 are written as JSON numbers instead of strings
+- int64, fixed64, uint64 are written as JSON numbers instead of strings. However, you may opt for a conformal representation by means of:
+  ```java
+  ProtobufJacksonConfig config = ProtobufJacksonConfig.builder().writeLongsAsStrings(true).build();
+  new ObjectMapper().registerModules(new ProtobufModule(config));
+  ```
 - `Any` objects don't have any special handling, so the value will be a base64 string, and the type URL field name is `typeUrl` instead of `@type`
 
 ### Protobuf 2 Support

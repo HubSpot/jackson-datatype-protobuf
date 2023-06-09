@@ -6,12 +6,13 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.Timestamps;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 
 public class TimestampSerializer extends ProtobufSerializer<Timestamp> {
 
-  public TimestampSerializer() {
-    super(Timestamp.class);
+  public TimestampSerializer(ProtobufJacksonConfig config) {
+    super(Timestamp.class, config);
   }
 
   @Override

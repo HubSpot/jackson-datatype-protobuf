@@ -24,11 +24,7 @@ import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 import com.hubspot.jackson.datatype.protobuf.internal.PropertyNamingCache;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
-  @SuppressFBWarnings(value="SE_BAD_FIELD")
-  private final ProtobufJacksonConfig config;
   private final boolean unwrappingSerializer;
   private final Map<Descriptor, PropertyNamingCache> propertyNamingCache;
 
@@ -45,8 +41,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   }
 
   private MessageSerializer(ProtobufJacksonConfig config, boolean unwrappingSerializer) {
-    super(MessageOrBuilder.class);
-    this.config = config;
+    super(MessageOrBuilder.class, config);
     this.unwrappingSerializer = unwrappingSerializer;
     this.propertyNamingCache = new ConcurrentHashMap<>();
   }

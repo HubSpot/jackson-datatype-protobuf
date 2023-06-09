@@ -6,12 +6,13 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.google.protobuf.Duration;
 import com.google.protobuf.util.Durations;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 
 public class DurationSerializer extends ProtobufSerializer<Duration> {
 
-  public DurationSerializer() {
-    super(Duration.class);
+  public DurationSerializer(ProtobufJacksonConfig config) {
+    super(Duration.class, config);
   }
 
   @Override

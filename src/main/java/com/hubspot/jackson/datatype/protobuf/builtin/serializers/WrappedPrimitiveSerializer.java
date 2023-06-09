@@ -6,12 +6,13 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.MessageOrBuilder;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 
 public class WrappedPrimitiveSerializer<T extends MessageOrBuilder> extends ProtobufSerializer<T> {
 
-  public WrappedPrimitiveSerializer(Class<T> wrapperType) {
-    super(wrapperType);
+  public WrappedPrimitiveSerializer(Class<T> wrapperType, ProtobufJacksonConfig config) {
+    super(wrapperType, config);
   }
 
   @Override

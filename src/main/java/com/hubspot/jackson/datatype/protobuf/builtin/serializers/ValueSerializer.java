@@ -8,12 +8,13 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Value;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 
 public class ValueSerializer extends ProtobufSerializer<Value> {
 
-  public ValueSerializer() {
-    super(Value.class);
+  public ValueSerializer(ProtobufJacksonConfig config) {
+    super(Value.class, config);
   }
 
   @Override

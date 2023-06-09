@@ -6,12 +6,13 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.google.protobuf.FieldMask;
 import com.google.protobuf.util.FieldMaskUtil;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 
 public class FieldMaskSerializer extends ProtobufSerializer<FieldMask> {
 
-  public FieldMaskSerializer() {
-    super(FieldMask.class);
+  public FieldMaskSerializer(ProtobufJacksonConfig config) {
+    super(FieldMask.class, config);
   }
 
   @Override

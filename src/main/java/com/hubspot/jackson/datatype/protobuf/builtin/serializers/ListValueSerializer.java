@@ -7,13 +7,14 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ListValue;
 import com.google.protobuf.Value;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 
 public class ListValueSerializer extends ProtobufSerializer<ListValue> {
   private static final FieldDescriptor VALUES_FIELD = ListValue.getDescriptor().findFieldByName("values");
 
-  public ListValueSerializer() {
-    super(ListValue.class);
+  public ListValueSerializer(ProtobufJacksonConfig config) {
+    super(ListValue.class, config);
   }
 
   @Override
