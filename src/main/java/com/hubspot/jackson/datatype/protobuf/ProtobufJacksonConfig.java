@@ -63,14 +63,15 @@ public class ProtobufJacksonConfig {
       return this;
     }
 
-    public Builder acceptLiteralFieldnames(boolean acceptLiteralFieldnames) {
-      this.acceptLiteralFieldnames = acceptLiteralFieldnames;
+    public Builder useCanonicalSerialization() {
+      acceptLiteralFieldnames(true);
+      properUnsignedNumberSerialization(true);
+      serializeLongsAsString(true);
       return this;
     }
 
-    public Builder useCanonicalSerialization() {
-      properUnsignedNumberSerialization(true);
-      serializeLongsAsString(true);
+    public Builder acceptLiteralFieldnames(boolean acceptLiteralFieldnames) {
+      this.acceptLiteralFieldnames = acceptLiteralFieldnames;
       return this;
     }
 
