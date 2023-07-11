@@ -7,10 +7,16 @@ public class ProtobufJacksonConfig {
 
   private final ExtensionRegistryWrapper extensionRegistry;
   private final boolean acceptLiteralFieldnames;
+  private final boolean properUnsignedNumberSerialization;
 
-  private ProtobufJacksonConfig(ExtensionRegistryWrapper extensionRegistry, boolean acceptLiteralFieldnames) {
+  private ProtobufJacksonConfig(
+    ExtensionRegistryWrapper extensionRegistry,
+    boolean acceptLiteralFieldnames,
+    boolean properUnsignedNumberSerialization
+  ) {
     this.extensionRegistry = extensionRegistry;
     this.acceptLiteralFieldnames = acceptLiteralFieldnames;
+    this.properUnsignedNumberSerialization = properUnsignedNumberSerialization;
   }
 
   public static ProtobufJacksonConfig getDefaultInstance() {
@@ -29,9 +35,14 @@ public class ProtobufJacksonConfig {
     return acceptLiteralFieldnames;
   }
 
+  public boolean properUnsignedNumberSerialization() {
+    return properUnsignedNumberSerialization;
+  }
+
   public static class Builder {
     private ExtensionRegistryWrapper extensionRegistry = ExtensionRegistryWrapper.empty();
     private boolean acceptLiteralFieldnames = false;
+    private boolean properUnsignedNumberSerialization = false;
 
     private Builder() {}
 
@@ -49,8 +60,17 @@ public class ProtobufJacksonConfig {
       return this;
     }
 
+    public Builder properUnsignedNumberSerialization(boolean properUnsignedNumberSerialization) {
+      this.properUnsignedNumberSerialization = properUnsignedNumberSerialization;
+      return this;
+    }
+
     public ProtobufJacksonConfig build() {
-      return new ProtobufJacksonConfig(extensionRegistry, acceptLiteralFieldnames);
+      return new ProtobufJacksonConfig(
+        extensionRegistry,
+        acceptLiteralFieldnames,
+        properUnsignedNumberSerialization
+      );
     }
   }
 }
