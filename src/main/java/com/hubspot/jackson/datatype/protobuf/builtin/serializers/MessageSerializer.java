@@ -1,12 +1,5 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -23,8 +16,13 @@ import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 import com.hubspot.jackson.datatype.protobuf.internal.PropertyNamingCache;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   @SuppressFBWarnings(value="SE_BAD_FIELD")
@@ -45,7 +43,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   }
 
   private MessageSerializer(ProtobufJacksonConfig config, boolean unwrappingSerializer) {
-    super(MessageOrBuilder.class);
+    super(MessageOrBuilder.class, config);
     this.config = config;
     this.unwrappingSerializer = unwrappingSerializer;
     this.propertyNamingCache = new ConcurrentHashMap<>();

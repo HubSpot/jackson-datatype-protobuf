@@ -3,12 +3,18 @@ package com.hubspot.jackson.datatype.protobuf;
 import com.google.protobuf.ExtensionRegistry;
 
 public class ProtobufJacksonConfig {
+  private static final ProtobufJacksonConfig DEFAULT_INSTANCE = ProtobufJacksonConfig.builder().build();
+
   private final ExtensionRegistryWrapper extensionRegistry;
   private final boolean acceptLiteralFieldnames;
 
   private ProtobufJacksonConfig(ExtensionRegistryWrapper extensionRegistry, boolean acceptLiteralFieldnames) {
     this.extensionRegistry = extensionRegistry;
     this.acceptLiteralFieldnames = acceptLiteralFieldnames;
+  }
+
+  public static ProtobufJacksonConfig getDefaultInstance() {
+    return DEFAULT_INSTANCE;
   }
 
   public static Builder builder() {

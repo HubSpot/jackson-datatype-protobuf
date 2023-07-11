@@ -1,15 +1,20 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.google.protobuf.NullValue;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
+import java.io.IOException;
 
 public class NullValueSerializer extends StdSerializer<NullValue> {
 
+  @Deprecated
   public NullValueSerializer() {
+    this(ProtobufJacksonConfig.getDefaultInstance());
+  }
+
+  public NullValueSerializer(ProtobufJacksonConfig config) {
     super(NullValue.class);
   }
 

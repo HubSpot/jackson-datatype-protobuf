@@ -2,11 +2,6 @@ package com.hubspot.jackson.datatype.protobuf;
 
 import static java.lang.String.format;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -20,15 +15,26 @@ import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.NullValue;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends StdSerializer<T> {
   private static final String NULL_VALUE_FULL_NAME = NullValue.getDescriptor().getFullName();
 
+  private final ProtobufJacksonConfig config;
   private final Map<Class<?>, JsonSerializer<Object>> serializerCache;
 
+  @Deprecated
   public ProtobufSerializer(Class<T> protobufType) {
+    this(protobufType, ProtobufJacksonConfig.getDefaultInstance());
+  }
+
+  public ProtobufSerializer(Class<T> protobufType, ProtobufJacksonConfig config) {
     super(protobufType);
 
+    this.config = config;
     this.serializerCache = new ConcurrentHashMap<>();
   }
 
