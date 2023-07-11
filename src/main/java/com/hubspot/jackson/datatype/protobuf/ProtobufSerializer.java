@@ -137,7 +137,13 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
       isUnsigned(field.getType())
     ) {
       BigInteger unsignedValue = BigInteger.valueOf(value & Long.MAX_VALUE).setBit(Long.SIZE - 1);
-      generator.writeNumber(unsignedValue);
+      if (config.serializeLongsAsString()) {
+        generator.writeString(unsignedValue.toString());
+      } else {
+        generator.writeNumber(unsignedValue);
+      }
+    } else if (config.serializeLongsAsString()) {
+      generator.writeString(Long.toString(value));
     } else {
       generator.writeNumber(value);
     }

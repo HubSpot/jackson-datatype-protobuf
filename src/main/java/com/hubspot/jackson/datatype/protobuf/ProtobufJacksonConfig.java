@@ -8,15 +8,18 @@ public class ProtobufJacksonConfig {
   private final ExtensionRegistryWrapper extensionRegistry;
   private final boolean acceptLiteralFieldnames;
   private final boolean properUnsignedNumberSerialization;
+  private final boolean serializeLongsAsString;
 
   private ProtobufJacksonConfig(
     ExtensionRegistryWrapper extensionRegistry,
     boolean acceptLiteralFieldnames,
-    boolean properUnsignedNumberSerialization
+    boolean properUnsignedNumberSerialization,
+    boolean serializeLongsAsString
   ) {
     this.extensionRegistry = extensionRegistry;
     this.acceptLiteralFieldnames = acceptLiteralFieldnames;
     this.properUnsignedNumberSerialization = properUnsignedNumberSerialization;
+    this.serializeLongsAsString = serializeLongsAsString;
   }
 
   public static ProtobufJacksonConfig getDefaultInstance() {
@@ -39,10 +42,15 @@ public class ProtobufJacksonConfig {
     return properUnsignedNumberSerialization;
   }
 
+  public boolean serializeLongsAsString() {
+    return serializeLongsAsString;
+  }
+
   public static class Builder {
     private ExtensionRegistryWrapper extensionRegistry = ExtensionRegistryWrapper.empty();
     private boolean acceptLiteralFieldnames = false;
     private boolean properUnsignedNumberSerialization = false;
+    private boolean serializeLongsAsString = false;
 
     private Builder() {}
 
@@ -60,8 +68,19 @@ public class ProtobufJacksonConfig {
       return this;
     }
 
+    public Builder useCanonicalSerialization() {
+      properUnsignedNumberSerialization(true);
+      serializeLongsAsString(true);
+      return this;
+    }
+
     public Builder properUnsignedNumberSerialization(boolean properUnsignedNumberSerialization) {
       this.properUnsignedNumberSerialization = properUnsignedNumberSerialization;
+      return this;
+    }
+
+    public Builder serializeLongsAsString(boolean serializeLongsAsString) {
+      this.serializeLongsAsString = serializeLongsAsString;
       return this;
     }
 
@@ -69,7 +88,8 @@ public class ProtobufJacksonConfig {
       return new ProtobufJacksonConfig(
         extensionRegistry,
         acceptLiteralFieldnames,
-        properUnsignedNumberSerialization
+        properUnsignedNumberSerialization,
+        serializeLongsAsString
       );
     }
   }
