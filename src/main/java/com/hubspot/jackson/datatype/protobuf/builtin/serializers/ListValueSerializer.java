@@ -12,6 +12,9 @@ import java.io.IOException;
 public class ListValueSerializer extends ProtobufSerializer<ListValue> {
   private static final FieldDescriptor VALUES_FIELD = ListValue.getDescriptor().findFieldByName("values");
 
+  /**
+   * @deprecated use {@link #ListValueSerializer(ProtobufJacksonConfig)}
+   */
   @Deprecated
   public ListValueSerializer() {
     this(ProtobufJacksonConfig.getDefaultInstance());

@@ -10,6 +10,9 @@ import java.io.IOException;
 
 public class TimestampSerializer extends ProtobufSerializer<Timestamp> {
 
+  /**
+   * @deprecated use {@link #TimestampSerializer(ProtobufJacksonConfig)}
+   */
   @Deprecated
   public TimestampSerializer() {
     this(ProtobufJacksonConfig.getDefaultInstance());

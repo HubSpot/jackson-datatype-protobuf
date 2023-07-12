@@ -9,6 +9,9 @@ import java.io.IOException;
 
 public class NullValueSerializer extends StdSerializer<NullValue> {
 
+  /**
+   * @deprecated use {@link #NullValueSerializer(ProtobufJacksonConfig)}
+   */
   @Deprecated
   public NullValueSerializer() {
     this(ProtobufJacksonConfig.getDefaultInstance());

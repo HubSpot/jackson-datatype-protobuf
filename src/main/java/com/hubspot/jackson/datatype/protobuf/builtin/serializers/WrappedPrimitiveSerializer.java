@@ -10,6 +10,9 @@ import java.io.IOException;
 
 public class WrappedPrimitiveSerializer<T extends MessageOrBuilder> extends ProtobufSerializer<T> {
 
+  /**
+   * @deprecated use {@link #WrappedPrimitiveSerializer(Class, ProtobufJacksonConfig)}
+   */
   @Deprecated
   public WrappedPrimitiveSerializer(Class<T> wrapperType) {
     this(wrapperType, ProtobufJacksonConfig.getDefaultInstance());

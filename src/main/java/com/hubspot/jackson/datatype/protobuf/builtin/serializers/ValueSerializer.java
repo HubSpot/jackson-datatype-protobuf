@@ -12,6 +12,9 @@ import java.util.Map.Entry;
 
 public class ValueSerializer extends ProtobufSerializer<Value> {
 
+  /**
+   * @deprecated use {@link #ValueSerializer(ProtobufJacksonConfig)}
+   */
   @Deprecated
   public ValueSerializer() {
     this(ProtobufJacksonConfig.getDefaultInstance());

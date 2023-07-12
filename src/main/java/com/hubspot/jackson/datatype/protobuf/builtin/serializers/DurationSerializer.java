@@ -10,6 +10,9 @@ import java.io.IOException;
 
 public class DurationSerializer extends ProtobufSerializer<Duration> {
 
+  /**
+   * @deprecated use {@link #DurationSerializer(ProtobufJacksonConfig)}
+   */
   @Deprecated
   public DurationSerializer() {
     this(ProtobufJacksonConfig.getDefaultInstance());

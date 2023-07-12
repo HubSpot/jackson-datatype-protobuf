@@ -29,6 +29,9 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
   private final ProtobufJacksonConfig config;
   private final Map<Class<?>, JsonSerializer<Object>> serializerCache;
 
+  /**
+   * @deprecated use {@link #ProtobufSerializer(Class, ProtobufJacksonConfig)}
+   */
   @Deprecated
   public ProtobufSerializer(Class<T> protobufType) {
     this(protobufType, ProtobufJacksonConfig.getDefaultInstance());

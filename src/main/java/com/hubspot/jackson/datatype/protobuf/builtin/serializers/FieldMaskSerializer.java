@@ -10,6 +10,9 @@ import java.io.IOException;
 
 public class FieldMaskSerializer extends ProtobufSerializer<FieldMask> {
 
+  /**
+   * @deprecated use {@link #FieldMaskSerializer(ProtobufJacksonConfig)}
+   */
   @Deprecated
   public FieldMaskSerializer() {
     this(ProtobufJacksonConfig.getDefaultInstance());

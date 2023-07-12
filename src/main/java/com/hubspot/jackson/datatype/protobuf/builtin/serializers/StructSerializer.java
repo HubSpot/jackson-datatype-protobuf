@@ -11,6 +11,9 @@ import java.io.IOException;
 public class StructSerializer extends ProtobufSerializer<Struct> {
   private static final FieldDescriptor FIELDS_FIELD = Struct.getDescriptor().findFieldByName("fields");
 
+  /**
+   * @deprecated use {@link #StructSerializer(ProtobufJacksonConfig)}
+   */
   @Deprecated
   public StructSerializer() {
     this(ProtobufJacksonConfig.getDefaultInstance());
