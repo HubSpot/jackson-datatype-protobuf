@@ -54,6 +54,13 @@ message PropertyNamingCamelCased {
   optional string stringAttribute = 1;
 }
 
+message PropertyNamingJsonName {
+  optional string custom_name = 1 [json_name = "custom-name"];
+  optional string lower_camel = 2 [json_name = "lowerCamel"];
+  optional string lower_underscore = 3 [json_name = "lower_underscore"];
+  optional string different_name = 4 [json_name = "surprise!"];
+}
+
 message Nested {
   optional double double = 1;
   optional float float = 2;
