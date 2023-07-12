@@ -1,37 +1,37 @@
 package com.hubspot.jackson.datatype.protobuf;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.annotation.Nonnull;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.exc.InputCoercionException;
 import com.fasterxml.jackson.core.io.NumberInput;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.BigIntegerDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Descriptors.FieldDescriptor.Type;
 import com.google.protobuf.Message;
 import com.google.protobuf.NullValue;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.MessageDeserializer;
-
+import com.hubspot.jackson.datatype.protobuf.internal.Constants;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public abstract class ProtobufDeserializer<T extends Message, V extends Message.Builder> extends StdDeserializer<V> {
   private static final String NULL_VALUE_FULL_NAME = NullValue.getDescriptor().getFullName();
@@ -245,9 +245,9 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
 
     switch (field.getJavaType()) {
       case INT:
-        return _parseIntPrimitive(parser, context);
+        return parseInt(field, parser, context);
       case LONG:
-        return _parseLongPrimitive(parser, context);
+        return parseLong(field, parser, context);
       case FLOAT:
         return _parseFloatPrimitive(parser, context);
       case DOUBLE:
@@ -337,6 +337,42 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
     }
   }
 
+  private int parseInt(FieldDescriptor field, JsonParser parser, DeserializationContext context) throws IOException {
+    if (isUnsigned(field.getType())) {
+      long longValue = _parseLongPrimitive(parser, context);
+      if (longValue < Constants.MIN_UINT32 || longValue > Constants.MAX_UINT32) {
+        throw new InputCoercionException(
+          parser,
+          "Value " + longValue + " is out of range for " + field.getType(),
+          parser.getCurrentToken(),
+          Integer.TYPE
+        );
+      } else {
+        return (int) longValue;
+      }
+    } else {
+      return _parseIntPrimitive(parser, context);
+    }
+  }
+
+  private long parseLong(FieldDescriptor field, JsonParser parser, DeserializationContext context) throws IOException {
+    if (isUnsigned(field.getType())) {
+      BigInteger bigIntegerValue = BigIntegerDeserializer.instance.deserialize(parser, context);
+      if (bigIntegerValue.compareTo(Constants.MIN_UINT64) < 0 || bigIntegerValue.compareTo(Constants.MAX_UINT64) > 0) {
+        throw new InputCoercionException(
+            parser,
+            "Value " + bigIntegerValue + " is out of range for " + field.getType(),
+            parser.getCurrentToken(),
+            Long.TYPE
+        );
+      } else {
+        return bigIntegerValue.longValue();
+      }
+    } else {
+      return _parseLongPrimitive(parser, context);
+    }
+  }
+
   private JsonDeserializer<Object> getMessageDeserializer(
           Message.Builder builder,
           FieldDescriptor field,
@@ -388,6 +424,10 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
     throw new AssertionError();
   }
 
+  private static boolean isUnsigned(Type type) {
+    return type == Type.FIXED32 || type == Type.UINT32 || type == Type.FIXED64 || type == Type.UINT64;
+  }
+
   private static boolean isDefaultMessageDeserializer(JsonDeserializer<?> deserializer) {
     final Class<?> deserializerType;
     if (deserializer instanceof BuildingDeserializer) {
@@ -415,19 +455,13 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   }
 
   private static String indexRange(EnumDescriptor field) {
-    List<Integer> indices = Lists.transform(field.getValues(), new Function<EnumValueDescriptor, Integer>() {
-      @Override
-      public Integer apply(@Nonnull EnumValueDescriptor value) {
-        return value.getIndex();
-      }
-    });
-
-    // Guava returns non-modifiable list
-    indices = Lists.newArrayList(indices);
-
-    Collections.sort(indices);
-
-    return "[" + Joiner.on(',').join(indices) + "]";
+    return field
+      .getValues()
+      .stream()
+      .map(EnumValueDescriptor::getIndex)
+      .sorted()
+      .map(String::valueOf)
+      .collect(Collectors.joining(",", "[", "]"));
   }
 
   private static String wrongTokenMessage(FieldDescriptor field, DeserializationContext context) {

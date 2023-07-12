@@ -2,11 +2,6 @@ package com.hubspot.jackson.datatype.protobuf;
 
 import static java.lang.String.format;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -17,18 +12,35 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Descriptors.FieldDescriptor.Type;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.NullValue;
+import com.hubspot.jackson.datatype.protobuf.internal.Constants;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends StdSerializer<T> {
   private static final String NULL_VALUE_FULL_NAME = NullValue.getDescriptor().getFullName();
 
+  private final ProtobufJacksonConfig config;
   private final Map<Class<?>, JsonSerializer<Object>> serializerCache;
 
+  /**
+   * @deprecated use {@link #ProtobufSerializer(Class, ProtobufJacksonConfig)}
+   */
+  @Deprecated
   public ProtobufSerializer(Class<T> protobufType) {
+    this(protobufType, ProtobufJacksonConfig.getDefaultInstance());
+  }
+
+  public ProtobufSerializer(Class<T> protobufType, ProtobufJacksonConfig config) {
     super(protobufType);
 
+    this.config = config;
     this.serializerCache = new ConcurrentHashMap<>();
   }
 
@@ -61,19 +73,19 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
   ) throws IOException {
     switch (field.getJavaType()) {
       case INT:
-        generator.writeNumber((Integer) value);
+        writeInt(field, (int) value, generator);
         break;
       case LONG:
-        generator.writeNumber((Long) value);
+        writeLong(field, (long) value, generator);
         break;
       case FLOAT:
-        generator.writeNumber((Float) value);
+        generator.writeNumber((float) value);
         break;
       case DOUBLE:
-        generator.writeNumber((Double) value);
+        generator.writeNumber((double) value);
         break;
       case BOOLEAN:
-        generator.writeBoolean((Boolean) value);
+        generator.writeBoolean((boolean) value);
         break;
       case STRING:
         generator.writeString((String) value);
@@ -107,6 +119,42 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
       default:
         throw unrecognizedType(field, generator);
     }
+  }
+
+  private void writeInt(FieldDescriptor field, int value, JsonGenerator generator) throws IOException {
+    if (
+      value < 0 &&
+      config.properUnsignedNumberSerialization() &&
+      isUnsigned(field.getType())
+    ) {
+      long unsignedValue = value & Constants.MAX_UINT32;
+      generator.writeNumber(unsignedValue);
+    } else {
+      generator.writeNumber(value);
+    }
+  }
+
+  private void writeLong(FieldDescriptor field, long value, JsonGenerator generator) throws IOException {
+    if (
+      value < 0 &&
+      config.properUnsignedNumberSerialization() &&
+      isUnsigned(field.getType())
+    ) {
+      BigInteger unsignedValue = BigInteger.valueOf(value & Long.MAX_VALUE).setBit(Long.SIZE - 1);
+      if (config.serializeLongsAsString()) {
+        generator.writeString(unsignedValue.toString());
+      } else {
+        generator.writeNumber(unsignedValue);
+      }
+    } else if (config.serializeLongsAsString()) {
+      generator.writeString(Long.toString(value));
+    } else {
+      generator.writeNumber(value);
+    }
+  }
+
+  private static boolean isUnsigned(Type type) {
+    return type == Type.FIXED32 || type == Type.UINT32 || type == Type.FIXED64 || type == Type.UINT64;
   }
 
   private static boolean writeEnumsUsingIndex(SerializerProvider config) {

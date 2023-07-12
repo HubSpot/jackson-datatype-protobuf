@@ -1,17 +1,25 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.Timestamps;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
+import java.io.IOException;
 
 public class TimestampSerializer extends ProtobufSerializer<Timestamp> {
 
+  /**
+   * @deprecated use {@link #TimestampSerializer(ProtobufJacksonConfig)}
+   */
+  @Deprecated
   public TimestampSerializer() {
-    super(Timestamp.class);
+    this(ProtobufJacksonConfig.getDefaultInstance());
+  }
+
+  public TimestampSerializer(ProtobufJacksonConfig config) {
+    super(Timestamp.class, config);
   }
 
   @Override

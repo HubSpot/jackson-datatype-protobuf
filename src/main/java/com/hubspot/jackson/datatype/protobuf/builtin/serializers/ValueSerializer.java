@@ -1,19 +1,27 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Value;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class ValueSerializer extends ProtobufSerializer<Value> {
 
+  /**
+   * @deprecated use {@link #ValueSerializer(ProtobufJacksonConfig)}
+   */
+  @Deprecated
   public ValueSerializer() {
-    super(Value.class);
+    this(ProtobufJacksonConfig.getDefaultInstance());
+  }
+
+  public ValueSerializer(ProtobufJacksonConfig config) {
+    super(Value.class, config);
   }
 
   @Override
