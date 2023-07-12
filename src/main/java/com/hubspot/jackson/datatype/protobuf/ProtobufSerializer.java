@@ -16,6 +16,7 @@ import com.google.protobuf.Descriptors.FieldDescriptor.Type;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.NullValue;
+import com.hubspot.jackson.datatype.protobuf.internal.Constants;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
@@ -123,7 +124,7 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
       config.properUnsignedNumberSerialization() &&
       isUnsigned(field.getType())
     ) {
-      long unsignedValue = value & 0xFFFFFFFFL;
+      long unsignedValue = value & Constants.MAX_UINT32;
       generator.writeNumber(unsignedValue);
     } else {
       generator.writeNumber(value);

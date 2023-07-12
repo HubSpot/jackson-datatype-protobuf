@@ -22,6 +22,7 @@ import com.google.protobuf.Descriptors.FieldDescriptor.Type;
 import com.google.protobuf.Message;
 import com.google.protobuf.NullValue;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.MessageDeserializer;
+import com.hubspot.jackson.datatype.protobuf.internal.Constants;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -35,9 +36,6 @@ import java.util.stream.Collectors;
 public abstract class ProtobufDeserializer<T extends Message, V extends Message.Builder> extends StdDeserializer<V> {
   private static final String NULL_VALUE_FULL_NAME = NullValue.getDescriptor().getFullName();
   private static final EnumValueDescriptor NULL_VALUE_DESCRIPTOR = NullValue.NULL_VALUE.getValueDescriptor();
-  private static final BigInteger MIN_UINT64 = BigInteger.valueOf(Long.MIN_VALUE);
-  private static final BigInteger MAX_UINT64 = new BigInteger("FFFFFFFFFFFFFFFF", 16);
-
 
   private final T defaultInstance;
   @SuppressFBWarnings(value="SE_BAD_FIELD")
@@ -342,7 +340,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   private int parseInt(FieldDescriptor field, JsonParser parser, DeserializationContext context) throws IOException {
     if (isUnsigned(field.getType())) {
       long longValue = _parseLongPrimitive(parser, context);
-      if (longValue < Integer.MIN_VALUE || longValue > 0xFFFFFFFFL) {
+      if (longValue < Constants.MIN_UINT32 || longValue > Constants.MAX_UINT32) {
         throw new InputCoercionException(
           parser,
           "Value " + longValue + " is out of range for " + field.getType(),
@@ -360,7 +358,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   private long parseLong(FieldDescriptor field, JsonParser parser, DeserializationContext context) throws IOException {
     if (isUnsigned(field.getType())) {
       BigInteger bigIntegerValue = BigIntegerDeserializer.instance.deserialize(parser, context);
-      if (bigIntegerValue.compareTo(MIN_UINT64) < 0 || bigIntegerValue.compareTo(MAX_UINT64) > 0) {
+      if (bigIntegerValue.compareTo(Constants.MIN_UINT64) < 0 || bigIntegerValue.compareTo(Constants.MAX_UINT64) > 0) {
         throw new InputCoercionException(
             parser,
             "Value " + bigIntegerValue + " is out of range for " + field.getType(),
