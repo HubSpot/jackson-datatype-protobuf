@@ -1,5 +1,9 @@
 package com.hubspot.jackson.datatype.protobuf;
 
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.create;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -7,9 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import org.junit.Test;
-
-import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class FailOnNullPrimitivesTest {
 
@@ -111,9 +112,9 @@ public class FailOnNullPrimitivesTest {
 
   private static ObjectMapper objectMapper(boolean enabled) {
     if (enabled) {
-      return camelCase().enable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES);
+      return create().enable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES);
     } else {
-      return camelCase().disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES);
+      return create().disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES);
     }
   }
 }

@@ -3,6 +3,7 @@ package com.hubspot.jackson.datatype.protobuf;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.toTree;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -198,10 +199,12 @@ public class PropertyNamingTest {
     }
   }
 
-  @Test(expected = UnrecognizedPropertyException.class)
-  public void itDoesntAcceptUnderscoreNameForCamelcasePropertyByDefault() throws IOException {
+  @Test
+  public void itDoesntAcceptUnderscoreNameForCamelcasePropertyByDefault() {
     String json = "{\"string_attribute\":\"test\"}";
-    camelCase().readValue(json, PropertyNamingSnakeCased.class);
+
+    Throwable t = catchThrowable(() -> camelCase().readValue(json, PropertyNamingSnakeCased.class));
+    assertThat(t).isInstanceOf(UnrecognizedPropertyException.class);
   }
 
   /**

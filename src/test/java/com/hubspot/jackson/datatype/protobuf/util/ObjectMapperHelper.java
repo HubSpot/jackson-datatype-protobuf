@@ -1,9 +1,5 @@
 package com.hubspot.jackson.datatype.protobuf.util;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,11 +12,18 @@ import com.google.common.collect.Lists;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.MessageOrBuilder;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 public class ObjectMapperHelper {
   private static final ObjectMapper DEFAULT = create();
   private static final ObjectMapper OLD_UNDERSCORE = create(PropertyNamingStrategy.SNAKE_CASE);
   private static final ObjectMapper NEW_UNDERSCORE = create(newUnderscoreStrategy());
+
+  public static ObjectMapper create() {
+    return new ObjectMapper().registerModule(new ProtobufModule());
+  }
 
   public static ObjectMapper camelCase() {
     return DEFAULT;
@@ -91,10 +94,6 @@ public class ObjectMapperHelper {
 
   private static ObjectMapper create(PropertyNamingStrategy namingStrategy) {
     return create().setPropertyNamingStrategy(namingStrategy);
-  }
-
-  private static ObjectMapper create() {
-    return new ObjectMapper().registerModule(new ProtobufModule());
   }
 
   private static PropertyNamingStrategy newUnderscoreStrategy() {
