@@ -41,8 +41,12 @@ after which functionality is available for all normal Jackson operations.
 ### Interop with Protobuf 3 Canonical JSON Representation
 
 Protobuf 3 specifies a canonical JSON representation (available [here](https://developers.google.com/protocol-buffers/docs/proto3#json)). This library conforms to that representation with a few exceptions:
-- int64, fixed64, uint64 are written as JSON numbers instead of strings
+- unsigned numbers (uint32, fixed32, uint64, fixed64) can be improperly serialized as negative numbers. This can be overridden by enabling `ProtobufJacksonConfig#properUnsignedNumberSerialization`
+- int64, fixed64, uint64 are written as JSON numbers instead of strings. This can be overridden by enabling `ProtobufJacksonConfig#serializeLongsAsString`
 - `Any` objects don't have any special handling, so the value will be a base64 string, and the type URL field name is `typeUrl` instead of `@type`
+- original field names are not accepted on deserialization. This can be overriden by enabling `ProtobufJacksonConfig#acceptLiteralFieldnames`
+
+If you want interop with canonical serialization/deserialization, you can call `ProtobufJacksonConfig#useCanonicalSerialization`. This will enable all of the available options to get as close to the canonical behavior as possible. The behavior of this method may change in the future as new options are added.
 
 ### Protobuf 2 Support
 
