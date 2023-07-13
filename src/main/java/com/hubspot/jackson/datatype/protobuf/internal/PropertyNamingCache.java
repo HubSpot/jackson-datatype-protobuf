@@ -1,11 +1,5 @@
 package com.hubspot.jackson.datatype.protobuf.internal;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.WeakHashMap;
-import java.util.function.Function;
-
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.google.common.collect.ImmutableMap;
@@ -13,6 +7,11 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.hubspot.jackson.datatype.protobuf.PropertyNamingStrategyWrapper;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.function.Function;
 
 public class PropertyNamingCache {
   private final Descriptor descriptor;
@@ -100,8 +99,42 @@ public class PropertyNamingCache {
 
   private static String getFieldName(
       FieldDescriptor field, PropertyNamingStrategyBase namingStrategy) {
-    return field.toProto().hasJsonName()
+    return hasJsonName(field)
         ? field.getJsonName()
         : namingStrategy.translate(field.getName());
+  }
+
+  private static boolean hasJsonName(FieldDescriptor field) {
+    if (!field.toProto().hasJsonName()) {
+      return false;
+    } else {
+      return !field.getJsonName().equals(defaultJsonName(field.getName()));
+    }
+  }
+
+  /**
+   * Copied from {@link com.google.protobuf.Descriptors} because the method is private
+   */
+  private static String defaultJsonName(String fieldName) {
+    final int length = fieldName.length();
+    StringBuilder result = new StringBuilder(length);
+    boolean isNextUpperCase = false;
+    for (int i = 0; i < length; i++) {
+      char ch = fieldName.charAt(i);
+      if (ch == '_') {
+        isNextUpperCase = true;
+      } else if (isNextUpperCase) {
+        // This closely matches the logic for ASCII characters in:
+        // http://google3/google/protobuf/descriptor.cc?l=249-251&rcl=228891689
+        if ('a' <= ch && ch <= 'z') {
+          ch = (char) (ch - 'a' + 'A');
+        }
+        result.append(ch);
+        isNextUpperCase = false;
+      } else {
+        result.append(ch);
+      }
+    }
+    return result.toString();
   }
 }

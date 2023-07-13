@@ -4,11 +4,6 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.came
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.toTree;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.NamingBase;
@@ -16,11 +11,17 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName;
 import com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper;
 import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingCamelCased;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingJsonName;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingSnakeCased;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.JsonNameProto3;
+import java.io.IOException;
+import java.util.List;
+import org.junit.Test;
 
 public class PropertyNamingTest {
 
@@ -219,7 +220,7 @@ public class PropertyNamingTest {
   }
 
   @Test
-  public void itRespectsCustomJsonPropertyNames() throws IOException {
+  public void itRespectsJsonNameAttributeProto2() throws IOException {
     ObjectMapper mapper = new ObjectMapper().registerModules(new ProtobufModule());
     String json = "{\"custom-name\":\"v\",\"lowerCamel\":\"v2\",\"lower_underscore\":\"v3\",\"surprise!\":\"v4\"}";
     PropertyNamingJsonName message = mapper.readValue(json, PropertyNamingJsonName.class);
@@ -229,6 +230,84 @@ public class PropertyNamingTest {
     assertThat(message.getLowerUnderscore()).isEqualTo("v3");
     assertThat(message.getDifferentName()).isEqualTo("v4");
     assertThat(mapper.writeValueAsString(message)).isEqualTo(json);
+  }
+
+  @Test
+  public void itAcceptsLiteralNameForMessageWithJsonNameAttributeProto2() throws IOException {
+    ObjectMapper mapper = new ObjectMapper().registerModules(
+        new ProtobufModule(ProtobufJacksonConfig.builder().acceptLiteralFieldnames(true).build())
+    );
+    String json = "{\"custom_name\":\"v\",\"lower_camel\":\"v2\",\"lower_underscore\":\"v3\",\"different_name\":\"v4\"}";
+    PropertyNamingJsonName message = mapper.readValue(json, PropertyNamingJsonName.class);
+
+    assertThat(message.getCustomName()).isEqualTo("v");
+    assertThat(message.getLowerCamel()).isEqualTo("v2");
+    assertThat(message.getLowerUnderscore()).isEqualTo("v3");
+    assertThat(message.getDifferentName()).isEqualTo("v4");
+  }
+
+  @Test
+  public void itRespectsJsonNameAttributeProto3() throws IOException {
+    ObjectMapper mapper = new ObjectMapper().registerModules(new ProtobufModule());
+    String json = "{\"custom-name\":\"v\",\"lowerCamel\":\"v2\",\"lower_underscore\":\"v3\",\"surprise!\":\"v4\"}";
+    JsonNameProto3 message = mapper.readValue(json, JsonNameProto3.class);
+
+    assertThat(message.getCustomName()).isEqualTo("v");
+    assertThat(message.getLowerCamel()).isEqualTo("v2");
+    assertThat(message.getLowerUnderscore()).isEqualTo("v3");
+    assertThat(message.getDifferentName()).isEqualTo("v4");
+    assertThat(mapper.writeValueAsString(message)).isEqualTo(json);
+  }
+
+  @Test
+  public void itAcceptsLiteralNameForMessageWithJsonNameAttributeProto3() throws IOException {
+    ObjectMapper mapper = new ObjectMapper().registerModules(
+        new ProtobufModule(ProtobufJacksonConfig.builder().acceptLiteralFieldnames(true).build())
+    );
+    String json = "{\"custom_name\":\"v\",\"lower_camel\":\"v2\",\"lower_underscore\":\"v3\",\"different_name\":\"v4\"}";
+    JsonNameProto3 message = mapper.readValue(json, JsonNameProto3.class);
+
+    assertThat(message.getCustomName()).isEqualTo("v");
+    assertThat(message.getLowerCamel()).isEqualTo("v2");
+    assertThat(message.getLowerUnderscore()).isEqualTo("v3");
+    assertThat(message.getDifferentName()).isEqualTo("v4");
+  }
+
+  @Test
+  public void itHandlesProtosCompiledFromDescriptorSet() throws IOException {
+    // protos compiled from descriptor set always have json_name populated
+    // https://github.com/protocolbuffers/protobuf/issues/6175
+
+    ObjectMapper mapper = new ObjectMapper()
+      .registerModules(new ProtobufModule(ProtobufJacksonConfig.builder().acceptLiteralFieldnames(true).build()))
+      .setPropertyNamingStrategy(new NamingBase() {
+        @Override
+        public String translate(String propertyName) {
+          return propertyName.toUpperCase();
+        }
+      });
+
+    MixedJsonName expected = MixedJsonName
+      .newBuilder()
+      .setFieldWithNoJsonName(123)
+      .setFieldWithJsonName(456)
+      .build();
+
+    ObjectNode node = mapper
+      .createObjectNode()
+      .put("field_with_no_json_name", 123)
+      .put("field_with_json_name", 456);
+
+    MixedJsonName parsed = mapper.treeToValue(node, MixedJsonName.class);
+    assertThat(parsed).isEqualTo(expected);
+
+    node = mapper
+      .createObjectNode()
+      .put("FIELD_WITH_NO_JSON_NAME", 123)
+      .put("custom-name", 456);
+
+    parsed = mapper.treeToValue(node, MixedJsonName.class);
+    assertThat(parsed).isEqualTo(expected);
   }
 
   private static PropertyNamingStrategy snakeCaseNamingBase() {
