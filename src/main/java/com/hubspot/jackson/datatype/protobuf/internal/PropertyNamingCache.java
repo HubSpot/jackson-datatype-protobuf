@@ -112,6 +112,9 @@ public class PropertyNamingCache {
     }
   }
 
+  /**
+   * Copied from {@link com.google.protobuf.Descriptors} because the method is private
+   */
   private static String defaultJsonName(String fieldName) {
     final int length = fieldName.length();
     StringBuilder result = new StringBuilder(length);
