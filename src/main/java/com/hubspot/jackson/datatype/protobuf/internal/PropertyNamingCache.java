@@ -108,16 +108,17 @@ public class PropertyNamingCache {
     if (!field.toProto().hasJsonName()) {
       return false;
     } else {
-      return !field.getJsonName().equals(defaultJsonName(field.getName()));
+      return !matchesDefaultJsonName(field.getJsonName(), field.getName());
     }
   }
 
   /**
-   * Copied from {@link com.google.protobuf.Descriptors} because the method is private
+   * Copied from {@link com.google.protobuf.Descriptors} because the method is private, then adapted to return a boolean
+   * as soon as possible without a need to grow a StringBuilder
    */
-  private static String defaultJsonName(String fieldName) {
+  private static boolean matchesDefaultJsonName(String jsonName, String fieldName) {
+    int defaultLength = 0;
     final int length = fieldName.length();
-    StringBuilder result = new StringBuilder(length);
     boolean isNextUpperCase = false;
     for (int i = 0; i < length; i++) {
       char ch = fieldName.charAt(i);
@@ -129,12 +130,14 @@ public class PropertyNamingCache {
         if ('a' <= ch && ch <= 'z') {
           ch = (char) (ch - 'a' + 'A');
         }
-        result.append(ch);
+        if (ch != jsonName.charAt(defaultLength++)) {
+          return false;
+        }
         isNextUpperCase = false;
-      } else {
-        result.append(ch);
+      } else if (ch != jsonName.charAt(defaultLength++)) {
+        return false;
       }
     }
-    return result.toString();
+    return defaultLength == jsonName.length();
   }
 }
