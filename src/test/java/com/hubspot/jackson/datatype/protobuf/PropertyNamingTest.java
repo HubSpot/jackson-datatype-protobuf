@@ -16,6 +16,7 @@ import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingCamelCased;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingJsonName;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingSnakeCased;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.JsonNameProto3;
 import java.io.IOException;
 import java.util.List;
 import org.junit.Test;
@@ -217,7 +218,7 @@ public class PropertyNamingTest {
   }
 
   @Test
-  public void itRespectsJsonNameAttribute() throws IOException {
+  public void itRespectsJsonNameAttributeProto2() throws IOException {
     ObjectMapper mapper = new ObjectMapper().registerModules(new ProtobufModule());
     String json = "{\"custom-name\":\"v\",\"lowerCamel\":\"v2\",\"lower_underscore\":\"v3\",\"surprise!\":\"v4\"}";
     PropertyNamingJsonName message = mapper.readValue(json, PropertyNamingJsonName.class);
@@ -230,12 +231,39 @@ public class PropertyNamingTest {
   }
 
   @Test
-  public void itAcceptsLiteralNameForMessageWithJsonNameAttribute() throws IOException {
+  public void itAcceptsLiteralNameForMessageWithJsonNameAttributeProto2() throws IOException {
     ObjectMapper mapper = new ObjectMapper().registerModules(
         new ProtobufModule(ProtobufJacksonConfig.builder().acceptLiteralFieldnames(true).build())
     );
     String json = "{\"custom_name\":\"v\",\"lower_camel\":\"v2\",\"lower_underscore\":\"v3\",\"different_name\":\"v4\"}";
     PropertyNamingJsonName message = mapper.readValue(json, PropertyNamingJsonName.class);
+
+    assertThat(message.getCustomName()).isEqualTo("v");
+    assertThat(message.getLowerCamel()).isEqualTo("v2");
+    assertThat(message.getLowerUnderscore()).isEqualTo("v3");
+    assertThat(message.getDifferentName()).isEqualTo("v4");
+  }
+
+  @Test
+  public void itRespectsJsonNameAttributeProto3() throws IOException {
+    ObjectMapper mapper = new ObjectMapper().registerModules(new ProtobufModule());
+    String json = "{\"custom-name\":\"v\",\"lowerCamel\":\"v2\",\"lower_underscore\":\"v3\",\"surprise!\":\"v4\"}";
+    JsonNameProto3 message = mapper.readValue(json, JsonNameProto3.class);
+
+    assertThat(message.getCustomName()).isEqualTo("v");
+    assertThat(message.getLowerCamel()).isEqualTo("v2");
+    assertThat(message.getLowerUnderscore()).isEqualTo("v3");
+    assertThat(message.getDifferentName()).isEqualTo("v4");
+    assertThat(mapper.writeValueAsString(message)).isEqualTo(json);
+  }
+
+  @Test
+  public void itAcceptsLiteralNameForMessageWithJsonNameAttributeProto3() throws IOException {
+    ObjectMapper mapper = new ObjectMapper().registerModules(
+        new ProtobufModule(ProtobufJacksonConfig.builder().acceptLiteralFieldnames(true).build())
+    );
+    String json = "{\"custom_name\":\"v\",\"lower_camel\":\"v2\",\"lower_underscore\":\"v3\",\"different_name\":\"v4\"}";
+    JsonNameProto3 message = mapper.readValue(json, JsonNameProto3.class);
 
     assertThat(message.getCustomName()).isEqualTo("v");
     assertThat(message.getLowerCamel()).isEqualTo("v2");
