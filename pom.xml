@@ -18,7 +18,7 @@
 
     <dep.jackson.version>2.13.1</dep.jackson.version>
     <dep.jackson-databind.version>2.13.1</dep.jackson-databind.version>
-    <dep.protobuf-java.version>3.21.12</dep.protobuf-java.version>
+    <dep.protobuf-java.version>3.19.3</dep.protobuf-java.version>
     <dep.plugin.duplicate-finder.version>1.4.0</dep.plugin.duplicate-finder.version>
   </properties>
 

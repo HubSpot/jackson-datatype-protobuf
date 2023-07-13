@@ -82,8 +82,8 @@ message RepeatedCustomWrapper {
 }
 
 message JsonNameProto3 {
-  optional string custom_name = 1 [json_name = "custom-name"];
-  optional string lower_camel = 2 [json_name = "lowerCamel"];
-  optional string lower_underscore = 3 [json_name = "lower_underscore"];
-  optional string different_name = 4 [json_name = "surprise!"];
+  string custom_name = 1 [json_name = "custom-name"];
+  string lower_camel = 2 [json_name = "lowerCamel"];
+  string lower_underscore = 3 [json_name = "lower_underscore"];
+  string different_name = 4 [json_name = "surprise!"];
 }
