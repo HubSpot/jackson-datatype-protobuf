@@ -4,11 +4,6 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.came
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.toTree;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.NamingBase;
@@ -21,6 +16,9 @@ import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingCamelCased;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingJsonName;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingSnakeCased;
+import java.io.IOException;
+import java.util.List;
+import org.junit.Test;
 
 public class PropertyNamingTest {
 
@@ -219,7 +217,7 @@ public class PropertyNamingTest {
   }
 
   @Test
-  public void itRespectsCustomJsonPropertyNames() throws IOException {
+  public void itRespectsJsonNameAttribute() throws IOException {
     ObjectMapper mapper = new ObjectMapper().registerModules(new ProtobufModule());
     String json = "{\"custom-name\":\"v\",\"lowerCamel\":\"v2\",\"lower_underscore\":\"v3\",\"surprise!\":\"v4\"}";
     PropertyNamingJsonName message = mapper.readValue(json, PropertyNamingJsonName.class);
@@ -229,6 +227,20 @@ public class PropertyNamingTest {
     assertThat(message.getLowerUnderscore()).isEqualTo("v3");
     assertThat(message.getDifferentName()).isEqualTo("v4");
     assertThat(mapper.writeValueAsString(message)).isEqualTo(json);
+  }
+
+  @Test
+  public void itAcceptsLiteralNameForMessageWithJsonNameAttribute() throws IOException {
+    ObjectMapper mapper = new ObjectMapper().registerModules(
+        new ProtobufModule(ProtobufJacksonConfig.builder().acceptLiteralFieldnames(true).build())
+    );
+    String json = "{\"custom_name\":\"v\",\"lower_camel\":\"v2\",\"lower_underscore\":\"v3\",\"different_name\":\"v4\"}";
+    PropertyNamingJsonName message = mapper.readValue(json, PropertyNamingJsonName.class);
+
+    assertThat(message.getCustomName()).isEqualTo("v");
+    assertThat(message.getLowerCamel()).isEqualTo("v2");
+    assertThat(message.getLowerUnderscore()).isEqualTo("v3");
+    assertThat(message.getDifferentName()).isEqualTo("v4");
   }
 
   private static PropertyNamingStrategy snakeCaseNamingBase() {
