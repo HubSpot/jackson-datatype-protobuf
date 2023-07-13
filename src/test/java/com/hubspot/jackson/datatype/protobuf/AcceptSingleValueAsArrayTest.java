@@ -1,5 +1,9 @@
 package com.hubspot.jackson.datatype.protobuf;
 
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.create;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -7,9 +11,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.RepeatedFields;
 import org.junit.Test;
-
-import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class AcceptSingleValueAsArrayTest {
 
@@ -35,9 +36,9 @@ public class AcceptSingleValueAsArrayTest {
 
   private static ObjectMapper objectMapper(boolean enabled) {
     if (enabled) {
-      return camelCase().enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+      return create().enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
     } else {
-      return camelCase().disable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+      return create().disable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
     }
   }
 }

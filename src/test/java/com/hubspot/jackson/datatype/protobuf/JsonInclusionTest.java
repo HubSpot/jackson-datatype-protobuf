@@ -1,14 +1,8 @@
 package com.hubspot.jackson.datatype.protobuf;
 
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.create;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,6 +15,11 @@ import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.hubspot.jackson.datatype.protobuf.util.TestExtensionRegistry;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 public class JsonInclusionTest {
   private static final EnumSet<Include> EXCLUDED_VALUES = presentValues("ALWAYS", "USE_DEFAULTS", "CUSTOM");
@@ -137,7 +136,7 @@ public class JsonInclusionTest {
   }
 
   private static ObjectMapper mapper(Include inclusion) {
-    return camelCase().copy().setSerializationInclusion(inclusion);
+    return create().setSerializationInclusion(inclusion);
   }
 
   private static ObjectMapper mapper(Include inclusion, ExtensionRegistry extensionRegistry) {

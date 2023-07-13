@@ -1,15 +1,15 @@
 package com.hubspot.jackson.datatype.protobuf;
 
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.create;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.writeAndReadBack;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import org.junit.Test;
-
-import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
-import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.writeAndReadBack;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class WriteEnumsUsingIndexTest {
 
@@ -47,9 +47,9 @@ public class WriteEnumsUsingIndexTest {
 
   private static ObjectMapper objectMapper(boolean enabled) {
     if (enabled) {
-      return camelCase().enable(SerializationFeature.WRITE_ENUMS_USING_INDEX);
+      return create().enable(SerializationFeature.WRITE_ENUMS_USING_INDEX);
     } else {
-      return camelCase().disable(SerializationFeature.WRITE_ENUMS_USING_INDEX);
+      return create().disable(SerializationFeature.WRITE_ENUMS_USING_INDEX);
     }
   }
 }
