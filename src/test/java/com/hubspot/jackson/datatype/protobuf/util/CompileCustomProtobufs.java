@@ -57,6 +57,53 @@ public final class CompileCustomProtobufs {
     getUnknownFields() {
       return this.unknownFields;
     }
+    private MixedJsonName(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              fieldWithNoJsonName_ = input.readInt32();
+              break;
+            }
+            case 16: {
+
+              fieldWithJsonName_ = input.readInt32();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.internal_static_com_hubspot_jackson_datatype_protobuf_util_MixedJsonName_descriptor;
@@ -71,7 +118,7 @@ public final class CompileCustomProtobufs {
     }
 
     public static final int FIELD_WITH_NO_JSON_NAME_FIELD_NUMBER = 1;
-    private int fieldWithNoJsonName_ = 0;
+    private int fieldWithNoJsonName_;
     /**
      * <code>int32 field_with_no_json_name = 1 [json_name = "fieldWithNoJsonName"];</code>
      * @return The fieldWithNoJsonName.
@@ -82,7 +129,7 @@ public final class CompileCustomProtobufs {
     }
 
     public static final int FIELD_WITH_JSON_NAME_FIELD_NUMBER = 2;
-    private int fieldWithJsonName_ = 0;
+    private int fieldWithJsonName_;
     /**
      * <code>int32 field_with_json_name = 2 [json_name = "custom-name"];</code>
      * @return The fieldWithJsonName.
@@ -112,7 +159,7 @@ public final class CompileCustomProtobufs {
       if (fieldWithJsonName_ != 0) {
         output.writeInt32(2, fieldWithJsonName_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
     @java.lang.Override
@@ -129,7 +176,7 @@ public final class CompileCustomProtobufs {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(2, fieldWithJsonName_);
       }
-      size += getUnknownFields().getSerializedSize();
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -148,7 +195,7 @@ public final class CompileCustomProtobufs {
           != other.getFieldWithNoJsonName()) return false;
       if (getFieldWithJsonName()
           != other.getFieldWithJsonName()) return false;
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
 
@@ -163,7 +210,7 @@ public final class CompileCustomProtobufs {
       hash = (53 * hash) + getFieldWithNoJsonName();
       hash = (37 * hash) + FIELD_WITH_JSON_NAME_FIELD_NUMBER;
       hash = (53 * hash) + getFieldWithJsonName();
-      hash = (29 * hash) + getUnknownFields().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -280,20 +327,26 @@ public final class CompileCustomProtobufs {
 
       // Construct using com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName.newBuilder()
       private Builder() {
-
+        maybeForceBuilderInitialization();
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        bitField0_ = 0;
         fieldWithNoJsonName_ = 0;
+
         fieldWithJsonName_ = 0;
+
         return this;
       }
 
@@ -320,19 +373,10 @@ public final class CompileCustomProtobufs {
       @java.lang.Override
       public com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName buildPartial() {
         com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName result = new com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName(this);
-        if (bitField0_ != 0) { buildPartial0(result); }
+        result.fieldWithNoJsonName_ = fieldWithNoJsonName_;
+        result.fieldWithJsonName_ = fieldWithJsonName_;
         onBuilt();
         return result;
-      }
-
-      private void buildPartial0(com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName result) {
-        int from_bitField0_ = bitField0_;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.fieldWithNoJsonName_ = fieldWithNoJsonName_;
-        }
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          result.fieldWithJsonName_ = fieldWithJsonName_;
-        }
       }
 
       @java.lang.Override
@@ -385,7 +429,7 @@ public final class CompileCustomProtobufs {
         if (other.getFieldWithJsonName() != 0) {
           setFieldWithJsonName(other.getFieldWithJsonName());
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -400,43 +444,19 @@ public final class CompileCustomProtobufs {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
+        com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName parsedMessage = null;
         try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 8: {
-                fieldWithNoJsonName_ = input.readInt32();
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 8
-              case 16: {
-                fieldWithJsonName_ = input.readInt32();
-                bitField0_ |= 0x00000002;
-                break;
-              } // case 16
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          onChanged();
-        } // finally
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
         return this;
       }
-      private int bitField0_;
 
       private int fieldWithNoJsonName_ ;
       /**
@@ -455,7 +475,6 @@ public final class CompileCustomProtobufs {
       public Builder setFieldWithNoJsonName(int value) {
         
         fieldWithNoJsonName_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -464,7 +483,7 @@ public final class CompileCustomProtobufs {
        * @return This builder for chaining.
        */
       public Builder clearFieldWithNoJsonName() {
-        bitField0_ = (bitField0_ & ~0x00000001);
+        
         fieldWithNoJsonName_ = 0;
         onChanged();
         return this;
@@ -487,7 +506,6 @@ public final class CompileCustomProtobufs {
       public Builder setFieldWithJsonName(int value) {
         
         fieldWithJsonName_ = value;
-        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -496,7 +514,7 @@ public final class CompileCustomProtobufs {
        * @return This builder for chaining.
        */
       public Builder clearFieldWithJsonName() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        
         fieldWithJsonName_ = 0;
         onChanged();
         return this;
@@ -534,18 +552,7 @@ public final class CompileCustomProtobufs {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
+        return new MixedJsonName(input, extensionRegistry);
       }
     };
 
