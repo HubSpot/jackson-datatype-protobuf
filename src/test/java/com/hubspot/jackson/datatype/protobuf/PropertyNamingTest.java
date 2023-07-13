@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName;
 import com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper;
 import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.PropertyNamingCamelCased;
@@ -269,6 +271,43 @@ public class PropertyNamingTest {
     assertThat(message.getLowerCamel()).isEqualTo("v2");
     assertThat(message.getLowerUnderscore()).isEqualTo("v3");
     assertThat(message.getDifferentName()).isEqualTo("v4");
+  }
+
+  @Test
+  public void itHandlesProtosCompiledFromDescriptorSet() throws IOException {
+    // protos compiled from descriptor set always have json_name populated
+    // https://github.com/protocolbuffers/protobuf/issues/6175
+
+    ObjectMapper mapper = new ObjectMapper()
+      .registerModules(new ProtobufModule(ProtobufJacksonConfig.builder().acceptLiteralFieldnames(true).build()))
+      .setPropertyNamingStrategy(new NamingBase() {
+        @Override
+        public String translate(String propertyName) {
+          return propertyName.toUpperCase();
+        }
+      });
+
+    MixedJsonName expected = MixedJsonName
+      .newBuilder()
+      .setFieldWithNoJsonName(123)
+      .setFieldWithJsonName(456)
+      .build();
+
+    ObjectNode node = mapper
+      .createObjectNode()
+      .put("field_with_no_json_name", 123)
+      .put("field_with_json_name", 456);
+
+    MixedJsonName parsed = mapper.treeToValue(node, MixedJsonName.class);
+    assertThat(parsed).isEqualTo(expected);
+
+    node = mapper
+      .createObjectNode()
+      .put("FIELD_WITH_NO_JSON_NAME", 123)
+      .put("custom-name", 456);
+
+    parsed = mapper.treeToValue(node, MixedJsonName.class);
+    assertThat(parsed).isEqualTo(expected);
   }
 
   private static PropertyNamingStrategy snakeCaseNamingBase() {
