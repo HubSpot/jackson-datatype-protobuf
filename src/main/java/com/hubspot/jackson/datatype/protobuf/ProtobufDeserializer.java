@@ -18,11 +18,11 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Descriptors.FieldDescriptor.Type;
 import com.google.protobuf.Message;
 import com.google.protobuf.NullValue;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.MessageDeserializer;
 import com.hubspot.jackson.datatype.protobuf.internal.Constants;
+import com.hubspot.jackson.datatype.protobuf.internal.Types;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -338,7 +338,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   }
 
   private int parseInt(FieldDescriptor field, JsonParser parser, DeserializationContext context) throws IOException {
-    if (isUnsigned(field.getType())) {
+    if (Types.isUnsigned(field.getType())) {
       long longValue = _parseLongPrimitive(parser, context);
       if (longValue < Constants.MIN_UINT32 || longValue > Constants.MAX_UINT32) {
         throw new InputCoercionException(
@@ -356,7 +356,7 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   }
 
   private long parseLong(FieldDescriptor field, JsonParser parser, DeserializationContext context) throws IOException {
-    if (isUnsigned(field.getType())) {
+    if (Types.isUnsigned(field.getType())) {
       BigInteger bigIntegerValue = BigIntegerDeserializer.instance.deserialize(parser, context);
       if (bigIntegerValue.compareTo(Constants.MIN_UINT64) < 0 || bigIntegerValue.compareTo(Constants.MAX_UINT64) > 0) {
         throw new InputCoercionException(
@@ -422,10 +422,6 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
     context.reportWrongTokenException(this, expected, message);
     // the previous method should have thrown
     throw new AssertionError();
-  }
-
-  private static boolean isUnsigned(Type type) {
-    return type == Type.FIXED32 || type == Type.UINT32 || type == Type.FIXED64 || type == Type.UINT64;
   }
 
   private static boolean isDefaultMessageDeserializer(JsonDeserializer<?> deserializer) {

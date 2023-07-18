@@ -1,7 +1,10 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
@@ -39,5 +42,11 @@ public class ValueSerializer extends ProtobufSerializer<Value> {
         writeValue(entry.getKey(), entry.getValue(), generator, serializerProvider);
       }
     }
+  }
+
+  @Override
+  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
+    // don't think we can do any better here since a Value is arbitrary json
+    visitor.expectAnyFormat(typeHint);
   }
 }
