@@ -18,6 +18,7 @@
 
     <dep.jackson.version>2.15.2</dep.jackson.version>
     <dep.jackson-databind.version>2.15.2</dep.jackson-databind.version>
+    <dep.javax-validation.version>2.0.1.Final</dep.javax-validation.version>
     <dep.protobuf-java.version>3.19.3</dep.protobuf-java.version>
     <dep.plugin.duplicate-finder.version>1.4.0</dep.plugin.duplicate-finder.version>
     <dep.scala.version>2.12.18</dep.scala.version>

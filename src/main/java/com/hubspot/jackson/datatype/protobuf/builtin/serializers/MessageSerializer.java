@@ -126,10 +126,6 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     Descriptor descriptor = defaultInstance.getDescriptorForType();
     Function<FieldDescriptor, String> propertyNaming = getPropertyNaming(descriptor, visitor.getProvider());
 
-    if (isUnwrappingSerializer()) {
-      // TODO do something different?
-    }
-
     new MessageSchemaGenerator(defaultInstance, descriptor, getConfig(), propertyNaming).acceptJsonFormatVisitor(visitor, typeHint);
   }
 
