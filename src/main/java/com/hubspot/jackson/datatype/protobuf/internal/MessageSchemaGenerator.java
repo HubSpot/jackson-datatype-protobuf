@@ -64,6 +64,7 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
         FieldDescriptor keyDescriptor = entryDescriptor.findFieldByName("key");
         FieldDescriptor valueDescriptor = entryDescriptor.findFieldByName("value");
 
+        // Hacky but I don't see an easier way to find exact map key/value class
         final JavaType mapType;
         try {
            mapType = visitor.getProvider().constructType(defaultInstance.getClass().getMethod(getterName(field)).getGenericReturnType());
