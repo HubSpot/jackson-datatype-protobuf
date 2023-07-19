@@ -3,20 +3,16 @@ package com.hubspot.jackson.datatype.protobuf.builtin;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-
-import org.junit.Test;
-
 import com.google.protobuf.ListValue;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.RepeatedListValue;
+import java.io.IOException;
+import org.junit.Test;
 
 public class RepeatedListValueTest {
+
   private static final Value NESTED = Value.newBuilder().setStringValue("nested").build();
-  private static final ListValue LIST = ListValue
-          .newBuilder()
-          .addValues(NESTED)
-          .build();
+  private static final ListValue LIST = ListValue.newBuilder().addValues(NESTED).build();
 
   @Test
   public void itReadsNestedListValues() throws IOException {

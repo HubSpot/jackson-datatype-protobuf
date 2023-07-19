@@ -15,7 +15,10 @@ import com.google.protobuf.NullValue;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import java.math.BigInteger;
 
-public class FieldSchemaGenerator extends StdSerializer<String> implements JsonFormatVisitable {
+public class FieldSchemaGenerator
+  extends StdSerializer<String>
+  implements JsonFormatVisitable {
+
   private final FieldDescriptor field;
   private final ProtobufJacksonConfig config;
 
@@ -32,13 +35,19 @@ public class FieldSchemaGenerator extends StdSerializer<String> implements JsonF
 
   @Override
   public void acceptJsonFormatVisitor(
-      JsonFormatVisitorWrapper visitor,
-      JavaType typeHint
+    JsonFormatVisitorWrapper visitor,
+    JavaType typeHint
   ) throws JsonMappingException {
     switch (field.getJavaType()) {
       case INT:
-        if (Types.isUnsigned(field.getType()) && config.properUnsignedNumberSerialization()) {
-          visitIntFormat(visitor, visitor.getProvider().constructType(Long.class), NumberType.LONG);
+        if (
+          Types.isUnsigned(field.getType()) && config.properUnsignedNumberSerialization()
+        ) {
+          visitIntFormat(
+            visitor,
+            visitor.getProvider().constructType(Long.class),
+            NumberType.LONG
+          );
         } else {
           visitIntFormat(visitor, typeHint, NumberType.INT);
         }
@@ -46,8 +55,14 @@ public class FieldSchemaGenerator extends StdSerializer<String> implements JsonF
       case LONG:
         if (config.serializeLongsAsString()) {
           visitor.expectStringFormat(visitor.getProvider().constructType(String.class));
-        } else if (Types.isUnsigned(field.getType()) && config.properUnsignedNumberSerialization()) {
-          visitIntFormat(visitor, visitor.getProvider().constructType(BigInteger.class), NumberType.BIG_INTEGER);
+        } else if (
+          Types.isUnsigned(field.getType()) && config.properUnsignedNumberSerialization()
+        ) {
+          visitIntFormat(
+            visitor,
+            visitor.getProvider().constructType(BigInteger.class),
+            NumberType.BIG_INTEGER
+          );
         } else {
           visitIntFormat(visitor, typeHint, NumberType.LONG);
         }
@@ -68,15 +83,18 @@ public class FieldSchemaGenerator extends StdSerializer<String> implements JsonF
       case ENUM:
         if (typeHint.getRawClass() == NullValue.class) {
           visitor.expectNullFormat(typeHint);
-        } else if (visitor.getProvider().isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX)) {
+        } else if (
+          visitor.getProvider().isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX)
+        ) {
           visitor.expectIntegerFormat(typeHint);
         } else {
           visitor.expectStringFormat(typeHint);
         }
         break;
       case MESSAGE:
-        JsonSerializer<Object> serializer =
-            visitor.getProvider().findValueSerializer(typeHint.getRawClass(), null);;
+        JsonSerializer<Object> serializer = visitor
+          .getProvider()
+          .findValueSerializer(typeHint.getRawClass(), null);
         serializer.acceptJsonFormatVisitor(visitor, typeHint);
         break;
     }

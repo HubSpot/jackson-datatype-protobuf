@@ -6,11 +6,6 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.oldU
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.writeAndReadBack;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
@@ -19,6 +14,9 @@ import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.AllFieldsProto3;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.AllFieldsProto3.Builder;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.NestedProto3;
+import java.io.IOException;
+import java.util.List;
+import org.junit.Test;
 
 public class AllFieldsProto3Test {
 
@@ -42,7 +40,9 @@ public class AllFieldsProto3Test {
 
   @Test
   public void testSingleBuilderCamelCase() {
-    AllFieldsProto3.Builder builder = ProtobufCreator.createBuilder(AllFieldsProto3.Builder.class);
+    AllFieldsProto3.Builder builder = ProtobufCreator.createBuilder(
+      AllFieldsProto3.Builder.class
+    );
 
     AllFieldsProto3.Builder parsed = writeAndReadBack(camelCase(), builder);
 
@@ -51,7 +51,10 @@ public class AllFieldsProto3Test {
 
   @Test
   public void testMultipleBuildersCamelCase() {
-    List<AllFieldsProto3.Builder> builders = ProtobufCreator.createBuilder(AllFieldsProto3.Builder.class, 10);
+    List<AllFieldsProto3.Builder> builders = ProtobufCreator.createBuilder(
+      AllFieldsProto3.Builder.class,
+      10
+    );
 
     List<AllFieldsProto3.Builder> parsed = writeAndReadBack(camelCase(), builders);
 
@@ -62,7 +65,10 @@ public class AllFieldsProto3Test {
   public void testSingleMessageUnderscore() {
     AllFieldsProto3 message = ProtobufCreator.create(AllFieldsProto3.class);
 
-    AllFieldsProto3 parsed = writeAndReadBack(ObjectMapperHelper.oldUnderscore(), message);
+    AllFieldsProto3 parsed = writeAndReadBack(
+      ObjectMapperHelper.oldUnderscore(),
+      message
+    );
 
     assertThat(parsed).isEqualTo(message);
   }
@@ -86,7 +92,10 @@ public class AllFieldsProto3Test {
   public void testMultipleMessagesUnderscore() {
     List<AllFieldsProto3> messages = ProtobufCreator.create(AllFieldsProto3.class, 10);
 
-    List<AllFieldsProto3> parsed = writeAndReadBack(ObjectMapperHelper.oldUnderscore(), messages);
+    List<AllFieldsProto3> parsed = writeAndReadBack(
+      ObjectMapperHelper.oldUnderscore(),
+      messages
+    );
 
     assertThat(parsed).isEqualTo(messages);
   }
@@ -96,7 +105,11 @@ public class AllFieldsProto3Test {
     List<AllFieldsProto3> messages = ProtobufCreator.create(AllFieldsProto3.class, 10);
 
     JsonNode json = newUnderscore().valueToTree(messages);
-    List<AllFieldsProto3> parsed = parseList(oldUnderscore(), AllFieldsProto3.class, json);
+    List<AllFieldsProto3> parsed = parseList(
+      oldUnderscore(),
+      AllFieldsProto3.class,
+      json
+    );
 
     assertThat(parsed).isEqualTo(messages);
 
@@ -108,19 +121,27 @@ public class AllFieldsProto3Test {
 
   @Test
   public void testSingleBuilderUnderscore() {
-    AllFieldsProto3.Builder builder = ProtobufCreator.createBuilder(AllFieldsProto3.Builder.class);
+    AllFieldsProto3.Builder builder = ProtobufCreator.createBuilder(
+      AllFieldsProto3.Builder.class
+    );
 
-    AllFieldsProto3.Builder parsed = writeAndReadBack(ObjectMapperHelper.oldUnderscore(), builder);
+    AllFieldsProto3.Builder parsed = writeAndReadBack(
+      ObjectMapperHelper.oldUnderscore(),
+      builder
+    );
 
     assertThat(parsed.build()).isEqualTo(builder.build());
   }
 
   @Test
   public void testSingleBuilderMixedUnderscoreNamingStrategies() throws IOException {
-    AllFieldsProto3.Builder builder = ProtobufCreator.createBuilder(AllFieldsProto3.Builder.class);
+    AllFieldsProto3.Builder builder = ProtobufCreator.createBuilder(
+      AllFieldsProto3.Builder.class
+    );
 
     JsonNode json = newUnderscore().valueToTree(builder);
-    AllFieldsProto3.Builder parsed = oldUnderscore().treeToValue(json, AllFieldsProto3.Builder.class);
+    AllFieldsProto3.Builder parsed = oldUnderscore()
+      .treeToValue(json, AllFieldsProto3.Builder.class);
 
     assertThat(parsed.build()).isEqualTo(builder.build());
 
@@ -132,19 +153,32 @@ public class AllFieldsProto3Test {
 
   @Test
   public void testMultipleBuildersUnderscore() {
-    List<AllFieldsProto3.Builder> builders = ProtobufCreator.createBuilder(AllFieldsProto3.Builder.class, 10);
+    List<AllFieldsProto3.Builder> builders = ProtobufCreator.createBuilder(
+      AllFieldsProto3.Builder.class,
+      10
+    );
 
-    List<AllFieldsProto3.Builder> parsed = writeAndReadBack(ObjectMapperHelper.oldUnderscore(), builders);
+    List<AllFieldsProto3.Builder> parsed = writeAndReadBack(
+      ObjectMapperHelper.oldUnderscore(),
+      builders
+    );
 
     assertThat(build(parsed)).isEqualTo(build(builders));
   }
 
   @Test
   public void testMultipleBuildersMixedUnderscoreNamingStrategies() {
-    List<AllFieldsProto3.Builder> builders = ProtobufCreator.createBuilder(AllFieldsProto3.Builder.class, 10);
+    List<AllFieldsProto3.Builder> builders = ProtobufCreator.createBuilder(
+      AllFieldsProto3.Builder.class,
+      10
+    );
 
     JsonNode json = newUnderscore().valueToTree(builders);
-    List<AllFieldsProto3.Builder> parsed = parseList(oldUnderscore(), AllFieldsProto3.Builder.class, json);
+    List<AllFieldsProto3.Builder> parsed = parseList(
+      oldUnderscore(),
+      AllFieldsProto3.Builder.class,
+      json
+    );
 
     assertThat(build(parsed)).isEqualTo(build(builders));
 
@@ -163,8 +197,15 @@ public class AllFieldsProto3Test {
     assertThat(parsed.getNested()).isEqualTo(NestedProto3.getDefaultInstance());
   }
 
-  private static <T> List<T> parseList(ObjectMapper mapper, Class<T> type, JsonNode json) {
-    return mapper.convertValue(json, mapper.getTypeFactory().constructCollectionType(List.class, type));
+  private static <T> List<T> parseList(
+    ObjectMapper mapper,
+    Class<T> type,
+    JsonNode json
+  ) {
+    return mapper.convertValue(
+      json,
+      mapper.getTypeFactory().constructCollectionType(List.class, type)
+    );
   }
 
   private static List<AllFieldsProto3> build(List<AllFieldsProto3.Builder> builders) {

@@ -22,7 +22,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class JsonInclusionTest {
-  private static final EnumSet<Include> EXCLUDED_VALUES = presentValues("ALWAYS", "USE_DEFAULTS", "CUSTOM");
+
+  private static final EnumSet<Include> EXCLUDED_VALUES = presentValues(
+    "ALWAYS",
+    "USE_DEFAULTS",
+    "CUSTOM"
+  );
   private static final ExtensionRegistry EXTENSION_REGISTRY = TestExtensionRegistry.getInstance();
 
   private static Set<String> allFields;
@@ -46,8 +51,12 @@ public class JsonInclusionTest {
     allExtensionFields = new HashSet<>();
     arrayExtensionFields = new HashSet<>();
 
-    ExtensionRegistryWrapper extensionRegistry = ExtensionRegistryWrapper.wrap(EXTENSION_REGISTRY);
-    for (ExtensionInfo extensionInfo : extensionRegistry.getExtensionsByDescriptor(descriptor)) {
+    ExtensionRegistryWrapper extensionRegistry = ExtensionRegistryWrapper.wrap(
+      EXTENSION_REGISTRY
+    );
+    for (ExtensionInfo extensionInfo : extensionRegistry.getExtensionsByDescriptor(
+      descriptor
+    )) {
       allExtensionFields.add(translate(extensionInfo.descriptor.getName()));
       if (extensionInfo.descriptor.isRepeated()) {
         arrayExtensionFields.add(translate(extensionInfo.descriptor.getName()));
@@ -139,7 +148,10 @@ public class JsonInclusionTest {
     return create().setSerializationInclusion(inclusion);
   }
 
-  private static ObjectMapper mapper(Include inclusion, ExtensionRegistry extensionRegistry) {
+  private static ObjectMapper mapper(
+    Include inclusion,
+    ExtensionRegistry extensionRegistry
+  ) {
     return camelCase(extensionRegistry).copy().setSerializationInclusion(inclusion);
   }
 

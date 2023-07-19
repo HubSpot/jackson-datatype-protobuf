@@ -27,15 +27,18 @@ public class DurationSerializer extends ProtobufSerializer<Duration> {
 
   @Override
   public void serialize(
-          Duration duration,
-          JsonGenerator generator,
-          SerializerProvider serializerProvider
+    Duration duration,
+    JsonGenerator generator,
+    SerializerProvider serializerProvider
   ) throws IOException {
     generator.writeString(Durations.toString(duration));
   }
 
   @Override
-  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
+  public void acceptJsonFormatVisitor(
+    JsonFormatVisitorWrapper visitor,
+    JavaType typeHint
+  ) throws JsonMappingException {
     visitor.expectStringFormat(typeHint);
   }
 }

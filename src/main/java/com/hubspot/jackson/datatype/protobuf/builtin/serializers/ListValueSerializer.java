@@ -14,7 +14,10 @@ import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 import java.io.IOException;
 
 public class ListValueSerializer extends ProtobufSerializer<ListValue> {
-  private static final FieldDescriptor VALUES_FIELD = ListValue.getDescriptor().findFieldByName("values");
+
+  private static final FieldDescriptor VALUES_FIELD = ListValue
+    .getDescriptor()
+    .findFieldByName("values");
 
   /**
    * @deprecated use {@link #ListValueSerializer(ProtobufJacksonConfig)}
@@ -30,9 +33,9 @@ public class ListValueSerializer extends ProtobufSerializer<ListValue> {
 
   @Override
   public void serialize(
-          ListValue listValue,
-          JsonGenerator generator,
-          SerializerProvider serializerProvider
+    ListValue listValue,
+    JsonGenerator generator,
+    SerializerProvider serializerProvider
   ) throws IOException {
     generator.writeStartArray();
     for (Value value : listValue.getValuesList()) {
@@ -42,9 +45,15 @@ public class ListValueSerializer extends ProtobufSerializer<ListValue> {
   }
 
   @Override
-  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
+  public void acceptJsonFormatVisitor(
+    JsonFormatVisitorWrapper visitor,
+    JavaType typeHint
+  ) throws JsonMappingException {
     JavaType elementType = visitor.getProvider().constructType(Value.class);
-    JavaType arrayType = visitor.getProvider().getTypeFactory().constructArrayType(elementType);
+    JavaType arrayType = visitor
+      .getProvider()
+      .getTypeFactory()
+      .constructArrayType(elementType);
     JsonArrayFormatVisitor itemVisitor = visitor.expectArrayFormat(arrayType);
     if (itemVisitor != null) {
       itemVisitor.itemsFormat(new ValueSerializer(getConfig()), elementType);

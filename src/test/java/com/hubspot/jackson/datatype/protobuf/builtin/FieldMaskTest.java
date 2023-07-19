@@ -3,16 +3,19 @@ package com.hubspot.jackson.datatype.protobuf.builtin;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-
-import org.junit.Test;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.protobuf.FieldMask;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasFieldMask;
+import java.io.IOException;
+import org.junit.Test;
 
 public class FieldMaskTest {
-  private static final FieldMask FIELD_MASK = FieldMask.newBuilder().addPaths("path_one").addPaths("path_two").build();
+
+  private static final FieldMask FIELD_MASK = FieldMask
+    .newBuilder()
+    .addPaths("path_one")
+    .addPaths("path_two")
+    .build();
 
   @Test
   public void itWritesFieldMaskWhenSetWithDefaultInclusion() throws IOException {
@@ -22,8 +25,12 @@ public class FieldMaskTest {
   }
 
   @Test
-  public void itWritesEmptyStringWhenSetToDefaultInstanceWithDefaultInclusion() throws IOException {
-    HasFieldMask message = HasFieldMask.newBuilder().setFieldMask(FieldMask.getDefaultInstance()).build();
+  public void itWritesEmptyStringWhenSetToDefaultInstanceWithDefaultInclusion()
+    throws IOException {
+    HasFieldMask message = HasFieldMask
+      .newBuilder()
+      .setFieldMask(FieldMask.getDefaultInstance())
+      .build();
     String json = camelCase().writeValueAsString(message);
     assertThat(json).isEqualTo("{\"fieldMask\":\"\"}");
   }
@@ -43,8 +50,12 @@ public class FieldMaskTest {
   }
 
   @Test
-  public void itWritesEmptyStringWhenSetToDefaultInstanceWithNonDefaultInclusion() throws IOException {
-    HasFieldMask message = HasFieldMask.newBuilder().setFieldMask(FieldMask.getDefaultInstance()).build();
+  public void itWritesEmptyStringWhenSetToDefaultInstanceWithNonDefaultInclusion()
+    throws IOException {
+    HasFieldMask message = HasFieldMask
+      .newBuilder()
+      .setFieldMask(FieldMask.getDefaultInstance())
+      .build();
     String json = camelCase(Include.NON_DEFAULT).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"fieldMask\":\"\"}");
   }
@@ -64,8 +75,12 @@ public class FieldMaskTest {
   }
 
   @Test
-  public void itWritesEmptyStringWhenSetToDefaultInstanceWithAlwaysInclusion() throws IOException {
-    HasFieldMask message = HasFieldMask.newBuilder().setFieldMask(FieldMask.getDefaultInstance()).build();
+  public void itWritesEmptyStringWhenSetToDefaultInstanceWithAlwaysInclusion()
+    throws IOException {
+    HasFieldMask message = HasFieldMask
+      .newBuilder()
+      .setFieldMask(FieldMask.getDefaultInstance())
+      .build();
     String json = camelCase(Include.ALWAYS).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"fieldMask\":\"\"}");
   }
@@ -85,8 +100,12 @@ public class FieldMaskTest {
   }
 
   @Test
-  public void itWritesEmptyStringWhenSetToDefaultInstanceWithNonNullInclusion() throws IOException {
-    HasFieldMask message = HasFieldMask.newBuilder().setFieldMask(FieldMask.getDefaultInstance()).build();
+  public void itWritesEmptyStringWhenSetToDefaultInstanceWithNonNullInclusion()
+    throws IOException {
+    HasFieldMask message = HasFieldMask
+      .newBuilder()
+      .setFieldMask(FieldMask.getDefaultInstance())
+      .build();
     String json = camelCase(Include.NON_NULL).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"fieldMask\":\"\"}");
   }

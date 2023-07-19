@@ -27,15 +27,18 @@ public class TimestampSerializer extends ProtobufSerializer<Timestamp> {
 
   @Override
   public void serialize(
-          Timestamp timestamp,
-          JsonGenerator generator,
-          SerializerProvider serializerProvider
+    Timestamp timestamp,
+    JsonGenerator generator,
+    SerializerProvider serializerProvider
   ) throws IOException {
     generator.writeString(Timestamps.toString(timestamp));
   }
 
   @Override
-  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
+  public void acceptJsonFormatVisitor(
+    JsonFormatVisitorWrapper visitor,
+    JavaType typeHint
+  ) throws JsonMappingException {
     visitor.expectStringFormat(typeHint);
   }
 }

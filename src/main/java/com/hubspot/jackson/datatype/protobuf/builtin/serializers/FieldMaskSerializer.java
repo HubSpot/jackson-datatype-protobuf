@@ -27,15 +27,18 @@ public class FieldMaskSerializer extends ProtobufSerializer<FieldMask> {
 
   @Override
   public void serialize(
-          FieldMask fieldMask,
-          JsonGenerator generator,
-          SerializerProvider serializerProvider
+    FieldMask fieldMask,
+    JsonGenerator generator,
+    SerializerProvider serializerProvider
   ) throws IOException {
     generator.writeString(FieldMaskUtil.toJsonString(fieldMask));
   }
 
   @Override
-  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
+  public void acceptJsonFormatVisitor(
+    JsonFormatVisitorWrapper visitor,
+    JavaType typeHint
+  ) throws JsonMappingException {
     visitor.expectStringFormat(typeHint);
   }
 }

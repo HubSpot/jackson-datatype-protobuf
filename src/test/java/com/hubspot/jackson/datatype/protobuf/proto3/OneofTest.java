@@ -4,12 +4,6 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.came
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.junit.Test;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -19,36 +13,47 @@ import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasOneof;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.AllFieldsProto3;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.EnumProto3;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import org.junit.Test;
 
 public class OneofTest {
+
   private static final HasOneof EMPTY = HasOneof.newBuilder().build();
   private static final HasOneof STRING = HasOneof.newBuilder().setString("test").build();
   private static final HasOneof DEFAULT_DURATION = HasOneof
-          .newBuilder()
-          .setDuration(Duration.getDefaultInstance())
-          .build();
+    .newBuilder()
+    .setDuration(Duration.getDefaultInstance())
+    .build();
   private static final HasOneof DURATION = HasOneof
-          .newBuilder()
-          .setDuration(Duration.newBuilder().setSeconds(30).build())
-          .build();
-  private static final HasOneof DEFAULT_ENUM = HasOneof.newBuilder().setEnum(EnumProto3.DEFAULT).build();
-  private static final HasOneof ENUM = HasOneof.newBuilder().setEnum(EnumProto3.FIRST).build();
+    .newBuilder()
+    .setDuration(Duration.newBuilder().setSeconds(30).build())
+    .build();
+  private static final HasOneof DEFAULT_ENUM = HasOneof
+    .newBuilder()
+    .setEnum(EnumProto3.DEFAULT)
+    .build();
+  private static final HasOneof ENUM = HasOneof
+    .newBuilder()
+    .setEnum(EnumProto3.FIRST)
+    .build();
   private static final HasOneof DEFAULT_PROTO2_MESSAGE = HasOneof
-          .newBuilder()
-          .setProto2Message(AllFields.getDefaultInstance())
-          .build();
+    .newBuilder()
+    .setProto2Message(AllFields.getDefaultInstance())
+    .build();
   private static final HasOneof PROTO2_MESSAGE = HasOneof
-          .newBuilder()
-          .setProto2Message(AllFields.newBuilder().setString("proto2").build())
-          .build();
+    .newBuilder()
+    .setProto2Message(AllFields.newBuilder().setString("proto2").build())
+    .build();
   private static final HasOneof DEFAULT_PROTO3_MESSAGE = HasOneof
-          .newBuilder()
-          .setProto3Message(AllFieldsProto3.getDefaultInstance())
-          .build();
+    .newBuilder()
+    .setProto3Message(AllFieldsProto3.getDefaultInstance())
+    .build();
   private static final HasOneof PROTO3_MESSAGE = HasOneof
-          .newBuilder()
-          .setProto3Message(AllFieldsProto3.newBuilder().setString("proto3").build())
-          .build();
+    .newBuilder()
+    .setProto3Message(AllFieldsProto3.newBuilder().setString("proto3").build())
+    .build();
 
   @Test
   public void itOmitsOneofWhenNotSetWithDefaultInclusion() throws IOException {
@@ -63,7 +68,8 @@ public class OneofTest {
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultDurationWithDefaultInclusion() throws IOException {
+  public void itWritesOneofWhenSetToDefaultDurationWithDefaultInclusion()
+    throws IOException {
     String json = camelCase().writeValueAsString(DEFAULT_DURATION);
     assertThat(json).isEqualTo("{\"duration\":\"0s\"}");
   }
@@ -87,29 +93,34 @@ public class OneofTest {
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultProto2MessageWithDefaultInclusion() throws IOException {
+  public void itWritesOneofWhenSetToDefaultProto2MessageWithDefaultInclusion()
+    throws IOException {
     String json = camelCase().writeValueAsString(DEFAULT_PROTO2_MESSAGE);
     assertThat(json).isEqualTo("{\"proto2Message\":{}}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToProto2MessageWithDefaultInclusion() throws IOException {
+  public void itWritesOneofWhenSetToProto2MessageWithDefaultInclusion()
+    throws IOException {
     String json = camelCase().writeValueAsString(PROTO2_MESSAGE);
     assertThat(json).isEqualTo("{\"proto2Message\":{\"string\":\"proto2\"}}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultProto3MessageWithDefaultInclusion() throws IOException {
+  public void itWritesOneofWhenSetToDefaultProto3MessageWithDefaultInclusion()
+    throws IOException {
     String json = camelCase().writeValueAsString(DEFAULT_PROTO3_MESSAGE);
     JsonNode node = camelCase().readTree(json).get("proto3Message");
     assertThat(node).isEqualTo(nullProto3Message().without("nested"));
   }
 
   @Test
-  public void itWritesOneofWhenSetToProto3MessageWithDefaultInclusion() throws IOException {
+  public void itWritesOneofWhenSetToProto3MessageWithDefaultInclusion()
+    throws IOException {
     String json = camelCase().writeValueAsString(PROTO3_MESSAGE);
     JsonNode node = camelCase().readTree(json).get("proto3Message");
-    assertThat(node).isEqualTo(nullProto3Message().put("string", "proto3").without("nested"));
+    assertThat(node)
+      .isEqualTo(nullProto3Message().put("string", "proto3").without("nested"));
   }
 
   @Test
@@ -125,7 +136,8 @@ public class OneofTest {
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultDurationWithAlwaysInclusion() throws IOException {
+  public void itWritesOneofWhenSetToDefaultDurationWithAlwaysInclusion()
+    throws IOException {
     String json = camelCase(Include.ALWAYS).writeValueAsString(DEFAULT_DURATION);
     assertThat(json).isEqualTo("{\"duration\":\"0s\"}");
   }
@@ -149,28 +161,32 @@ public class OneofTest {
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultProto2MessageWithAlwaysInclusion() throws IOException {
+  public void itWritesOneofWhenSetToDefaultProto2MessageWithAlwaysInclusion()
+    throws IOException {
     String json = camelCase(Include.ALWAYS).writeValueAsString(DEFAULT_PROTO2_MESSAGE);
     JsonNode node = camelCase(Include.ALWAYS).readTree(json).get("proto2Message");
     assertThat(node).isEqualTo(nullProto2Message());
   }
 
   @Test
-  public void itWritesOneofWhenSetToProto2MessageWithAlwaysInclusion() throws IOException {
+  public void itWritesOneofWhenSetToProto2MessageWithAlwaysInclusion()
+    throws IOException {
     String json = camelCase(Include.ALWAYS).writeValueAsString(PROTO2_MESSAGE);
     JsonNode node = camelCase(Include.ALWAYS).readTree(json).get("proto2Message");
     assertThat(node).isEqualTo(nullProto2Message().put("string", "proto2"));
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultProto3MessageWithAlwaysInclusion() throws IOException {
+  public void itWritesOneofWhenSetToDefaultProto3MessageWithAlwaysInclusion()
+    throws IOException {
     String json = camelCase(Include.ALWAYS).writeValueAsString(DEFAULT_PROTO3_MESSAGE);
     JsonNode node = camelCase(Include.ALWAYS).readTree(json).get("proto3Message");
     assertThat(node).isEqualTo(nullProto3Message());
   }
 
   @Test
-  public void itWritesOneofWhenSetToProto3MessageWithAlwaysInclusion() throws IOException {
+  public void itWritesOneofWhenSetToProto3MessageWithAlwaysInclusion()
+    throws IOException {
     String json = camelCase(Include.ALWAYS).writeValueAsString(PROTO3_MESSAGE);
     JsonNode node = camelCase(Include.ALWAYS).readTree(json).get("proto3Message");
     assertThat(node).isEqualTo(nullProto3Message().put("string", "proto3"));
@@ -221,7 +237,8 @@ public class OneofTest {
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
       case DURATION:
-        assertThat(message.getDuration()).isEqualTo(Duration.newBuilder().setSeconds(30).build());
+        assertThat(message.getDuration())
+          .isEqualTo(Duration.newBuilder().setSeconds(30).build());
         break;
       default:
         fail("Unexpected oneof set: " + message.getOneofCase());
@@ -286,7 +303,8 @@ public class OneofTest {
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
       case PROTO2_MESSAGE:
-        assertThat(message.getProto2Message()).isEqualTo(AllFields.newBuilder().setString("test").build());
+        assertThat(message.getProto2Message())
+          .isEqualTo(AllFields.newBuilder().setString("test").build());
         break;
       default:
         fail("Unexpected oneof set: " + message.getOneofCase());
@@ -325,7 +343,8 @@ public class OneofTest {
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
       case PROTO3_MESSAGE:
-        assertThat(message.getProto3Message()).isEqualTo(AllFieldsProto3.newBuilder().setString("test").build());
+        assertThat(message.getProto3Message())
+          .isEqualTo(AllFieldsProto3.newBuilder().setString("test").build());
         break;
       default:
         fail("Unexpected oneof set: " + message.getOneofCase());
@@ -338,7 +357,8 @@ public class OneofTest {
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
       case PROTO3_MESSAGE:
-        assertThat(message.getProto3Message()).isEqualTo(AllFieldsProto3.getDefaultInstance());
+        assertThat(message.getProto3Message())
+          .isEqualTo(AllFieldsProto3.getDefaultInstance());
         break;
       default:
         fail("Unexpected oneof set: " + message.getOneofCase());
@@ -385,23 +405,23 @@ public class OneofTest {
   private ObjectNode nullProto3Message() {
     ObjectNode node = camelCase().createObjectNode();
     node
-            .put("double", 0.0d)
-            .put("float", 0.0d)
-            .put("int32", 0)
-            .put("int64", 0)
-            .put("uint32", 0)
-            .put("uint64", 0)
-            .put("sint32", 0)
-            .put("sint64", 0)
-            .put("fixed32", 0)
-            .put("fixed64", 0)
-            .put("sfixed32", 0)
-            .put("sfixed64", 0)
-            .put("bool", false)
-            .put("string", "")
-            .put("bytes", "")
-            .put("enum", "DEFAULT")
-            .set("nested", NullNode.getInstance());
+      .put("double", 0.0d)
+      .put("float", 0.0d)
+      .put("int32", 0)
+      .put("int64", 0)
+      .put("uint32", 0)
+      .put("uint64", 0)
+      .put("sint32", 0)
+      .put("sint64", 0)
+      .put("fixed32", 0)
+      .put("fixed64", 0)
+      .put("sfixed32", 0)
+      .put("sfixed64", 0)
+      .put("bool", false)
+      .put("string", "")
+      .put("bytes", "")
+      .put("enum", "DEFAULT")
+      .set("nested", NullNode.getInstance());
     return node;
   }
 }

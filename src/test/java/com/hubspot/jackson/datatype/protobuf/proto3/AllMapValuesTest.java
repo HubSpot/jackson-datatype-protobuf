@@ -3,10 +3,6 @@ package com.hubspot.jackson.datatype.protobuf.proto3;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-
-import org.junit.Test;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -34,6 +30,8 @@ import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasAllMapValu
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.AllFieldsProto3;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.EnumProto3;
+import java.io.IOException;
+import org.junit.Test;
 
 public class AllMapValuesTest {
 
@@ -78,48 +76,69 @@ public class AllMapValuesTest {
     Value value = Value.newBuilder().setStringValue("test").build();
     ByteString byteString = ByteString.copyFromUtf8("test");
     Any any = Any
-            .newBuilder()
-            .setTypeUrl("type.googleapis.com/google.protobuf.Value")
-            .setValue(value.toByteString())
-            .build();
+      .newBuilder()
+      .setTypeUrl("type.googleapis.com/google.protobuf.Value")
+      .setValue(value.toByteString())
+      .build();
     return HasAllMapValues
-            .newBuilder()
-            .putDoubleMap("double", 1.5d)
-            .putFloatMap("float", 2.5f)
-            .putInt32Map("int32", 1)
-            .putInt64Map("int64", 2)
-            .putUint32Map("uint32", 3)
-            .putUint64Map("uint64", 4)
-            .putSint32Map("sint32", 5)
-            .putSint64Map("sint64", 6)
-            .putFixed32Map("fixed32", 7)
-            .putFixed64Map("fixed64", 8)
-            .putSfixed32Map("sfixed32", 9)
-            .putSfixed64Map("sfixed64", 10)
-            .putBoolMap("bool", true)
-            .putStringMap("string", "test")
-            .putBytesMap("bytes", byteString)
-            .putAnyMap("any", any)
-            .putDurationMap("duration", Duration.newBuilder().setSeconds(30).build())
-            .putFieldMaskMap("field_mask", FieldMask.newBuilder().addPaths("path_one").addPaths("path_two").build())
-            .putListValueMap("list_value", ListValue.newBuilder().addValues(value).build())
-            .putNullValueMap("null_value", NullValue.NULL_VALUE)
-            .putStructMap("struct", Struct.newBuilder().putFields("field", value).build())
-            .putTimestampMap("timestamp", Timestamp.newBuilder().setSeconds(946684800).build())
-            .putValueMap("value", value)
-            .putDoubleWrapperMap("double_wrapper", DoubleValue.newBuilder().setValue(3.5d).build())
-            .putFloatWrapperMap("float_wrapper", FloatValue.newBuilder().setValue(4.5f).build())
-            .putInt32WrapperMap("int32_wrapper", Int32Value.newBuilder().setValue(11).build())
-            .putInt64WrapperMap("int64_wrapper", Int64Value.newBuilder().setValue(12).build())
-            .putUint32WrapperMap("uint32_wrapper", UInt32Value.newBuilder().setValue(13).build())
-            .putUint64WrapperMap("uint64_wrapper", UInt64Value.newBuilder().setValue(14).build())
-            .putBoolWrapperMap("bool_wrapper", BoolValue.newBuilder().setValue(true).build())
-            .putStringWrapperMap("string_wrapper", StringValue.newBuilder().setValue("test").build())
-            .putBytesWrapperMap("bytes_wrapper", BytesValue.newBuilder().setValue(byteString).build())
-            .putEnumMap("enum", EnumProto3.FIRST)
-            .putProto2MessageMap("proto2", AllFields.newBuilder().setString("proto2").build())
-            .putProto3MessageMap("proto3", AllFieldsProto3.newBuilder().setString("proto3").build())
-            .build();
+      .newBuilder()
+      .putDoubleMap("double", 1.5d)
+      .putFloatMap("float", 2.5f)
+      .putInt32Map("int32", 1)
+      .putInt64Map("int64", 2)
+      .putUint32Map("uint32", 3)
+      .putUint64Map("uint64", 4)
+      .putSint32Map("sint32", 5)
+      .putSint64Map("sint64", 6)
+      .putFixed32Map("fixed32", 7)
+      .putFixed64Map("fixed64", 8)
+      .putSfixed32Map("sfixed32", 9)
+      .putSfixed64Map("sfixed64", 10)
+      .putBoolMap("bool", true)
+      .putStringMap("string", "test")
+      .putBytesMap("bytes", byteString)
+      .putAnyMap("any", any)
+      .putDurationMap("duration", Duration.newBuilder().setSeconds(30).build())
+      .putFieldMaskMap(
+        "field_mask",
+        FieldMask.newBuilder().addPaths("path_one").addPaths("path_two").build()
+      )
+      .putListValueMap("list_value", ListValue.newBuilder().addValues(value).build())
+      .putNullValueMap("null_value", NullValue.NULL_VALUE)
+      .putStructMap("struct", Struct.newBuilder().putFields("field", value).build())
+      .putTimestampMap("timestamp", Timestamp.newBuilder().setSeconds(946684800).build())
+      .putValueMap("value", value)
+      .putDoubleWrapperMap(
+        "double_wrapper",
+        DoubleValue.newBuilder().setValue(3.5d).build()
+      )
+      .putFloatWrapperMap("float_wrapper", FloatValue.newBuilder().setValue(4.5f).build())
+      .putInt32WrapperMap("int32_wrapper", Int32Value.newBuilder().setValue(11).build())
+      .putInt64WrapperMap("int64_wrapper", Int64Value.newBuilder().setValue(12).build())
+      .putUint32WrapperMap(
+        "uint32_wrapper",
+        UInt32Value.newBuilder().setValue(13).build()
+      )
+      .putUint64WrapperMap(
+        "uint64_wrapper",
+        UInt64Value.newBuilder().setValue(14).build()
+      )
+      .putBoolWrapperMap("bool_wrapper", BoolValue.newBuilder().setValue(true).build())
+      .putStringWrapperMap(
+        "string_wrapper",
+        StringValue.newBuilder().setValue("test").build()
+      )
+      .putBytesWrapperMap(
+        "bytes_wrapper",
+        BytesValue.newBuilder().setValue(byteString).build()
+      )
+      .putEnumMap("enum", EnumProto3.FIRST)
+      .putProto2MessageMap("proto2", AllFields.newBuilder().setString("proto2").build())
+      .putProto3MessageMap(
+        "proto3",
+        AllFieldsProto3.newBuilder().setString("proto3").build()
+      )
+      .build();
   }
 
   private static ObjectNode hasAllMapValuesNode() {
@@ -142,9 +161,16 @@ public class AllMapValuesTest {
     node.set("anyMap", newObjectNode().set("any", anyNode()));
     node.set("durationMap", newObjectNode().put("duration", "30s"));
     node.set("fieldMaskMap", newObjectNode().put("field_mask", "pathOne,pathTwo"));
-    node.set("listValueMap", newObjectNode().set("list_value", camelCase().createArrayNode().add(TextNode.valueOf("test"))));
+    node.set(
+      "listValueMap",
+      newObjectNode()
+        .set("list_value", camelCase().createArrayNode().add(TextNode.valueOf("test")))
+    );
     node.set("nullValueMap", newObjectNode().set("null_value", NullNode.getInstance()));
-    node.set("structMap", newObjectNode().set("struct", newObjectNode().put("field", "test")));
+    node.set(
+      "structMap",
+      newObjectNode().set("struct", newObjectNode().put("field", "test"))
+    );
     node.set("timestampMap", newObjectNode().put("timestamp", "2000-01-01T00:00:00Z"));
     node.set("valueMap", newObjectNode().put("value", "test"));
     node.set("doubleWrapperMap", newObjectNode().put("double_wrapper", 3.5d));
@@ -157,8 +183,14 @@ public class AllMapValuesTest {
     node.set("stringWrapperMap", newObjectNode().put("string_wrapper", "test"));
     node.set("bytesWrapperMap", newObjectNode().put("bytes_wrapper", "dGVzdA=="));
     node.set("enumMap", newObjectNode().put("enum", "FIRST"));
-    node.set("proto2MessageMap", newObjectNode().set("proto2", newObjectNode().put("string", "proto2")));
-    node.set("proto3MessageMap", newObjectNode().set("proto3", newObjectNode().put("string", "proto3")));
+    node.set(
+      "proto2MessageMap",
+      newObjectNode().set("proto2", newObjectNode().put("string", "proto2"))
+    );
+    node.set(
+      "proto3MessageMap",
+      newObjectNode().set("proto3", newObjectNode().put("string", "proto3"))
+    );
     return node;
   }
 
@@ -166,8 +198,8 @@ public class AllMapValuesTest {
     byte[] bytes = Value.newBuilder().setStringValue("test").build().toByteArray();
     String base64 = camelCase().getSerializationConfig().getBase64Variant().encode(bytes);
     return newObjectNode()
-            .put("typeUrl", "type.googleapis.com/google.protobuf.Value")
-            .put("value", base64);
+      .put("typeUrl", "type.googleapis.com/google.protobuf.Value")
+      .put("value", base64);
   }
 
   private static ObjectNode hasEmptyMapsNode() {
