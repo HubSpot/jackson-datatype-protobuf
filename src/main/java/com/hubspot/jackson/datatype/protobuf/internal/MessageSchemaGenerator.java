@@ -1,18 +1,12 @@
 package com.hubspot.jackson.datatype.protobuf.internal;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser.NumberType;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonMapFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.databind.type.ArrayType;
 import com.google.common.base.CaseFormat;
 import com.google.protobuf.Descriptors.Descriptor;
@@ -20,10 +14,8 @@ import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.google.protobuf.GeneratedMessageV3.ExtendableMessageOrBuilder;
 import com.google.protobuf.Message;
-import com.google.protobuf.NullValue;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import java.lang.reflect.Method;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -56,7 +48,7 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
       String fieldName = propertyNaming.apply(field);
       JavaType fieldType =
           visitor.getProvider().constructType(fieldClass(defaultInstance, field));
-      JsonFormatVisitable fieldVisitable = new MessageFieldVisitable(field);
+      JsonFormatVisitable fieldVisitable = new FieldSchemaGenerator(field, config);
 
       if (field.isMapField()) {
         Message defaultMapEntry = defaultInstance.toBuilder().newBuilderForField(field).getDefaultInstanceForType();
@@ -75,8 +67,8 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
         objectVisitor.optionalProperty(fieldName, (fieldVisitor, ignored) -> {
             JsonMapFormatVisitor mapVisitor = fieldVisitor.expectMapFormat(mapType);
             if (mapVisitor != null) {
-              mapVisitor.keyFormat(new MessageFieldVisitable(keyDescriptor), mapType.getKeyType());
-              mapVisitor.valueFormat(new MessageFieldVisitable(valueDescriptor), mapType.getContentType());
+              mapVisitor.keyFormat(new FieldSchemaGenerator(keyDescriptor, config), mapType.getKeyType());
+              mapVisitor.valueFormat(new FieldSchemaGenerator(valueDescriptor, config), mapType.getContentType());
             }
         }, mapType);
       } else if (field.isRepeated()) {
@@ -136,71 +128,5 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
 
   private static String getterName(FieldDescriptor field) {
     return "get" + CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, field.getName());
-  }
-
-  private class MessageFieldVisitable extends StdSerializer<String> implements JsonFormatVisitable {
-    private final FieldDescriptor field;
-
-    public MessageFieldVisitable(FieldDescriptor field) {
-      super(String.class);
-      this.field = field;
-    }
-
-    @Override
-    public void serialize(String value, JsonGenerator gen, SerializerProvider provider) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void acceptJsonFormatVisitor(
-        JsonFormatVisitorWrapper visitor,
-        JavaType typeHint
-    ) throws JsonMappingException {
-      switch (field.getJavaType()) {
-        case INT:
-          if (Types.isUnsigned(field.getType()) && config.properUnsignedNumberSerialization()) {
-            visitIntFormat(visitor, visitor.getProvider().constructType(Long.class), NumberType.LONG);
-          } else {
-            visitIntFormat(visitor, typeHint, NumberType.INT);
-          }
-          break;
-        case LONG:
-          if (config.serializeLongsAsString()) {
-            visitor.expectStringFormat(visitor.getProvider().constructType(String.class));
-          } else if (Types.isUnsigned(field.getType()) && config.properUnsignedNumberSerialization()) {
-            visitIntFormat(visitor, visitor.getProvider().constructType(BigInteger.class), NumberType.BIG_INTEGER);
-          } else {
-            visitIntFormat(visitor, typeHint, NumberType.LONG);
-          }
-          break;
-        case FLOAT:
-          visitFloatFormat(visitor, typeHint, NumberType.FLOAT);
-          break;
-        case DOUBLE:
-          visitFloatFormat(visitor, typeHint, NumberType.DOUBLE);
-          break;
-        case BOOLEAN:
-          visitor.expectBooleanFormat(typeHint);
-          break;
-        case STRING:
-        case BYTE_STRING:
-          visitor.expectStringFormat(typeHint);
-          break;
-        case ENUM:
-          if (typeHint.getRawClass() == NullValue.class) {
-            visitor.expectNullFormat(typeHint);
-          } else if (visitor.getProvider().isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX)) {
-            visitor.expectIntegerFormat(typeHint);
-          } else {
-            visitor.expectStringFormat(typeHint);
-          }
-          break;
-        case MESSAGE:
-          JsonSerializer<Object> serializer =
-              visitor.getProvider().findValueSerializer(typeHint.getRawClass(), null);;
-          serializer.acceptJsonFormatVisitor(visitor, typeHint);
-          break;
-      }
-    }
   }
 }

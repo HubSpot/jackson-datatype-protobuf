@@ -89,15 +89,15 @@ public class ProtobufModule extends Module {
     serializers.addSerializer(new StructSerializer(config));
     serializers.addSerializer(new TimestampSerializer(config));
     serializers.addSerializer(new ValueSerializer(config));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(DoubleValue.class, config));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(FloatValue.class, config));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(Int64Value.class, config));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(UInt64Value.class, config));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(Int32Value.class, config));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(UInt32Value.class, config));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(BoolValue.class, config));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(StringValue.class, config));
-    serializers.addSerializer(new WrappedPrimitiveSerializer<>(BytesValue.class, config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(DoubleValue.getDefaultInstance(), config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(FloatValue.getDefaultInstance(), config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(Int64Value.getDefaultInstance(), config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(UInt64Value.getDefaultInstance(), config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(Int32Value.getDefaultInstance(), config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(UInt32Value.getDefaultInstance(),  config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(BoolValue.getDefaultInstance(), config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(StringValue.getDefaultInstance(), config));
+    serializers.addSerializer(new WrappedPrimitiveSerializer<>(BytesValue.getDefaultInstance(), config));
 
     context.addSerializers(serializers);
 
