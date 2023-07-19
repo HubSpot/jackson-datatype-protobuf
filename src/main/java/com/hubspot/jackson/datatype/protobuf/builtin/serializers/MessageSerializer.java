@@ -2,21 +2,24 @@ package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 import com.fasterxml.jackson.databind.util.NameTransformer;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
 import com.google.protobuf.Descriptors.FileDescriptor.Syntax;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.google.protobuf.GeneratedMessageV3.ExtendableMessageOrBuilder;
+import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
+import com.hubspot.jackson.datatype.protobuf.internal.MessageSchemaGenerator;
 import com.hubspot.jackson.datatype.protobuf.internal.PropertyNamingCache;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +28,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
-  @SuppressFBWarnings(value="SE_BAD_FIELD")
-  private final ProtobufJacksonConfig config;
   private final boolean unwrappingSerializer;
   private final Map<Descriptor, PropertyNamingCache> propertyNamingCache;
 
@@ -44,7 +45,6 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
   private MessageSerializer(ProtobufJacksonConfig config, boolean unwrappingSerializer) {
     super(MessageOrBuilder.class, config);
-    this.config = config;
     this.unwrappingSerializer = unwrappingSerializer;
     this.propertyNamingCache = new ConcurrentHashMap<>();
   }
@@ -70,7 +70,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     if (message instanceof ExtendableMessageOrBuilder<?>) {
       fields = new ArrayList<>(fields);
 
-      for (ExtensionInfo extensionInfo : config.extensionRegistry().getExtensionsByDescriptor(descriptor)) {
+      for (ExtensionInfo extensionInfo : getConfig().extensionRegistry().getExtensionsByDescriptor(descriptor)) {
         fields.add(extensionInfo.descriptor);
       }
     }
@@ -117,7 +117,35 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
   @Override
   public MessageSerializer unwrappingSerializer(NameTransformer nameTransformer) {
-    return new MessageSerializer(config, true);
+    return new MessageSerializer(getConfig(), true);
+  }
+
+  @Override
+  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
+    Message defaultInstance = defaultInstance(typeHint);
+    Descriptor descriptor = defaultInstance.getDescriptorForType();
+    Function<FieldDescriptor, String> propertyNaming = getPropertyNaming(descriptor, visitor.getProvider());
+
+    new MessageSchemaGenerator(defaultInstance, descriptor, getConfig(), propertyNaming).acceptJsonFormatVisitor(visitor, typeHint);
+  }
+
+  private static Message defaultInstance(JavaType typeHint) {
+    Class<?> messageOrBuilderType = typeHint.getRawClass();
+
+    final Class<?> messageType;
+    if (Message.class.isAssignableFrom(messageOrBuilderType)) {
+      messageType = messageOrBuilderType;
+    } else if (Message.Builder.class.isAssignableFrom(messageOrBuilderType)) {
+      messageType = messageOrBuilderType.getDeclaringClass();
+    } else {
+      throw new RuntimeException("Class does not appear to extend Message or Message.Builder: " + messageOrBuilderType);
+    }
+
+    try {
+      return (Message) messageType.getMethod("getDefaultInstance").invoke(null);
+    } catch (Exception e) {
+      throw new RuntimeException("Unable to get default instance for type " + messageType, e);
+    }
   }
 
   private Function<FieldDescriptor, String> getPropertyNaming(Descriptor descriptor, SerializerProvider serializerProvider) {
@@ -126,7 +154,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
       // use computeIfAbsent as a fallback since it allocates
       cache = propertyNamingCache.computeIfAbsent(
           descriptor,
-          ignored -> PropertyNamingCache.forDescriptor(descriptor, config)
+          ignored -> PropertyNamingCache.forDescriptor(descriptor, getConfig())
       );
     }
 
@@ -135,7 +163,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
   private static boolean supportsFieldPresence(FieldDescriptor field) {
     // messages still support field presence in proto3
-    return field.getJavaType() == JavaType.MESSAGE;
+    return field.getJavaType() == com.google.protobuf.Descriptors.FieldDescriptor.JavaType.MESSAGE;
   }
 
   private static boolean writeSingleElementArraysUnwrapped(SerializerProvider config) {

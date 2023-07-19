@@ -1,7 +1,11 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ListValue;
 import com.google.protobuf.Value;
@@ -35,5 +39,15 @@ public class ListValueSerializer extends ProtobufSerializer<ListValue> {
       writeValue(VALUES_FIELD, value, generator, serializerProvider);
     }
     generator.writeEndArray();
+  }
+
+  @Override
+  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
+    JavaType elementType = visitor.getProvider().constructType(Value.class);
+    JavaType arrayType = visitor.getProvider().getTypeFactory().constructArrayType(elementType);
+    JsonArrayFormatVisitor itemVisitor = visitor.expectArrayFormat(arrayType);
+    if (itemVisitor != null) {
+      itemVisitor.itemsFormat(new ValueSerializer(getConfig()), elementType);
+    }
   }
 }

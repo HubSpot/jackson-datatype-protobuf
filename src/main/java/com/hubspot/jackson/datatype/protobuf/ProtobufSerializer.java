@@ -4,19 +4,22 @@ import static java.lang.String.format;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Descriptors.FieldDescriptor.Type;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.NullValue;
 import com.hubspot.jackson.datatype.protobuf.internal.Constants;
+import com.hubspot.jackson.datatype.protobuf.internal.Types;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
@@ -44,6 +47,9 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
     this.serializerCache = new ConcurrentHashMap<>();
   }
 
+  @Override
+  public abstract void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException;
+
   @SuppressWarnings("unchecked")
   protected void writeMap(
           FieldDescriptor field,
@@ -63,6 +69,10 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
       writeValue(valueDescriptor, value, generator, serializerProvider);
     }
     generator.writeEndObject();
+  }
+
+  protected ProtobufJacksonConfig getConfig() {
+    return config;
   }
 
   protected void writeValue(
@@ -125,7 +135,7 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
     if (
       value < 0 &&
       config.properUnsignedNumberSerialization() &&
-      isUnsigned(field.getType())
+      Types.isUnsigned(field.getType())
     ) {
       long unsignedValue = value & Constants.MAX_UINT32;
       generator.writeNumber(unsignedValue);
@@ -138,7 +148,7 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
     if (
       value < 0 &&
       config.properUnsignedNumberSerialization() &&
-      isUnsigned(field.getType())
+      Types.isUnsigned(field.getType())
     ) {
       BigInteger unsignedValue = BigInteger.valueOf(value & Long.MAX_VALUE).setBit(Long.SIZE - 1);
       if (config.serializeLongsAsString()) {
@@ -151,10 +161,6 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
     } else {
       generator.writeNumber(value);
     }
-  }
-
-  private static boolean isUnsigned(Type type) {
-    return type == Type.FIXED32 || type == Type.UINT32 || type == Type.FIXED64 || type == Type.UINT64;
   }
 
   private static boolean writeEnumsUsingIndex(SerializerProvider config) {
