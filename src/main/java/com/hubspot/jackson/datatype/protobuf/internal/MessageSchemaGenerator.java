@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.MapType;
+import com.google.common.base.CaseFormat;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
@@ -118,7 +119,7 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
         return String.class;
       case ENUM:
         // Hacky but I don't see an easier way to find exact enum class
-        String getterName = "get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
+        String getterName = "get" + CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, field.getName());
 
         try {
           final Method getterMethod;
@@ -200,7 +201,7 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
           break;
         case MESSAGE:
           JsonSerializer<Object> serializer =
-              visitor.getProvider().findValueSerializer(typeHint);
+              visitor.getProvider().findValueSerializer(typeHint.getRawClass(), null);;
           serializer.acceptJsonFormatVisitor(visitor, typeHint);
           break;
       }

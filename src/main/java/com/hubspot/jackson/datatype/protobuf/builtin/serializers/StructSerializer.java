@@ -39,12 +39,13 @@ public class StructSerializer extends ProtobufSerializer<Struct> {
 
   @Override
   public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
-    JsonMapFormatVisitor mapVisitor = visitor.expectMapFormat(typeHint);
-    if (mapVisitor != null) {
-      JavaType stringType = visitor.getProvider().constructType(String.class);
-      mapVisitor.keyFormat(JsonFormatVisitorWrapper::expectStringFormat, stringType);
+    JavaType keyType = visitor.getProvider().constructType(String.class);
+    JavaType valueType = visitor.getProvider().constructType(Value.class);
+    JavaType mapType = visitor.getProvider().getTypeFactory().constructMapLikeType(typeHint.getRawClass(), keyType, valueType);
 
-      JavaType valueType = visitor.getProvider().constructType(Value.class);
+    JsonMapFormatVisitor mapVisitor = visitor.expectMapFormat(mapType);
+    if (mapVisitor != null) {
+      mapVisitor.keyFormat(JsonFormatVisitorWrapper::expectStringFormat, keyType);
       mapVisitor.valueFormat(new ValueSerializer(getConfig()), valueType);
     }
   }

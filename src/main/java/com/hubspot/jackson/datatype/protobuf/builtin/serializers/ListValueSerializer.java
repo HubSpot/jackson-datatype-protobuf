@@ -43,10 +43,11 @@ public class ListValueSerializer extends ProtobufSerializer<ListValue> {
 
   @Override
   public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
-    JsonArrayFormatVisitor itemVisitor = visitor.expectArrayFormat(typeHint);
+    JavaType elementType = visitor.getProvider().constructType(Value.class);
+    JavaType arrayType = visitor.getProvider().getTypeFactory().constructArrayType(elementType);
+    JsonArrayFormatVisitor itemVisitor = visitor.expectArrayFormat(arrayType);
     if (itemVisitor != null) {
-      JavaType valueType = visitor.getProvider().constructType(Value.class);
-      itemVisitor.itemsFormat(new ValueSerializer(getConfig()), valueType);
+      itemVisitor.itemsFormat(new ValueSerializer(getConfig()), elementType);
     }
   }
 }
