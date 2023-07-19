@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonMapFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.databind.type.ArrayType;
-import com.fasterxml.jackson.databind.type.MapType;
 import com.google.common.base.CaseFormat;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -27,7 +26,6 @@ import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 public class MessageSchemaGenerator implements JsonFormatVisitable {
@@ -63,26 +61,21 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
       if (field.isMapField()) {
         Message defaultMapEntry = defaultInstance.toBuilder().newBuilderForField(field).getDefaultInstanceForType();
         Descriptor entryDescriptor = defaultMapEntry.getDescriptorForType();
-
         FieldDescriptor keyDescriptor = entryDescriptor.findFieldByName("key");
-        JavaType keyType = visitor.getProvider().constructType(fieldClass(defaultMapEntry, keyDescriptor));
-
         FieldDescriptor valueDescriptor = entryDescriptor.findFieldByName("value");
-        JavaType valueType;
-        // TODO this doesn't really work for enums
-        if (valueDescriptor.getJavaType() == FieldDescriptor.JavaType.ENUM) {
-          valueType = visitor.getProvider().constructType(String.class);
-        } else {
-          valueType = visitor.getProvider().constructType(fieldClass(defaultMapEntry, valueDescriptor));
+
+        final JavaType mapType;
+        try {
+           mapType = visitor.getProvider().constructType(defaultInstance.getClass().getMethod(getterName(field)).getGenericReturnType());
+        } catch (ReflectiveOperationException e) {
+          throw new RuntimeException(e);
         }
 
-        MapType mapType =
-            visitor.getProvider().getTypeFactory().constructMapType(Map.class, keyType, valueType);
         objectVisitor.optionalProperty(fieldName, (fieldVisitor, ignored) -> {
             JsonMapFormatVisitor mapVisitor = fieldVisitor.expectMapFormat(mapType);
             if (mapVisitor != null) {
-              mapVisitor.keyFormat(new MessageFieldVisitable(keyDescriptor), keyType);
-              mapVisitor.valueFormat(new MessageFieldVisitable(valueDescriptor), valueType);
+              mapVisitor.keyFormat(new MessageFieldVisitable(keyDescriptor), mapType.getKeyType());
+              mapVisitor.valueFormat(new MessageFieldVisitable(valueDescriptor), mapType.getContentType());
             }
         }, mapType);
       } else if (field.isRepeated()) {
@@ -119,15 +112,13 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
         return String.class;
       case ENUM:
         // Hacky but I don't see an easier way to find exact enum class
-        String getterName = "get" + CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, field.getName());
-
         try {
           final Method getterMethod;
           if (field.isRepeated()) {
             // for repeated fields it takes an int index argument
-            getterMethod = defaultInstance.getClass().getMethod(getterName, Integer.TYPE);
+            getterMethod = defaultInstance.getClass().getMethod(getterName(field), Integer.TYPE);
           } else {
-            getterMethod = defaultInstance.getClass().getMethod(getterName);
+            getterMethod = defaultInstance.getClass().getMethod(getterName(field));
           }
 
           return getterMethod.getReturnType();
@@ -140,6 +131,10 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
       default:
         throw new IllegalArgumentException("Unknown field type: " + field.getJavaType());
     }
+  }
+
+  private static String getterName(FieldDescriptor field) {
+    return "get" + CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, field.getName());
   }
 
   private class MessageFieldVisitable extends StdSerializer<String> implements JsonFormatVisitable {
