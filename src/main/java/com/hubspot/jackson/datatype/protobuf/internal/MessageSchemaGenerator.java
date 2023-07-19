@@ -21,12 +21,18 @@ import java.util.List;
 import java.util.function.Function;
 
 public class MessageSchemaGenerator implements JsonFormatVisitable {
+
   private final Message defaultInstance;
   private final Descriptor descriptor;
   private final ProtobufJacksonConfig config;
   private final Function<FieldDescriptor, String> propertyNaming;
 
-  public MessageSchemaGenerator(Message defaultInstance, Descriptor descriptor, ProtobufJacksonConfig config, Function<FieldDescriptor, String> propertyNaming) {
+  public MessageSchemaGenerator(
+    Message defaultInstance,
+    Descriptor descriptor,
+    ProtobufJacksonConfig config,
+    Function<FieldDescriptor, String> propertyNaming
+  ) {
     this.defaultInstance = defaultInstance;
     this.descriptor = descriptor;
     this.config = config;
@@ -34,24 +40,33 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
   }
 
   @Override
-  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
+  public void acceptJsonFormatVisitor(
+    JsonFormatVisitorWrapper visitor,
+    JavaType typeHint
+  ) throws JsonMappingException {
     JsonObjectFormatVisitor objectVisitor = visitor.expectObjectFormat(typeHint);
 
     List<FieldDescriptor> fields = new ArrayList<>(descriptor.getFields());
     if (defaultInstance instanceof ExtendableMessageOrBuilder<?>) {
-      for (ExtensionInfo extensionInfo : config.extensionRegistry().getExtensionsByDescriptor(descriptor)) {
+      for (ExtensionInfo extensionInfo : config
+        .extensionRegistry()
+        .getExtensionsByDescriptor(descriptor)) {
         fields.add(extensionInfo.descriptor);
       }
     }
 
     for (final FieldDescriptor field : fields) {
       String fieldName = propertyNaming.apply(field);
-      JavaType fieldType =
-          visitor.getProvider().constructType(fieldClass(defaultInstance, field));
+      JavaType fieldType = visitor
+        .getProvider()
+        .constructType(fieldClass(defaultInstance, field));
       JsonFormatVisitable fieldVisitable = new FieldSchemaGenerator(field, config);
 
       if (field.isMapField()) {
-        Message defaultMapEntry = defaultInstance.toBuilder().newBuilderForField(field).getDefaultInstanceForType();
+        Message defaultMapEntry = defaultInstance
+          .toBuilder()
+          .newBuilderForField(field)
+          .getDefaultInstanceForType();
         Descriptor entryDescriptor = defaultMapEntry.getDescriptorForType();
         FieldDescriptor keyDescriptor = entryDescriptor.findFieldByName("key");
         FieldDescriptor valueDescriptor = entryDescriptor.findFieldByName("value");
@@ -59,27 +74,54 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
         // Hacky but I don't see an easier way to find exact map key/value class
         final JavaType mapType;
         try {
-           mapType = visitor.getProvider().constructType(defaultInstance.getClass().getMethod(getterName(field)).getGenericReturnType());
+          mapType =
+            visitor
+              .getProvider()
+              .constructType(
+                defaultInstance
+                  .getClass()
+                  .getMethod(getterName(field))
+                  .getGenericReturnType()
+              );
         } catch (ReflectiveOperationException e) {
           throw new RuntimeException(e);
         }
 
-        objectVisitor.optionalProperty(fieldName, (fieldVisitor, ignored) -> {
+        objectVisitor.optionalProperty(
+          fieldName,
+          (fieldVisitor, ignored) -> {
             JsonMapFormatVisitor mapVisitor = fieldVisitor.expectMapFormat(mapType);
             if (mapVisitor != null) {
-              mapVisitor.keyFormat(new FieldSchemaGenerator(keyDescriptor, config), mapType.getKeyType());
-              mapVisitor.valueFormat(new FieldSchemaGenerator(valueDescriptor, config), mapType.getContentType());
+              mapVisitor.keyFormat(
+                new FieldSchemaGenerator(keyDescriptor, config),
+                mapType.getKeyType()
+              );
+              mapVisitor.valueFormat(
+                new FieldSchemaGenerator(valueDescriptor, config),
+                mapType.getContentType()
+              );
             }
-        }, mapType);
+          },
+          mapType
+        );
       } else if (field.isRepeated()) {
-        ArrayType listType = visitor.getProvider().getTypeFactory().constructArrayType(fieldType);
+        ArrayType listType = visitor
+          .getProvider()
+          .getTypeFactory()
+          .constructArrayType(fieldType);
 
-        objectVisitor.optionalProperty(fieldName, (fieldVisitor, ignored) -> {
-          JsonArrayFormatVisitor arrayVisitor = fieldVisitor.expectArrayFormat(listType);
-          if (arrayVisitor != null) {
-            arrayVisitor.itemsFormat(fieldVisitable, fieldType);
-          }
-        }, listType);
+        objectVisitor.optionalProperty(
+          fieldName,
+          (fieldVisitor, ignored) -> {
+            JsonArrayFormatVisitor arrayVisitor = fieldVisitor.expectArrayFormat(
+              listType
+            );
+            if (arrayVisitor != null) {
+              arrayVisitor.itemsFormat(fieldVisitable, fieldType);
+            }
+          },
+          listType
+        );
       } else {
         objectVisitor.optionalProperty(fieldName, fieldVisitable, fieldType);
       }
@@ -100,7 +142,7 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
       case BOOLEAN:
         return Boolean.class;
       case STRING:
-        // just return String for ByteString, otherwise we may accidentally introspect the ByteString proto
+      // just return String for ByteString, otherwise we may accidentally introspect the ByteString proto
       case BYTE_STRING:
         return String.class;
       case ENUM:
@@ -109,7 +151,8 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
           final Method getterMethod;
           if (field.isRepeated()) {
             // for repeated fields it takes an int index argument
-            getterMethod = defaultInstance.getClass().getMethod(getterName(field), Integer.TYPE);
+            getterMethod =
+              defaultInstance.getClass().getMethod(getterName(field), Integer.TYPE);
           } else {
             getterMethod = defaultInstance.getClass().getMethod(getterName(field));
           }
@@ -119,7 +162,9 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
           throw new RuntimeException(e);
         }
       case MESSAGE:
-        Message.Builder subBuilder = defaultInstance.toBuilder().newBuilderForField(field);
+        Message.Builder subBuilder = defaultInstance
+          .toBuilder()
+          .newBuilderForField(field);
         return subBuilder.getDefaultInstanceForType().getClass();
       default:
         throw new IllegalArgumentException("Unknown field type: " + field.getJavaType());
@@ -127,6 +172,8 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
   }
 
   private static String getterName(FieldDescriptor field) {
-    return "get" + CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, field.getName());
+    return (
+      "get" + CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, field.getName())
+    );
   }
 }

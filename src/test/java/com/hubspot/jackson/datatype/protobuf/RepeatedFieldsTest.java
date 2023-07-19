@@ -6,11 +6,6 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.oldU
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.writeAndReadBack;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
@@ -18,6 +13,9 @@ import com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper;
 import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.RepeatedFields;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.RepeatedFields.Builder;
+import java.io.IOException;
+import java.util.List;
+import org.junit.Test;
 
 public class RepeatedFieldsTest {
 
@@ -41,7 +39,9 @@ public class RepeatedFieldsTest {
 
   @Test
   public void testSingleBuilderCamelCase() {
-    RepeatedFields.Builder builder = ProtobufCreator.createBuilder(RepeatedFields.Builder.class);
+    RepeatedFields.Builder builder = ProtobufCreator.createBuilder(
+      RepeatedFields.Builder.class
+    );
 
     RepeatedFields.Builder parsed = writeAndReadBack(camelCase(), builder);
 
@@ -50,7 +50,10 @@ public class RepeatedFieldsTest {
 
   @Test
   public void testMultipleBuildersCamelCase() {
-    List<RepeatedFields.Builder> builders = ProtobufCreator.createBuilder(RepeatedFields.Builder.class, 10);
+    List<RepeatedFields.Builder> builders = ProtobufCreator.createBuilder(
+      RepeatedFields.Builder.class,
+      10
+    );
 
     List<RepeatedFields.Builder> parsed = writeAndReadBack(camelCase(), builders);
 
@@ -85,7 +88,10 @@ public class RepeatedFieldsTest {
   public void testMultipleMessagesUnderscore() {
     List<RepeatedFields> messages = ProtobufCreator.create(RepeatedFields.class, 10);
 
-    List<RepeatedFields> parsed = writeAndReadBack(ObjectMapperHelper.oldUnderscore(), messages);
+    List<RepeatedFields> parsed = writeAndReadBack(
+      ObjectMapperHelper.oldUnderscore(),
+      messages
+    );
 
     assertThat(parsed).isEqualTo(messages);
   }
@@ -107,19 +113,27 @@ public class RepeatedFieldsTest {
 
   @Test
   public void testSingleBuilderUnderscore() {
-    RepeatedFields.Builder builder = ProtobufCreator.createBuilder(RepeatedFields.Builder.class);
+    RepeatedFields.Builder builder = ProtobufCreator.createBuilder(
+      RepeatedFields.Builder.class
+    );
 
-    RepeatedFields.Builder parsed = writeAndReadBack(ObjectMapperHelper.oldUnderscore(), builder);
+    RepeatedFields.Builder parsed = writeAndReadBack(
+      ObjectMapperHelper.oldUnderscore(),
+      builder
+    );
 
     assertThat(parsed.build()).isEqualTo(builder.build());
   }
 
   @Test
   public void testSingleBuilderMixedUnderscoreNamingStrategies() throws IOException {
-    RepeatedFields.Builder builder = ProtobufCreator.createBuilder(RepeatedFields.Builder.class);
+    RepeatedFields.Builder builder = ProtobufCreator.createBuilder(
+      RepeatedFields.Builder.class
+    );
 
     JsonNode json = newUnderscore().valueToTree(builder);
-    RepeatedFields.Builder parsed = oldUnderscore().treeToValue(json, RepeatedFields.Builder.class);
+    RepeatedFields.Builder parsed = oldUnderscore()
+      .treeToValue(json, RepeatedFields.Builder.class);
 
     assertThat(parsed.build()).isEqualTo(builder.build());
 
@@ -131,19 +145,32 @@ public class RepeatedFieldsTest {
 
   @Test
   public void testMultipleBuildersUnderscore() {
-    List<RepeatedFields.Builder> builders = ProtobufCreator.createBuilder(RepeatedFields.Builder.class, 10);
+    List<RepeatedFields.Builder> builders = ProtobufCreator.createBuilder(
+      RepeatedFields.Builder.class,
+      10
+    );
 
-    List<RepeatedFields.Builder> parsed = writeAndReadBack(ObjectMapperHelper.oldUnderscore(), builders);
+    List<RepeatedFields.Builder> parsed = writeAndReadBack(
+      ObjectMapperHelper.oldUnderscore(),
+      builders
+    );
 
     assertThat(build(parsed)).isEqualTo(build(builders));
   }
 
   @Test
   public void testMultipleBuildersMixedUnderscoreNamingStrategies() {
-    List<RepeatedFields.Builder> builders = ProtobufCreator.createBuilder(RepeatedFields.Builder.class, 10);
+    List<RepeatedFields.Builder> builders = ProtobufCreator.createBuilder(
+      RepeatedFields.Builder.class,
+      10
+    );
 
     JsonNode json = newUnderscore().valueToTree(builders);
-    List<RepeatedFields.Builder> parsed = parseList(oldUnderscore(), RepeatedFields.Builder.class, json);
+    List<RepeatedFields.Builder> parsed = parseList(
+      oldUnderscore(),
+      RepeatedFields.Builder.class,
+      json
+    );
 
     assertThat(build(parsed)).isEqualTo(build(builders));
 
@@ -153,8 +180,15 @@ public class RepeatedFieldsTest {
     assertThat(build(parsed)).isEqualTo(build(builders));
   }
 
-  private static <T> List<T> parseList(ObjectMapper mapper, Class<T> type, JsonNode json) {
-    return mapper.convertValue(json, mapper.getTypeFactory().constructCollectionType(List.class, type));
+  private static <T> List<T> parseList(
+    ObjectMapper mapper,
+    Class<T> type,
+    JsonNode json
+  ) {
+    return mapper.convertValue(
+      json,
+      mapper.getTypeFactory().constructCollectionType(List.class, type)
+    );
   }
 
   private static List<RepeatedFields> build(List<RepeatedFields.Builder> builders) {

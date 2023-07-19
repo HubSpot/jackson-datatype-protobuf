@@ -13,8 +13,8 @@ public class TestExtensionRegistry {
   public static ExtensionRegistry getInstance() {
     ExtensionRegistry extensionRegistry = ExtensionRegistry.newInstance();
     Iterable<FieldDescriptor> extensionDescriptors = Iterables.concat(
-        AllExtensions.getDescriptor().getExtensions(),
-        RepeatedExtensions.getDescriptor().getExtensions()
+      AllExtensions.getDescriptor().getExtensions(),
+      RepeatedExtensions.getDescriptor().getExtensions()
     );
 
     for (FieldDescriptor extension : extensionDescriptors) {

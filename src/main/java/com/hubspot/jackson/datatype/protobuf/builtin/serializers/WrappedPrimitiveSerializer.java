@@ -12,7 +12,9 @@ import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 import com.hubspot.jackson.datatype.protobuf.internal.FieldSchemaGenerator;
 import java.io.IOException;
 
-public class WrappedPrimitiveSerializer<T extends MessageOrBuilder> extends ProtobufSerializer<T> {
+public class WrappedPrimitiveSerializer<T extends MessageOrBuilder>
+  extends ProtobufSerializer<T> {
+
   private final FieldDescriptor valueField;
 
   /**
@@ -39,17 +41,21 @@ public class WrappedPrimitiveSerializer<T extends MessageOrBuilder> extends Prot
 
   @Override
   public void serialize(
-          MessageOrBuilder message,
-          JsonGenerator generator,
-          SerializerProvider serializerProvider
+    MessageOrBuilder message,
+    JsonGenerator generator,
+    SerializerProvider serializerProvider
   ) throws IOException {
     Object value = message.getField(valueField);
     writeValue(valueField, value, generator, serializerProvider);
   }
 
   @Override
-  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
-    new FieldSchemaGenerator(valueField, getConfig()).acceptJsonFormatVisitor(visitor, typeHint);
+  public void acceptJsonFormatVisitor(
+    JsonFormatVisitorWrapper visitor,
+    JavaType typeHint
+  ) throws JsonMappingException {
+    new FieldSchemaGenerator(valueField, getConfig())
+      .acceptJsonFormatVisitor(visitor, typeHint);
   }
 
   @SuppressWarnings("unchecked")

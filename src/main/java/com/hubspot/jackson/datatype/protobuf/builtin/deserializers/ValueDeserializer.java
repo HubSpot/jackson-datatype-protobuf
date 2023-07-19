@@ -1,17 +1,21 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.deserializers;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.NullValue;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.ProtobufDeserializer;
+import java.io.IOException;
 
 public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder> {
-  private static final FieldDescriptor STRUCT_FIELD = Value.getDescriptor().findFieldByName("struct_value");
-  private static final FieldDescriptor LIST_FIELD = Value.getDescriptor().findFieldByName("list_value");
+
+  private static final FieldDescriptor STRUCT_FIELD = Value
+    .getDescriptor()
+    .findFieldByName("struct_value");
+  private static final FieldDescriptor LIST_FIELD = Value
+    .getDescriptor()
+    .findFieldByName("list_value");
 
   public ValueDeserializer() {
     super(Value.class);
@@ -19,9 +23,9 @@ public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder
 
   @Override
   protected void populate(
-          Value.Builder builder,
-          JsonParser parser,
-          DeserializationContext context
+    Value.Builder builder,
+    JsonParser parser,
+    DeserializationContext context
   ) throws IOException {
     switch (parser.getCurrentToken()) {
       case START_OBJECT:
@@ -49,7 +53,10 @@ public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder
         builder.setNullValue(NullValue.NULL_VALUE);
         return;
       default:
-        String message = "Can not deserialize instance of com.google.protobuf.Value out of " + parser.currentToken() + " token";
+        String message =
+          "Can not deserialize instance of com.google.protobuf.Value out of " +
+          parser.currentToken() +
+          " token";
         context.reportInputMismatch(Value.class, message);
         // the previous method should have thrown
         throw new AssertionError();

@@ -3,15 +3,14 @@ package com.hubspot.jackson.datatype.protobuf.builtin;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-
-import org.junit.Test;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.protobuf.Duration;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasDuration;
+import java.io.IOException;
+import org.junit.Test;
 
 public class DurationTest {
+
   private static final Duration DURATION = Duration.newBuilder().setSeconds(30).build();
 
   @Test
@@ -22,8 +21,12 @@ public class DurationTest {
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithDefaultInclusion() throws IOException {
-    HasDuration message = HasDuration.newBuilder().setDuration(Duration.getDefaultInstance()).build();
+  public void itWritesZeroWhenSetToDefaultInstanceWithDefaultInclusion()
+    throws IOException {
+    HasDuration message = HasDuration
+      .newBuilder()
+      .setDuration(Duration.getDefaultInstance())
+      .build();
     String json = camelCase().writeValueAsString(message);
     assertThat(json).isEqualTo("{\"duration\":\"0s\"}");
   }
@@ -43,8 +46,12 @@ public class DurationTest {
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithNonDefaultInclusion() throws IOException {
-    HasDuration message = HasDuration.newBuilder().setDuration(Duration.getDefaultInstance()).build();
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonDefaultInclusion()
+    throws IOException {
+    HasDuration message = HasDuration
+      .newBuilder()
+      .setDuration(Duration.getDefaultInstance())
+      .build();
     String json = camelCase(Include.NON_DEFAULT).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"duration\":\"0s\"}");
   }
@@ -64,8 +71,12 @@ public class DurationTest {
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithAlwaysInclusion() throws IOException {
-    HasDuration message = HasDuration.newBuilder().setDuration(Duration.getDefaultInstance()).build();
+  public void itWritesZeroWhenSetToDefaultInstanceWithAlwaysInclusion()
+    throws IOException {
+    HasDuration message = HasDuration
+      .newBuilder()
+      .setDuration(Duration.getDefaultInstance())
+      .build();
     String json = camelCase(Include.ALWAYS).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"duration\":\"0s\"}");
   }
@@ -85,8 +96,12 @@ public class DurationTest {
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithNonNullInclusion() throws IOException {
-    HasDuration message = HasDuration.newBuilder().setDuration(Duration.getDefaultInstance()).build();
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonNullInclusion()
+    throws IOException {
+    HasDuration message = HasDuration
+      .newBuilder()
+      .setDuration(Duration.getDefaultInstance())
+      .build();
     String json = camelCase(Include.NON_NULL).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"duration\":\"0s\"}");
   }

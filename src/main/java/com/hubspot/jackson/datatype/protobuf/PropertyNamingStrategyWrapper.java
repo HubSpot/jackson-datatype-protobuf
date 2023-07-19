@@ -1,13 +1,13 @@
 package com.hubspot.jackson.datatype.protobuf;
 
-import java.lang.reflect.Method;
-
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.google.common.base.CaseFormat;
+import java.lang.reflect.Method;
 
 @SuppressWarnings("serial")
 public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
+
   private static final PropertyNamingStrategyBase SNAKE_TO_CAMEL = new SnakeToCamelNamingStrategy();
   private static final PropertyNamingStrategyBase NO_OP = new NoOpNamingStrategy();
 
@@ -36,7 +36,6 @@ public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
     public String translate(String fieldName) {
       return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, fieldName);
     }
-
   }
 
   private static class NoOpNamingStrategy extends PropertyNamingStrategyBase {
@@ -48,6 +47,7 @@ public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
   }
 
   private static class NamingBaseAdapter extends PropertyNamingStrategyBase {
+
     private static final Class<?> NAMING_BASE = tryToLoadNamingBase();
     private static final Method TRANSLATE_METHOD = tryToLoadTranslateMethod(NAMING_BASE);
 
@@ -72,7 +72,9 @@ public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
 
     private static Class<?> tryToLoadNamingBase() {
       try {
-        return Class.forName("com.fasterxml.jackson.databind.PropertyNamingStrategies$NamingBase");
+        return Class.forName(
+          "com.fasterxml.jackson.databind.PropertyNamingStrategies$NamingBase"
+        );
       } catch (ClassNotFoundException e) {
         return null;
       }
@@ -85,7 +87,9 @@ public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
         try {
           return namingBase.getMethod("translate", String.class);
         } catch (NoSuchMethodException e) {
-          throw new RuntimeException("Unable to find translate method on class: " + namingBase);
+          throw new RuntimeException(
+            "Unable to find translate method on class: " + namingBase
+          );
         }
       }
     }

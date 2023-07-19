@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
+
   private final boolean unwrappingSerializer;
   private final Map<Descriptor, PropertyNamingCache> propertyNamingCache;
 
@@ -51,26 +52,36 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
   @Override
   public void serialize(
-          MessageOrBuilder message,
-          JsonGenerator generator,
-          SerializerProvider serializerProvider
+    MessageOrBuilder message,
+    JsonGenerator generator,
+    SerializerProvider serializerProvider
   ) throws IOException {
     if (!isUnwrappingSerializer()) {
       generator.writeStartObject();
     }
 
-    boolean proto3 = message.getDescriptorForType().getFile().getSyntax() == Syntax.PROTO3;
-    Include include = serializerProvider.getConfig().getDefaultPropertyInclusion().getValueInclusion();
+    boolean proto3 =
+      message.getDescriptorForType().getFile().getSyntax() == Syntax.PROTO3;
+    Include include = serializerProvider
+      .getConfig()
+      .getDefaultPropertyInclusion()
+      .getValueInclusion();
     boolean writeDefaultValues = proto3 && include != Include.NON_DEFAULT;
-    boolean writeEmptyCollections = include != Include.NON_DEFAULT && include != Include.NON_EMPTY;
+    boolean writeEmptyCollections =
+      include != Include.NON_DEFAULT && include != Include.NON_EMPTY;
 
     Descriptor descriptor = message.getDescriptorForType();
-    Function<FieldDescriptor, String> propertyNaming = getPropertyNaming(descriptor, serializerProvider);
+    Function<FieldDescriptor, String> propertyNaming = getPropertyNaming(
+      descriptor,
+      serializerProvider
+    );
     List<FieldDescriptor> fields = descriptor.getFields();
     if (message instanceof ExtendableMessageOrBuilder<?>) {
       fields = new ArrayList<>(fields);
 
-      for (ExtensionInfo extensionInfo : getConfig().extensionRegistry().getExtensionsByDescriptor(descriptor)) {
+      for (ExtensionInfo extensionInfo : getConfig()
+        .extensionRegistry()
+        .getExtensionsByDescriptor(descriptor)) {
         fields.add(extensionInfo.descriptor);
       }
     }
@@ -85,7 +96,9 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
           if (field.isMapField()) {
             generator.writeFieldName(fieldName);
             writeMap(field, valueList, generator, serializerProvider);
-          } else if (valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)) {
+          } else if (
+            valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)
+          ) {
             generator.writeFieldName(fieldName);
             writeValue(field, valueList.get(0), generator, serializerProvider);
           } else {
@@ -96,7 +109,14 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
             generator.writeEndArray();
           }
         }
-      } else if (message.hasField(field) || (writeDefaultValues && !supportsFieldPresence(field) && field.getContainingOneof() == null)) {
+      } else if (
+        message.hasField(field) ||
+        (
+          writeDefaultValues &&
+          !supportsFieldPresence(field) &&
+          field.getContainingOneof() == null
+        )
+      ) {
         generator.writeFieldName(fieldName);
         writeValue(field, message.getField(field), generator, serializerProvider);
       } else if (include == Include.ALWAYS && field.getContainingOneof() == null) {
@@ -121,12 +141,19 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   }
 
   @Override
-  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
+  public void acceptJsonFormatVisitor(
+    JsonFormatVisitorWrapper visitor,
+    JavaType typeHint
+  ) throws JsonMappingException {
     Message defaultInstance = defaultInstance(typeHint);
     Descriptor descriptor = defaultInstance.getDescriptorForType();
-    Function<FieldDescriptor, String> propertyNaming = getPropertyNaming(descriptor, visitor.getProvider());
+    Function<FieldDescriptor, String> propertyNaming = getPropertyNaming(
+      descriptor,
+      visitor.getProvider()
+    );
 
-    new MessageSchemaGenerator(defaultInstance, descriptor, getConfig(), propertyNaming).acceptJsonFormatVisitor(visitor, typeHint);
+    new MessageSchemaGenerator(defaultInstance, descriptor, getConfig(), propertyNaming)
+      .acceptJsonFormatVisitor(visitor, typeHint);
   }
 
   private static Message defaultInstance(JavaType typeHint) {
@@ -138,32 +165,47 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     } else if (Message.Builder.class.isAssignableFrom(messageOrBuilderType)) {
       messageType = messageOrBuilderType.getDeclaringClass();
     } else {
-      throw new RuntimeException("Class does not appear to extend Message or Message.Builder: " + messageOrBuilderType);
+      throw new RuntimeException(
+        "Class does not appear to extend Message or Message.Builder: " +
+        messageOrBuilderType
+      );
     }
 
     try {
       return (Message) messageType.getMethod("getDefaultInstance").invoke(null);
     } catch (Exception e) {
-      throw new RuntimeException("Unable to get default instance for type " + messageType, e);
+      throw new RuntimeException(
+        "Unable to get default instance for type " + messageType,
+        e
+      );
     }
   }
 
-  private Function<FieldDescriptor, String> getPropertyNaming(Descriptor descriptor, SerializerProvider serializerProvider) {
+  private Function<FieldDescriptor, String> getPropertyNaming(
+    Descriptor descriptor,
+    SerializerProvider serializerProvider
+  ) {
     PropertyNamingCache cache = propertyNamingCache.get(descriptor);
     if (cache == null) {
       // use computeIfAbsent as a fallback since it allocates
-      cache = propertyNamingCache.computeIfAbsent(
+      cache =
+        propertyNamingCache.computeIfAbsent(
           descriptor,
           ignored -> PropertyNamingCache.forDescriptor(descriptor, getConfig())
-      );
+        );
     }
 
-    return cache.forSerialization(serializerProvider.getConfig().getPropertyNamingStrategy());
+    return cache.forSerialization(
+      serializerProvider.getConfig().getPropertyNamingStrategy()
+    );
   }
 
   private static boolean supportsFieldPresence(FieldDescriptor field) {
     // messages still support field presence in proto3
-    return field.getJavaType() == com.google.protobuf.Descriptors.FieldDescriptor.JavaType.MESSAGE;
+    return (
+      field.getJavaType() ==
+      com.google.protobuf.Descriptors.FieldDescriptor.JavaType.MESSAGE
+    );
   }
 
   private static boolean writeSingleElementArraysUnwrapped(SerializerProvider config) {

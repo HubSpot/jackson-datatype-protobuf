@@ -3,24 +3,23 @@ package com.hubspot.jackson.datatype.protobuf.builtin;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-
-import org.junit.Test;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.protobuf.Any;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasAny;
+import java.io.IOException;
+import org.junit.Test;
 
 public class AnyTest {
+
   private static final String TYPE_URL = "type.googleapis.com/google.protobuf.Value";
   private static final Value VALUE = Value.newBuilder().setStringValue("test").build();
   private static final Any ANY = Any
-          .newBuilder()
-          .setTypeUrl(TYPE_URL)
-          .setValue(VALUE.toByteString())
-          .build();
+    .newBuilder()
+    .setTypeUrl(TYPE_URL)
+    .setValue(VALUE.toByteString())
+    .build();
 
   @Test
   public void itWritesDurationWhenSetWithDefaultInclusion() throws IOException {
@@ -30,7 +29,8 @@ public class AnyTest {
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithDefaultInclusion() throws IOException {
+  public void itWritesZeroWhenSetToDefaultInstanceWithDefaultInclusion()
+    throws IOException {
     HasAny message = HasAny.newBuilder().setAny(Any.getDefaultInstance()).build();
     String json = camelCase().writeValueAsString(message);
     assertThat(camelCase().readTree(json)).isEqualTo(defaultNode());
@@ -51,7 +51,8 @@ public class AnyTest {
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithNonDefaultInclusion() throws IOException {
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonDefaultInclusion()
+    throws IOException {
     HasAny message = HasAny.newBuilder().setAny(Any.getDefaultInstance()).build();
     String json = camelCase().writeValueAsString(message);
     assertThat(camelCase().readTree(json)).isEqualTo(defaultNode());
@@ -72,7 +73,8 @@ public class AnyTest {
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithAlwaysInclusion() throws IOException {
+  public void itWritesZeroWhenSetToDefaultInstanceWithAlwaysInclusion()
+    throws IOException {
     HasAny message = HasAny.newBuilder().setAny(Any.getDefaultInstance()).build();
     String json = camelCase().writeValueAsString(message);
     assertThat(camelCase().readTree(json)).isEqualTo(defaultNode());
@@ -93,7 +95,8 @@ public class AnyTest {
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithNonNullInclusion() throws IOException {
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonNullInclusion()
+    throws IOException {
     HasAny message = HasAny.newBuilder().setAny(Any.getDefaultInstance()).build();
     String json = camelCase().writeValueAsString(message);
     assertThat(camelCase().readTree(json)).isEqualTo(defaultNode());
@@ -137,19 +140,22 @@ public class AnyTest {
   }
 
   private static JsonNode anyNode() {
-    String base64 = camelCase().getSerializationConfig().getBase64Variant().encode(VALUE.toByteArray());
+    String base64 = camelCase()
+      .getSerializationConfig()
+      .getBase64Variant()
+      .encode(VALUE.toByteArray());
     JsonNode valueNode = camelCase()
-            .createObjectNode()
-            .put("typeUrl", TYPE_URL)
-            .put("value", base64);
+      .createObjectNode()
+      .put("typeUrl", TYPE_URL)
+      .put("value", base64);
     return camelCase().createObjectNode().set("any", valueNode);
   }
 
   private static JsonNode defaultNode() {
     JsonNode valueNode = camelCase()
-            .createObjectNode()
-            .put("typeUrl", "")
-            .put("value", "");
+      .createObjectNode()
+      .put("typeUrl", "")
+      .put("value", "");
     return camelCase().createObjectNode().set("any", valueNode);
   }
 }

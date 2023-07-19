@@ -14,7 +14,10 @@ import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 import java.io.IOException;
 
 public class StructSerializer extends ProtobufSerializer<Struct> {
-  private static final FieldDescriptor FIELDS_FIELD = Struct.getDescriptor().findFieldByName("fields");
+
+  private static final FieldDescriptor FIELDS_FIELD = Struct
+    .getDescriptor()
+    .findFieldByName("fields");
 
   /**
    * @deprecated use {@link #StructSerializer(ProtobufJacksonConfig)}
@@ -30,18 +33,24 @@ public class StructSerializer extends ProtobufSerializer<Struct> {
 
   @Override
   public void serialize(
-          Struct struct,
-          JsonGenerator generator,
-          SerializerProvider serializerProvider
+    Struct struct,
+    JsonGenerator generator,
+    SerializerProvider serializerProvider
   ) throws IOException {
     writeMap(FIELDS_FIELD, struct.getField(FIELDS_FIELD), generator, serializerProvider);
   }
 
   @Override
-  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
+  public void acceptJsonFormatVisitor(
+    JsonFormatVisitorWrapper visitor,
+    JavaType typeHint
+  ) throws JsonMappingException {
     JavaType keyType = visitor.getProvider().constructType(String.class);
     JavaType valueType = visitor.getProvider().constructType(Value.class);
-    JavaType mapType = visitor.getProvider().getTypeFactory().constructMapLikeType(typeHint.getRawClass(), keyType, valueType);
+    JavaType mapType = visitor
+      .getProvider()
+      .getTypeFactory()
+      .constructMapLikeType(typeHint.getRawClass(), keyType, valueType);
 
     JsonMapFormatVisitor mapVisitor = visitor.expectMapFormat(mapType);
     if (mapVisitor != null) {

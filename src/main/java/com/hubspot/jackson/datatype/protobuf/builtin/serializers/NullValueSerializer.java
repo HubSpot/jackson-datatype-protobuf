@@ -25,12 +25,16 @@ public class NullValueSerializer extends StdSerializer<NullValue> {
   }
 
   @Override
-  public void serialize(NullValue value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+  public void serialize(NullValue value, JsonGenerator gen, SerializerProvider provider)
+    throws IOException {
     gen.writeNull();
   }
 
   @Override
-  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
+  public void acceptJsonFormatVisitor(
+    JsonFormatVisitorWrapper visitor,
+    JavaType typeHint
+  ) throws JsonMappingException {
     visitor.expectNullFormat(typeHint);
   }
 }

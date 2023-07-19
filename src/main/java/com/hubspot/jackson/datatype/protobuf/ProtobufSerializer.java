@@ -26,8 +26,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends StdSerializer<T> {
-  private static final String NULL_VALUE_FULL_NAME = NullValue.getDescriptor().getFullName();
+public abstract class ProtobufSerializer<T extends MessageOrBuilder>
+  extends StdSerializer<T> {
+
+  private static final String NULL_VALUE_FULL_NAME = NullValue
+    .getDescriptor()
+    .getFullName();
 
   private final ProtobufJacksonConfig config;
   private final Map<Class<?>, JsonSerializer<Object>> serializerCache;
@@ -42,20 +46,22 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
 
   public ProtobufSerializer(Class<T> protobufType, ProtobufJacksonConfig config) {
     super(protobufType);
-
     this.config = config;
     this.serializerCache = new ConcurrentHashMap<>();
   }
 
   @Override
-  public abstract void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException;
+  public abstract void acceptJsonFormatVisitor(
+    JsonFormatVisitorWrapper visitor,
+    JavaType typeHint
+  ) throws JsonMappingException;
 
   @SuppressWarnings("unchecked")
   protected void writeMap(
-          FieldDescriptor field,
-          Object entries,
-          JsonGenerator generator,
-          SerializerProvider serializerProvider
+    FieldDescriptor field,
+    Object entries,
+    JsonGenerator generator,
+    SerializerProvider serializerProvider
   ) throws IOException {
     Descriptor entryDescriptor = field.getMessageType();
     FieldDescriptor keyDescriptor = entryDescriptor.findFieldByName("key");
@@ -76,10 +82,10 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
   }
 
   protected void writeValue(
-          FieldDescriptor field,
-          Object value,
-          JsonGenerator generator,
-          SerializerProvider serializerProvider
+    FieldDescriptor field,
+    Object value,
+    JsonGenerator generator,
+    SerializerProvider serializerProvider
   ) throws IOException {
     switch (field.getJavaType()) {
       case INT:
@@ -113,7 +119,12 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
         }
         break;
       case BYTE_STRING:
-        generator.writeString(serializerProvider.getConfig().getBase64Variant().encode(((ByteString) value).toByteArray()));
+        generator.writeString(
+          serializerProvider
+            .getConfig()
+            .getBase64Variant()
+            .encode(((ByteString) value).toByteArray())
+        );
         break;
       case MESSAGE:
         Class<?> subType = value.getClass();
@@ -131,7 +142,8 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
     }
   }
 
-  private void writeInt(FieldDescriptor field, int value, JsonGenerator generator) throws IOException {
+  private void writeInt(FieldDescriptor field, int value, JsonGenerator generator)
+    throws IOException {
     if (
       value < 0 &&
       config.properUnsignedNumberSerialization() &&
@@ -144,13 +156,16 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
     }
   }
 
-  private void writeLong(FieldDescriptor field, long value, JsonGenerator generator) throws IOException {
+  private void writeLong(FieldDescriptor field, long value, JsonGenerator generator)
+    throws IOException {
     if (
       value < 0 &&
       config.properUnsignedNumberSerialization() &&
       Types.isUnsigned(field.getType())
     ) {
-      BigInteger unsignedValue = BigInteger.valueOf(value & Long.MAX_VALUE).setBit(Long.SIZE - 1);
+      BigInteger unsignedValue = BigInteger
+        .valueOf(value & Long.MAX_VALUE)
+        .setBit(Long.SIZE - 1);
       if (config.serializeLongsAsString()) {
         generator.writeString(unsignedValue.toString());
       } else {
@@ -167,8 +182,15 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder> extends Std
     return config.isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX);
   }
 
-  private static IOException unrecognizedType(FieldDescriptor field, JsonGenerator generator) throws IOException {
-    String error = format("Unrecognized java type '%s' for field %s", field.getJavaType(), field.getFullName());
+  private static IOException unrecognizedType(
+    FieldDescriptor field,
+    JsonGenerator generator
+  ) throws IOException {
+    String error = format(
+      "Unrecognized java type '%s' for field %s",
+      field.getJavaType(),
+      field.getFullName()
+    );
     throw new JsonGenerationException(error, generator);
   }
 }

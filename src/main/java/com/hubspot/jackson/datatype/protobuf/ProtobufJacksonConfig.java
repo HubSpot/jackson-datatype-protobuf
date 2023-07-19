@@ -3,7 +3,10 @@ package com.hubspot.jackson.datatype.protobuf;
 import com.google.protobuf.ExtensionRegistry;
 
 public class ProtobufJacksonConfig {
-  private static final ProtobufJacksonConfig DEFAULT_INSTANCE = ProtobufJacksonConfig.builder().build();
+
+  private static final ProtobufJacksonConfig DEFAULT_INSTANCE = ProtobufJacksonConfig
+    .builder()
+    .build();
 
   private final ExtensionRegistryWrapper extensionRegistry;
   private final boolean acceptLiteralFieldnames;
@@ -47,6 +50,7 @@ public class ProtobufJacksonConfig {
   }
 
   public static class Builder {
+
     private ExtensionRegistryWrapper extensionRegistry = ExtensionRegistryWrapper.empty();
     private boolean acceptLiteralFieldnames = false;
     private boolean properUnsignedNumberSerialization = false;
@@ -75,7 +79,9 @@ public class ProtobufJacksonConfig {
       return this;
     }
 
-    public Builder properUnsignedNumberSerialization(boolean properUnsignedNumberSerialization) {
+    public Builder properUnsignedNumberSerialization(
+      boolean properUnsignedNumberSerialization
+    ) {
       this.properUnsignedNumberSerialization = properUnsignedNumberSerialization;
       return this;
     }

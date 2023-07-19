@@ -29,9 +29,9 @@ public class ValueSerializer extends ProtobufSerializer<Value> {
 
   @Override
   public void serialize(
-          Value value,
-          JsonGenerator generator,
-          SerializerProvider serializerProvider
+    Value value,
+    JsonGenerator generator,
+    SerializerProvider serializerProvider
   ) throws IOException {
     Map<FieldDescriptor, Object> fields = value.getAllFields();
     if (fields.isEmpty()) {
@@ -45,7 +45,10 @@ public class ValueSerializer extends ProtobufSerializer<Value> {
   }
 
   @Override
-  public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
+  public void acceptJsonFormatVisitor(
+    JsonFormatVisitorWrapper visitor,
+    JavaType typeHint
+  ) throws JsonMappingException {
     // don't think we can do any better here since a Value is arbitrary json
     visitor.expectAnyFormat(typeHint);
   }

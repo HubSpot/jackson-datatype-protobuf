@@ -3,14 +3,12 @@ package com.hubspot.jackson.datatype.protobuf.proto3;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-
-import org.junit.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasAllMapKeys;
+import java.io.IOException;
+import org.junit.Test;
 
 public class AllMapKeysTest {
 
@@ -53,20 +51,20 @@ public class AllMapKeysTest {
 
   private static HasAllMapKeys hasAllMapKeys() {
     return HasAllMapKeys
-            .newBuilder()
-            .putInt32Map(1, "int32")
-            .putInt64Map(2, "int64")
-            .putUint32Map(3, "uint32")
-            .putUint64Map(4, "uint64")
-            .putSint32Map(5, "sint32")
-            .putSint64Map(6, "sint64")
-            .putFixed32Map(7, "fixed32")
-            .putFixed64Map(8, "fixed64")
-            .putSfixed32Map(9, "sfixed32")
-            .putSfixed64Map(10, "sfixed64")
-            .putBoolMap(true, "bool")
-            .putStringMap("key", "value")
-            .build();
+      .newBuilder()
+      .putInt32Map(1, "int32")
+      .putInt64Map(2, "int64")
+      .putUint32Map(3, "uint32")
+      .putUint64Map(4, "uint64")
+      .putSint32Map(5, "sint32")
+      .putSint64Map(6, "sint64")
+      .putFixed32Map(7, "fixed32")
+      .putFixed64Map(8, "fixed64")
+      .putSfixed32Map(9, "sfixed32")
+      .putSfixed64Map(10, "sfixed64")
+      .putBoolMap(true, "bool")
+      .putStringMap("key", "value")
+      .build();
   }
 
   private static ObjectNode hasAllMapKeysNode() {

@@ -14,6 +14,7 @@ import java.util.WeakHashMap;
 import java.util.function.Function;
 
 public class PropertyNamingCache {
+
   private final Descriptor descriptor;
   private final ProtobufJacksonConfig config;
   private final Map<PropertyNamingStrategy, Function<FieldDescriptor, String>> serializationCache;
@@ -26,28 +27,45 @@ public class PropertyNamingCache {
     this.deserializationCache = Collections.synchronizedMap(new WeakHashMap<>());
   }
 
-  public static PropertyNamingCache forDescriptor(Descriptor descriptor, ProtobufJacksonConfig config) {
+  public static PropertyNamingCache forDescriptor(
+    Descriptor descriptor,
+    ProtobufJacksonConfig config
+  ) {
     return new PropertyNamingCache(descriptor, config);
   }
 
-  public Function<FieldDescriptor, String> forSerialization(PropertyNamingStrategy propertyNamingStrategy) {
-    Function<FieldDescriptor, String> cached = serializationCache.get(propertyNamingStrategy);
+  public Function<FieldDescriptor, String> forSerialization(
+    PropertyNamingStrategy propertyNamingStrategy
+  ) {
+    Function<FieldDescriptor, String> cached = serializationCache.get(
+      propertyNamingStrategy
+    );
     if (cached != null) {
       return cached;
     } else {
-      Function<FieldDescriptor, String> function = buildSerializationFunction(descriptor, propertyNamingStrategy);
+      Function<FieldDescriptor, String> function = buildSerializationFunction(
+        descriptor,
+        propertyNamingStrategy
+      );
       serializationCache.put(propertyNamingStrategy, function);
 
       return function;
     }
   }
 
-  public Function<String, FieldDescriptor> forDeserialization(PropertyNamingStrategy propertyNamingStrategy) {
-    Function<String, FieldDescriptor> cached = deserializationCache.get(propertyNamingStrategy);
+  public Function<String, FieldDescriptor> forDeserialization(
+    PropertyNamingStrategy propertyNamingStrategy
+  ) {
+    Function<String, FieldDescriptor> cached = deserializationCache.get(
+      propertyNamingStrategy
+    );
     if (cached != null) {
       return cached;
     } else {
-      Function<String, FieldDescriptor> function = buildDeserializationFunction(descriptor, propertyNamingStrategy);
+      Function<String, FieldDescriptor> function = buildDeserializationFunction(
+        descriptor,
+        propertyNamingStrategy
+      );
       deserializationCache.put(propertyNamingStrategy, function);
 
       return function;
@@ -55,11 +73,12 @@ public class PropertyNamingCache {
   }
 
   private Function<FieldDescriptor, String> buildSerializationFunction(
-      Descriptor descriptor,
-      PropertyNamingStrategy originalNamingStrategy
+    Descriptor descriptor,
+    PropertyNamingStrategy originalNamingStrategy
   ) {
-    PropertyNamingStrategyBase namingStrategy =
-        new PropertyNamingStrategyWrapper(originalNamingStrategy);
+    PropertyNamingStrategyBase namingStrategy = new PropertyNamingStrategyWrapper(
+      originalNamingStrategy
+    );
 
     Map<FieldDescriptor, String> tempMap = new HashMap<>();
     for (FieldDescriptor field : descriptor.getFields()) {
@@ -74,11 +93,12 @@ public class PropertyNamingCache {
   }
 
   private Function<String, FieldDescriptor> buildDeserializationFunction(
-      Descriptor descriptor,
-      PropertyNamingStrategy originalNamingStrategy
+    Descriptor descriptor,
+    PropertyNamingStrategy originalNamingStrategy
   ) {
-    PropertyNamingStrategyBase namingStrategy =
-        new PropertyNamingStrategyWrapper(originalNamingStrategy);
+    PropertyNamingStrategyBase namingStrategy = new PropertyNamingStrategyWrapper(
+      originalNamingStrategy
+    );
 
     Map<String, FieldDescriptor> tempMap = new HashMap<>();
     for (FieldDescriptor field : descriptor.getFields()) {
@@ -98,10 +118,12 @@ public class PropertyNamingCache {
   }
 
   private static String getFieldName(
-      FieldDescriptor field, PropertyNamingStrategyBase namingStrategy) {
+    FieldDescriptor field,
+    PropertyNamingStrategyBase namingStrategy
+  ) {
     return hasJsonName(field)
-        ? field.getJsonName()
-        : namingStrategy.translate(field.getName());
+      ? field.getJsonName()
+      : namingStrategy.translate(field.getName());
   }
 
   private static boolean hasJsonName(FieldDescriptor field) {

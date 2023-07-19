@@ -3,16 +3,18 @@ package com.hubspot.jackson.datatype.protobuf.builtin;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-
-import org.junit.Test;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.protobuf.Timestamp;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasTimestamp;
+import java.io.IOException;
+import org.junit.Test;
 
 public class TimestampTest {
-  private static final Timestamp TIMESTAMP = Timestamp.newBuilder().setSeconds(946684800).build();
+
+  private static final Timestamp TIMESTAMP = Timestamp
+    .newBuilder()
+    .setSeconds(946684800)
+    .build();
 
   @Test
   public void itWritesTimestampWhenSetWithDefaultInclusion() throws IOException {
@@ -22,8 +24,12 @@ public class TimestampTest {
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithDefaultInclusion() throws IOException {
-    HasTimestamp message = HasTimestamp.newBuilder().setTimestamp(Timestamp.getDefaultInstance()).build();
+  public void itWritesZeroWhenSetToDefaultInstanceWithDefaultInclusion()
+    throws IOException {
+    HasTimestamp message = HasTimestamp
+      .newBuilder()
+      .setTimestamp(Timestamp.getDefaultInstance())
+      .build();
     String json = camelCase().writeValueAsString(message);
     assertThat(json).isEqualTo("{\"timestamp\":\"1970-01-01T00:00:00Z\"}");
   }
@@ -43,8 +49,12 @@ public class TimestampTest {
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithNonDefaultInclusion() throws IOException {
-    HasTimestamp message = HasTimestamp.newBuilder().setTimestamp(Timestamp.getDefaultInstance()).build();
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonDefaultInclusion()
+    throws IOException {
+    HasTimestamp message = HasTimestamp
+      .newBuilder()
+      .setTimestamp(Timestamp.getDefaultInstance())
+      .build();
     String json = camelCase(Include.NON_DEFAULT).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"timestamp\":\"1970-01-01T00:00:00Z\"}");
   }
@@ -64,8 +74,12 @@ public class TimestampTest {
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithAlwaysInclusion() throws IOException {
-    HasTimestamp message = HasTimestamp.newBuilder().setTimestamp(Timestamp.getDefaultInstance()).build();
+  public void itWritesZeroWhenSetToDefaultInstanceWithAlwaysInclusion()
+    throws IOException {
+    HasTimestamp message = HasTimestamp
+      .newBuilder()
+      .setTimestamp(Timestamp.getDefaultInstance())
+      .build();
     String json = camelCase(Include.ALWAYS).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"timestamp\":\"1970-01-01T00:00:00Z\"}");
   }
@@ -85,8 +99,12 @@ public class TimestampTest {
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithNonNullInclusion() throws IOException {
-    HasTimestamp message = HasTimestamp.newBuilder().setTimestamp(Timestamp.getDefaultInstance()).build();
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonNullInclusion()
+    throws IOException {
+    HasTimestamp message = HasTimestamp
+      .newBuilder()
+      .setTimestamp(Timestamp.getDefaultInstance())
+      .build();
     String json = camelCase(Include.NON_NULL).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"timestamp\":\"1970-01-01T00:00:00Z\"}");
   }
