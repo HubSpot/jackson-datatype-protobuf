@@ -71,15 +71,7 @@ public class PropertyNamingTest {
       PropertyNamingSnakeCased.class
     );
 
-    JsonNode tree = toTree(ObjectMapperHelper.oldUnderscore(), message);
-
-    assertThat(tree.isObject()).isTrue();
-    assertThat(tree.size()).isEqualTo(1);
-    assertThat(tree.get("string_attribute")).isNotNull();
-    assertThat(tree.get("string_attribute").textValue())
-      .isEqualTo(message.getStringAttribute());
-
-    tree = toTree(ObjectMapperHelper.newUnderscore(), message);
+    JsonNode tree = toTree(ObjectMapperHelper.underscore(), message);
 
     assertThat(tree.isObject()).isTrue();
     assertThat(tree.size()).isEqualTo(1);
@@ -95,7 +87,7 @@ public class PropertyNamingTest {
       10
     );
 
-    JsonNode tree = toTree(ObjectMapperHelper.oldUnderscore(), messages);
+    JsonNode tree = toTree(ObjectMapperHelper.underscore(), messages);
 
     assertThat(tree).isInstanceOf(ArrayNode.class);
     assertThat(tree.size()).isEqualTo(10);
@@ -110,7 +102,7 @@ public class PropertyNamingTest {
         .isEqualTo(messages.get(i).getStringAttribute());
     }
 
-    tree = toTree(ObjectMapperHelper.newUnderscore(), messages);
+    tree = toTree(ObjectMapperHelper.underscore(), messages);
 
     assertThat(tree).isInstanceOf(ArrayNode.class);
     assertThat(tree.size()).isEqualTo(10);
