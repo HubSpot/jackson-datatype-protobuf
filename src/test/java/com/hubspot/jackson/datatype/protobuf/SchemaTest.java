@@ -1,7 +1,7 @@
 package com.hubspot.jackson.datatype.protobuf;
 
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
-import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.newUnderscore;
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.underscore;
 
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasAllMapKeys;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasAllMapValues;
@@ -33,7 +33,7 @@ public class SchemaTest {
 
   @Test
   public void itHandlesProto2Underscore() {
-    JsonSchemaGenerator schemaGenerator = new JsonSchemaGenerator(newUnderscore());
+    JsonSchemaGenerator schemaGenerator = new JsonSchemaGenerator(underscore());
     schemaGenerator.generateJsonSchema(AllFields.class);
     schemaGenerator.generateJsonSchema(RepeatedFields.class);
   }
@@ -59,7 +59,7 @@ public class SchemaTest {
 
   @Test
   public void itHandlesProto3Underscore() {
-    JsonSchemaGenerator schemaGenerator = new JsonSchemaGenerator(newUnderscore());
+    JsonSchemaGenerator schemaGenerator = new JsonSchemaGenerator(underscore());
     schemaGenerator.generateJsonSchema(AllFieldsProto3.class);
     schemaGenerator.generateJsonSchema(RepeatedFieldsProto3.class);
     schemaGenerator.generateJsonSchema(HasAny.class);

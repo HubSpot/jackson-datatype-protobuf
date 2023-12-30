@@ -19,10 +19,7 @@ import java.util.List;
 public class ObjectMapperHelper {
 
   private static final ObjectMapper DEFAULT = create();
-  private static final ObjectMapper OLD_UNDERSCORE = create(
-    PropertyNamingStrategy.SNAKE_CASE
-  );
-  private static final ObjectMapper NEW_UNDERSCORE = create(newUnderscoreStrategy());
+  private static final ObjectMapper UNDERSCORE = create(underscoreStrategy());
 
   public static ObjectMapper create() {
     return new ObjectMapper().registerModule(new ProtobufModule());
@@ -32,12 +29,8 @@ public class ObjectMapperHelper {
     return DEFAULT;
   }
 
-  public static ObjectMapper oldUnderscore() {
-    return OLD_UNDERSCORE;
-  }
-
-  public static ObjectMapper newUnderscore() {
-    return NEW_UNDERSCORE;
+  public static ObjectMapper underscore() {
+    return UNDERSCORE;
   }
 
   public static ObjectMapper camelCase(Include inclusion) {
@@ -48,12 +41,8 @@ public class ObjectMapperHelper {
     return create(extensionRegistry);
   }
 
-  public static ObjectMapper oldUnderscore(ExtensionRegistry extensionRegistry) {
-    return create(PropertyNamingStrategy.SNAKE_CASE, extensionRegistry);
-  }
-
-  public static ObjectMapper newUnderscore(ExtensionRegistry extensionRegistry) {
-    return create(newUnderscoreStrategy(), extensionRegistry);
+  public static ObjectMapper underscore(ExtensionRegistry extensionRegistry) {
+    return create(underscoreStrategy(), extensionRegistry);
   }
 
   public static JsonNode toTree(ObjectMapper mapper, Object value) {
@@ -108,11 +97,7 @@ public class ObjectMapperHelper {
     return create().setPropertyNamingStrategy(namingStrategy);
   }
 
-  private static PropertyNamingStrategy newUnderscoreStrategy() {
-    try {
-      return PropertyNamingStrategies.SNAKE_CASE;
-    } catch (Throwable t) {
-      return PropertyNamingStrategy.SNAKE_CASE;
-    }
+  private static PropertyNamingStrategy underscoreStrategy() {
+    return PropertyNamingStrategies.SNAKE_CASE;
   }
 }
