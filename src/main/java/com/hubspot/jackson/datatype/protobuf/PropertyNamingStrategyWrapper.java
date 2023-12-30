@@ -14,8 +14,8 @@ import java.lang.reflect.Field;
 @SuppressWarnings("serial")
 public class PropertyNamingStrategyWrapper {
 
-  private static final PropertyNamingStrategy SNAKE_TO_CAMEL = new SnakeToCamelNamingStrategy();
-  private static final PropertyNamingStrategy NO_OP = new NoOpNamingStrategy();
+  private static final NamingBase SNAKE_TO_CAMEL = new SnakeToCamelNamingStrategy();
+  private static final NamingBase NO_OP = new NoOpNamingStrategy();
 
   private final Class<?> messageType;
   private final MapperConfig<?> mapperConfig;
@@ -43,7 +43,7 @@ public class PropertyNamingStrategyWrapper {
   public String translate(String fieldName) {
     AnnotatedField annotatedField = null;
     try {
-      Field field = messageType.getDeclaredField(fieldName + "_");
+      Field field = messageType.getDeclaredField(javaFieldName(fieldName));
       annotatedField =
         new AnnotatedField(
           new TypeResolutionContext.Empty(mapperConfig.getTypeFactory()),
@@ -55,6 +55,12 @@ public class PropertyNamingStrategyWrapper {
     }
 
     return delegate.nameForField(mapperConfig, annotatedField, fieldName);
+  }
+
+  private static String javaFieldName(String fieldName) {
+    return (
+      (fieldName.contains("_") ? SNAKE_TO_CAMEL.translate(fieldName) : fieldName) + "_"
+    );
   }
 
   private static class SnakeToCamelNamingStrategy extends NamingBase {
