@@ -1,4 +1,4 @@
-name: Jackson-Latest
+name: Jackson-2.15
 
 on:
   push:
