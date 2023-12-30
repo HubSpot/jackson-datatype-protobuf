@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
@@ -27,6 +26,8 @@ import java.util.function.Function;
 public class MessageDeserializer<T extends Message, V extends Builder>
   extends ProtobufDeserializer<T, V> {
 
+  private final Class<T> messageType;
+
   @SuppressFBWarnings(value = "SE_BAD_FIELD")
   private final ProtobufJacksonConfig config;
 
@@ -48,8 +49,10 @@ public class MessageDeserializer<T extends Message, V extends Builder>
 
   public MessageDeserializer(Class<T> messageType, ProtobufJacksonConfig config) {
     super(messageType);
+    this.messageType = messageType;
     this.config = config;
-    this.propertyNamingCache = PropertyNamingCache.forDescriptor(getDescriptor(), config);
+    this.propertyNamingCache =
+      PropertyNamingCache.forDescriptor(getDescriptor(), messageType, config);
   }
 
   @Override
@@ -75,7 +78,7 @@ public class MessageDeserializer<T extends Message, V extends Builder>
 
     final Descriptor descriptor = builder.getDescriptorForType();
     final Function<String, FieldDescriptor> fieldLookup = propertyNamingCache.forDeserialization(
-      context.getConfig().getPropertyNamingStrategy()
+      context.getConfig()
     );
     final Map<String, ExtensionInfo> extensionLookup;
     if (builder instanceof ExtendableMessageOrBuilder<?>) {
@@ -116,8 +119,9 @@ public class MessageDeserializer<T extends Message, V extends Builder>
     Descriptor descriptor,
     DeserializationContext context
   ) {
-    PropertyNamingStrategyBase namingStrategy = new PropertyNamingStrategyWrapper(
-      context.getConfig().getPropertyNamingStrategy()
+    PropertyNamingStrategyWrapper namingStrategy = new PropertyNamingStrategyWrapper(
+      messageType,
+      context.getConfig()
     );
 
     Map<String, ExtensionInfo> extensionLookup = new HashMap<>();

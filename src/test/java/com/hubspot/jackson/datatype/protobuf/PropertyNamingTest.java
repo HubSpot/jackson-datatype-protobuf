@@ -9,8 +9,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.NamingBase;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName;
@@ -135,10 +136,14 @@ public class PropertyNamingTest {
     ObjectMapper mapper = new ObjectMapper()
       .registerModule(new ProtobufModule())
       .setPropertyNamingStrategy(
-        new PropertyNamingStrategy.PropertyNamingStrategyBase() {
+        new PropertyNamingStrategy() {
           @Override
-          public String translate(String propertyName) {
-            return propertyName;
+          public String nameForField(
+            MapperConfig<?> config,
+            AnnotatedField field,
+            String defaultName
+          ) {
+            return defaultName;
           }
         }
       );
@@ -183,10 +188,14 @@ public class PropertyNamingTest {
     ObjectMapper mapper = new ObjectMapper()
       .registerModule(new ProtobufModule())
       .setPropertyNamingStrategy(
-        new PropertyNamingStrategy.PropertyNamingStrategyBase() {
+        new PropertyNamingStrategy() {
           @Override
-          public String translate(String propertyName) {
-            return propertyName;
+          public String nameForField(
+            MapperConfig<?> config,
+            AnnotatedField field,
+            String defaultName
+          ) {
+            return defaultName;
           }
         }
       );
@@ -378,20 +387,11 @@ public class PropertyNamingTest {
   }
 
   private static PropertyNamingStrategy snakeCaseNamingBase() {
-    try {
-      return new NamingBase() {
-        @Override
-        public String translate(String propertyName) {
-          return propertyName;
-        }
-      };
-    } catch (Throwable t) {
-      return new PropertyNamingStrategyBase() {
-        @Override
-        public String translate(String propertyName) {
-          return propertyName;
-        }
-      };
-    }
+    return new NamingBase() {
+      @Override
+      public String translate(String propertyName) {
+        return propertyName;
+      }
+    };
   }
 }

@@ -23,18 +23,15 @@ import java.util.function.Function;
 public class MessageSchemaGenerator implements JsonFormatVisitable {
 
   private final Message defaultInstance;
-  private final Descriptor descriptor;
   private final ProtobufJacksonConfig config;
   private final Function<FieldDescriptor, String> propertyNaming;
 
   public MessageSchemaGenerator(
     Message defaultInstance,
-    Descriptor descriptor,
     ProtobufJacksonConfig config,
     Function<FieldDescriptor, String> propertyNaming
   ) {
     this.defaultInstance = defaultInstance;
-    this.descriptor = descriptor;
     this.config = config;
     this.propertyNaming = propertyNaming;
   }
@@ -46,6 +43,7 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
   ) throws JsonMappingException {
     JsonObjectFormatVisitor objectVisitor = visitor.expectObjectFormat(typeHint);
 
+    Descriptor descriptor = defaultInstance.getDescriptorForType();
     List<FieldDescriptor> fields = new ArrayList<>(descriptor.getFields());
     if (defaultInstance instanceof ExtendableMessageOrBuilder<?>) {
       for (ExtensionInfo extensionInfo : config
