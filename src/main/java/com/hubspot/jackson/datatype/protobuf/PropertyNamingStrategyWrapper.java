@@ -31,9 +31,7 @@ public class PropertyNamingStrategyWrapper {
 
     @Override
     public String translate(String fieldName) {
-      return fieldName.contains("_")
-        ? CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, fieldName)
-        : fieldName;
+      return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, fieldName);
     }
   }
 }
