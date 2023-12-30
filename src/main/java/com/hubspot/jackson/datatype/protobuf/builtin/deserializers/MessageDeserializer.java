@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
@@ -116,7 +115,7 @@ public class MessageDeserializer<T extends Message, V extends Builder>
     Descriptor descriptor,
     DeserializationContext context
   ) {
-    PropertyNamingStrategyBase namingStrategy = new PropertyNamingStrategyWrapper(
+    PropertyNamingStrategyWrapper namingStrategy = new PropertyNamingStrategyWrapper(
       context.getConfig().getPropertyNamingStrategy()
     );
 

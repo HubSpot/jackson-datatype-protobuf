@@ -1,7 +1,6 @@
 package com.hubspot.jackson.datatype.protobuf.internal;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.google.common.collect.ImmutableMap;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -76,7 +75,7 @@ public class PropertyNamingCache {
     Descriptor descriptor,
     PropertyNamingStrategy originalNamingStrategy
   ) {
-    PropertyNamingStrategyBase namingStrategy = new PropertyNamingStrategyWrapper(
+    PropertyNamingStrategyWrapper namingStrategy = new PropertyNamingStrategyWrapper(
       originalNamingStrategy
     );
 
@@ -96,7 +95,7 @@ public class PropertyNamingCache {
     Descriptor descriptor,
     PropertyNamingStrategy originalNamingStrategy
   ) {
-    PropertyNamingStrategyBase namingStrategy = new PropertyNamingStrategyWrapper(
+    PropertyNamingStrategyWrapper namingStrategy = new PropertyNamingStrategyWrapper(
       originalNamingStrategy
     );
 
@@ -119,7 +118,7 @@ public class PropertyNamingCache {
 
   private static String getFieldName(
     FieldDescriptor field,
-    PropertyNamingStrategyBase namingStrategy
+    PropertyNamingStrategyWrapper namingStrategy
   ) {
     return hasJsonName(field)
       ? field.getJsonName()

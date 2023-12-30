@@ -6,7 +6,7 @@ import com.google.common.base.CaseFormat;
 import java.lang.reflect.Method;
 
 @SuppressWarnings("serial")
-public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
+public class PropertyNamingStrategyWrapper {
 
   private static final PropertyNamingStrategyBase SNAKE_TO_CAMEL = new SnakeToCamelNamingStrategy();
   private static final PropertyNamingStrategyBase NO_OP = new NoOpNamingStrategy();
@@ -25,7 +25,6 @@ public class PropertyNamingStrategyWrapper extends PropertyNamingStrategyBase {
     }
   }
 
-  @Override
   public String translate(String fieldName) {
     return delegate.translate(fieldName);
   }
