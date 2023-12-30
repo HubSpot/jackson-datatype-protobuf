@@ -9,19 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 public class ExtensionRegistryWrapper {
 
   private final Function<Descriptor, Set<ExtensionInfo>> extensionFunction;
 
   private ExtensionRegistryWrapper() {
-    this.extensionFunction =
-      new Function<Descriptor, Set<ExtensionInfo>>() {
-        @Override
-        public Set<ExtensionInfo> apply(Descriptor descriptor) {
-          return Collections.emptySet();
-        }
-      };
+    this.extensionFunction = ignored -> Collections.emptySet();
   }
 
   private ExtensionRegistryWrapper(final ExtensionRegistry extensionRegistry) {
@@ -63,9 +58,5 @@ public class ExtensionRegistryWrapper {
 
   public Set<ExtensionInfo> getExtensionsByDescriptor(Descriptor descriptor) {
     return extensionFunction.apply(descriptor);
-  }
-
-  private interface Function<T, V> {
-    V apply(T t);
   }
 }
