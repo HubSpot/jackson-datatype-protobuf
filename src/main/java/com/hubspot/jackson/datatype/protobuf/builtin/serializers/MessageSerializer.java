@@ -70,11 +70,11 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     boolean writeEmptyCollections =
       include != Include.NON_DEFAULT && include != Include.NON_EMPTY;
 
-    Descriptor descriptor = message.getDescriptorForType();
     Function<FieldDescriptor, String> propertyNaming = getPropertyNaming(
-      descriptor,
+      message,
       serializerProvider
     );
+    Descriptor descriptor = message.getDescriptorForType();
     List<FieldDescriptor> fields = descriptor.getFields();
     if (message instanceof ExtendableMessageOrBuilder<?>) {
       fields = new ArrayList<>(fields);
@@ -146,13 +146,12 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     JavaType typeHint
   ) throws JsonMappingException {
     Message defaultInstance = defaultInstance(typeHint);
-    Descriptor descriptor = defaultInstance.getDescriptorForType();
     Function<FieldDescriptor, String> propertyNaming = getPropertyNaming(
-      descriptor,
+      defaultInstance,
       visitor.getProvider()
     );
 
-    new MessageSchemaGenerator(defaultInstance, descriptor, getConfig(), propertyNaming)
+    new MessageSchemaGenerator(defaultInstance, getConfig(), propertyNaming)
       .acceptJsonFormatVisitor(visitor, typeHint);
   }
 
@@ -182,22 +181,26 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   }
 
   private Function<FieldDescriptor, String> getPropertyNaming(
-    Descriptor descriptor,
+    MessageOrBuilder messageOrBuilder,
     SerializerProvider serializerProvider
   ) {
+    Descriptor descriptor = messageOrBuilder.getDescriptorForType();
     PropertyNamingCache cache = propertyNamingCache.get(descriptor);
     if (cache == null) {
       // use computeIfAbsent as a fallback since it allocates
       cache =
         propertyNamingCache.computeIfAbsent(
           descriptor,
-          ignored -> PropertyNamingCache.forDescriptor(descriptor, getConfig())
+          ignored ->
+            PropertyNamingCache.forDescriptor(
+              descriptor,
+              messageOrBuilder.getDefaultInstanceForType().getClass(),
+              getConfig()
+            )
         );
     }
 
-    return cache.forSerialization(
-      serializerProvider.getConfig().getPropertyNamingStrategy()
-    );
+    return cache.forSerialization(serializerProvider.getConfig());
   }
 
   private static boolean supportsFieldPresence(FieldDescriptor field) {

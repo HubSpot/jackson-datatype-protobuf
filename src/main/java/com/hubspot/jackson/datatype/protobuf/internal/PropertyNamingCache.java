@@ -1,9 +1,11 @@
 package com.hubspot.jackson.datatype.protobuf.internal;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.google.common.collect.ImmutableMap;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Message;
 import com.hubspot.jackson.datatype.protobuf.PropertyNamingStrategyWrapper;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import java.util.Collections;
@@ -15,12 +17,18 @@ import java.util.function.Function;
 public class PropertyNamingCache {
 
   private final Descriptor descriptor;
+  private final Class<? extends Message> messageType;
   private final ProtobufJacksonConfig config;
   private final Map<PropertyNamingStrategy, Function<FieldDescriptor, String>> serializationCache;
   private final Map<PropertyNamingStrategy, Function<String, FieldDescriptor>> deserializationCache;
 
-  private PropertyNamingCache(Descriptor descriptor, ProtobufJacksonConfig config) {
+  private PropertyNamingCache(
+    Descriptor descriptor,
+    Class<? extends Message> messageType,
+    ProtobufJacksonConfig config
+  ) {
     this.descriptor = descriptor;
+    this.messageType = messageType;
     this.config = config;
     this.serializationCache = Collections.synchronizedMap(new WeakHashMap<>());
     this.deserializationCache = Collections.synchronizedMap(new WeakHashMap<>());
@@ -28,44 +36,45 @@ public class PropertyNamingCache {
 
   public static PropertyNamingCache forDescriptor(
     Descriptor descriptor,
+    Class<? extends Message> messageType,
     ProtobufJacksonConfig config
   ) {
-    return new PropertyNamingCache(descriptor, config);
+    return new PropertyNamingCache(descriptor, messageType, config);
   }
 
   public Function<FieldDescriptor, String> forSerialization(
-    PropertyNamingStrategy propertyNamingStrategy
+    MapperConfig<?> mapperConfig
   ) {
     Function<FieldDescriptor, String> cached = serializationCache.get(
-      propertyNamingStrategy
+      mapperConfig.getPropertyNamingStrategy()
     );
     if (cached != null) {
       return cached;
     } else {
       Function<FieldDescriptor, String> function = buildSerializationFunction(
         descriptor,
-        propertyNamingStrategy
+        mapperConfig
       );
-      serializationCache.put(propertyNamingStrategy, function);
+      serializationCache.put(mapperConfig.getPropertyNamingStrategy(), function);
 
       return function;
     }
   }
 
   public Function<String, FieldDescriptor> forDeserialization(
-    PropertyNamingStrategy propertyNamingStrategy
+    MapperConfig<?> mapperConfig
   ) {
     Function<String, FieldDescriptor> cached = deserializationCache.get(
-      propertyNamingStrategy
+      mapperConfig.getPropertyNamingStrategy()
     );
     if (cached != null) {
       return cached;
     } else {
       Function<String, FieldDescriptor> function = buildDeserializationFunction(
         descriptor,
-        propertyNamingStrategy
+        mapperConfig
       );
-      deserializationCache.put(propertyNamingStrategy, function);
+      deserializationCache.put(mapperConfig.getPropertyNamingStrategy(), function);
 
       return function;
     }
@@ -73,10 +82,11 @@ public class PropertyNamingCache {
 
   private Function<FieldDescriptor, String> buildSerializationFunction(
     Descriptor descriptor,
-    PropertyNamingStrategy originalNamingStrategy
+    MapperConfig<?> mapperConfig
   ) {
     PropertyNamingStrategyWrapper namingStrategy = new PropertyNamingStrategyWrapper(
-      originalNamingStrategy
+      messageType,
+      mapperConfig
     );
 
     Map<FieldDescriptor, String> tempMap = new HashMap<>();
@@ -93,10 +103,11 @@ public class PropertyNamingCache {
 
   private Function<String, FieldDescriptor> buildDeserializationFunction(
     Descriptor descriptor,
-    PropertyNamingStrategy originalNamingStrategy
+    MapperConfig<?> mapperConfig
   ) {
     PropertyNamingStrategyWrapper namingStrategy = new PropertyNamingStrategyWrapper(
-      originalNamingStrategy
+      messageType,
+      mapperConfig
     );
 
     Map<String, FieldDescriptor> tempMap = new HashMap<>();
