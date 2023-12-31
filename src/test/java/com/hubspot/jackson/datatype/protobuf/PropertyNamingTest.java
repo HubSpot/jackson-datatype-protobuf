@@ -144,8 +144,8 @@ public class PropertyNamingTest {
 
     assertThat(tree.isObject()).isTrue();
     assertThat(tree.size()).isEqualTo(1);
-    assertThat(tree.get("stringAttribute")).isNotNull();
-    assertThat(tree.get("stringAttribute").textValue())
+    assertThat(tree.get("stringattribute")).isNotNull();
+    assertThat(tree.get("stringattribute").textValue())
       .isEqualTo(message.getStringAttribute());
   }
 
@@ -202,8 +202,8 @@ public class PropertyNamingTest {
 
       assertThat(subTree.isObject()).isTrue();
       assertThat(subTree.size()).isEqualTo(1);
-      assertThat(subTree.get("stringAttribute")).isNotNull();
-      assertThat(subTree.get("stringAttribute").textValue())
+      assertThat(subTree.get("stringattribute")).isNotNull();
+      assertThat(subTree.get("stringattribute").textValue())
         .isEqualTo(messages.get(i).getStringAttribute());
     }
   }
