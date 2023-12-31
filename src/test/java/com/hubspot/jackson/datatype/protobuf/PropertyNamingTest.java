@@ -156,8 +156,7 @@ public class PropertyNamingTest {
     );
 
     @SuppressWarnings("serial")
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModule(new ProtobufModule());
+    ObjectMapper mapper = new ObjectMapper().registerModule(new ProtobufModule());
 
     JsonNode tree = toTree(mapper, message);
 
@@ -235,8 +234,7 @@ public class PropertyNamingTest {
     );
 
     @SuppressWarnings("serial")
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModule(new ProtobufModule());
+    ObjectMapper mapper = new ObjectMapper().registerModule(new ProtobufModule());
 
     JsonNode tree = toTree(mapper, messages);
 
@@ -253,7 +251,6 @@ public class PropertyNamingTest {
         .isEqualTo(messages.get(i).getStringAttribute());
     }
   }
-
 
   @Test
   public void testMultipleStillCamelCaseUsingNamingBase() {
