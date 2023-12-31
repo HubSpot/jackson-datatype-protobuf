@@ -150,6 +150,25 @@ public class PropertyNamingTest {
   }
 
   @Test
+  public void testSingleNoNamingStrategy() {
+    PropertyNamingCamelCased message = ProtobufCreator.create(
+      PropertyNamingCamelCased.class
+    );
+
+    @SuppressWarnings("serial")
+    ObjectMapper mapper = new ObjectMapper()
+      .registerModule(new ProtobufModule());
+
+    JsonNode tree = toTree(mapper, message);
+
+    assertThat(tree.isObject()).isTrue();
+    assertThat(tree.size()).isEqualTo(1);
+    assertThat(tree.get("stringattribute")).isNotNull();
+    assertThat(tree.get("stringattribute").textValue())
+      .isEqualTo(message.getStringAttribute());
+  }
+
+  @Test
   public void testSingleStillCamelCaseUsingNamingBase() {
     PropertyNamingCamelCased message = ProtobufCreator.create(
       PropertyNamingCamelCased.class
@@ -207,6 +226,34 @@ public class PropertyNamingTest {
         .isEqualTo(messages.get(i).getStringAttribute());
     }
   }
+
+  @Test
+  public void testMultipleNoNamingStrategy() {
+    List<PropertyNamingCamelCased> messages = ProtobufCreator.create(
+      PropertyNamingCamelCased.class,
+      10
+    );
+
+    @SuppressWarnings("serial")
+    ObjectMapper mapper = new ObjectMapper()
+      .registerModule(new ProtobufModule());
+
+    JsonNode tree = toTree(mapper, messages);
+
+    assertThat(tree).isInstanceOf(ArrayNode.class);
+    assertThat(tree.size()).isEqualTo(10);
+
+    for (int i = 0; i < 10; i++) {
+      JsonNode subTree = tree.get(i);
+
+      assertThat(subTree.isObject()).isTrue();
+      assertThat(subTree.size()).isEqualTo(1);
+      assertThat(subTree.get("stringattribute")).isNotNull();
+      assertThat(subTree.get("stringattribute").textValue())
+        .isEqualTo(messages.get(i).getStringAttribute());
+    }
+  }
+
 
   @Test
   public void testMultipleStillCamelCaseUsingNamingBase() {
