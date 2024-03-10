@@ -22,7 +22,8 @@ public class ExtensionRegistryWrapper {
   private ExtensionRegistryWrapper(final ExtensionRegistry extensionRegistry) {
     this.extensionFunction =
       new Function<Descriptor, Set<ExtensionInfo>>() {
-        private final Map<Descriptor, Set<ExtensionInfo>> extensionCache = new ConcurrentHashMap<>();
+        private final Map<Descriptor, Set<ExtensionInfo>> extensionCache =
+          new ConcurrentHashMap<>();
 
         @Override
         public Set<ExtensionInfo> apply(Descriptor descriptor) {
@@ -31,9 +32,10 @@ public class ExtensionRegistryWrapper {
             return cached;
           }
 
-          Set<ExtensionInfo> extensions = extensionRegistry.getAllImmutableExtensionsByExtendedType(
-            descriptor.getFullName()
-          );
+          Set<ExtensionInfo> extensions =
+            extensionRegistry.getAllImmutableExtensionsByExtendedType(
+              descriptor.getFullName()
+            );
           extensionCache.put(descriptor, extensions);
           return extensions;
         }

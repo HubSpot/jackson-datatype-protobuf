@@ -71,7 +71,8 @@ public final class CompileCustomProtobufs {
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder();
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+        com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -201,7 +202,8 @@ public final class CompileCustomProtobufs {
       ) {
         return super.equals(obj);
       }
-      com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName other = (com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName) obj;
+      com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName other =
+        (com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName) obj;
 
       if (getFieldWithNoJsonName() != other.getFieldWithNoJsonName()) return false;
       if (getFieldWithJsonName() != other.getFieldWithJsonName()) return false;
@@ -403,7 +405,8 @@ public final class CompileCustomProtobufs {
 
       @java.lang.Override
       public com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName build() {
-        com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName result = buildPartial();
+        com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName result =
+          buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -412,9 +415,10 @@ public final class CompileCustomProtobufs {
 
       @java.lang.Override
       public com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName buildPartial() {
-        com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName result = new com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName(
-          this
-        );
+        com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName result =
+          new com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName(
+            this
+          );
         result.fieldWithNoJsonName_ = fieldWithNoJsonName_;
         result.fieldWithJsonName_ = fieldWithJsonName_;
         onBuilt();
@@ -611,15 +615,16 @@ public final class CompileCustomProtobufs {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<MixedJsonName> PARSER = new com.google.protobuf.AbstractParser<MixedJsonName>() {
-      @java.lang.Override
-      public MixedJsonName parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry
-      ) throws com.google.protobuf.InvalidProtocolBufferException {
-        return new MixedJsonName(input, extensionRegistry);
-      }
-    };
+    private static final com.google.protobuf.Parser<MixedJsonName> PARSER =
+      new com.google.protobuf.AbstractParser<MixedJsonName>() {
+        @java.lang.Override
+        public MixedJsonName parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry
+        ) throws com.google.protobuf.InvalidProtocolBufferException {
+          return new MixedJsonName(input, extensionRegistry);
+        }
+      };
 
     public static com.google.protobuf.Parser<MixedJsonName> parser() {
       return PARSER;

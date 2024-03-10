@@ -77,9 +77,8 @@ public class MessageDeserializer<T extends Message, V extends Builder>
     }
 
     final Descriptor descriptor = builder.getDescriptorForType();
-    final Function<String, FieldDescriptor> fieldLookup = propertyNamingCache.forDeserialization(
-      context.getConfig()
-    );
+    final Function<String, FieldDescriptor> fieldLookup =
+      propertyNamingCache.forDeserialization(context.getConfig());
     final Map<String, ExtensionInfo> extensionLookup;
     if (builder instanceof ExtendableMessageOrBuilder<?>) {
       extensionLookup = buildExtensionLookup(descriptor, context);

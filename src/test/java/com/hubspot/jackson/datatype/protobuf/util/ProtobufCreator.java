@@ -57,7 +57,8 @@ public class ProtobufCreator {
     Class<T> builderType,
     ExtensionRegistry extensionRegistry
   ) {
-    Class<? extends Message> messageType = (Class<? extends Message>) builderType.getDeclaringClass();
+    Class<? extends Message> messageType =
+      (Class<? extends Message>) builderType.getDeclaringClass();
     return (T) create(messageType, extensionRegistry).toBuilder();
   }
 

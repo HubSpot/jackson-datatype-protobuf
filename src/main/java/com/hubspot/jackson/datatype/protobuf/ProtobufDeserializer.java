@@ -39,7 +39,8 @@ public abstract class ProtobufDeserializer<T extends Message, V extends Message.
   private static final String NULL_VALUE_FULL_NAME = NullValue
     .getDescriptor()
     .getFullName();
-  private static final EnumValueDescriptor NULL_VALUE_DESCRIPTOR = NullValue.NULL_VALUE.getValueDescriptor();
+  private static final EnumValueDescriptor NULL_VALUE_DESCRIPTOR =
+    NullValue.NULL_VALUE.getValueDescriptor();
 
   private final T defaultInstance;
 

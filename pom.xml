@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.hubspot</groupId>
     <artifactId>basepom</artifactId>
-    <version>56.1</version>
+    <version>59.2-SNAPSHOT</version>
   </parent>
 
   <groupId>com.hubspot.jackson</groupId>
@@ -20,7 +20,6 @@
     <dep.jackson.version>2.16.1</dep.jackson.version>
     <dep.jackson-databind.version>2.16.1</dep.jackson-databind.version>
     <dep.javax-validation.version>2.0.1.Final</dep.javax-validation.version>
-    <dep.protobuf-java.version>3.19.3</dep.protobuf-java.version>
     <dep.scala.version>2.12.18</dep.scala.version>
   </properties>
 
