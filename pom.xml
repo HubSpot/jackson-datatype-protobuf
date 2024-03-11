@@ -14,6 +14,9 @@
   <description>Jackson Module that adds support for reading/writing protobufs</description>
 
   <properties>
+    <project.build.targetJdk>8</project.build.targetJdk>
+    <project.build.releaseJdk>8</project.build.releaseJdk>
+
     <basepom.check.skip-dependency-versions-check>true</basepom.check.skip-dependency-versions-check>
     <basepom.check.skip-spotbugs>true</basepom.check.skip-spotbugs>
 
