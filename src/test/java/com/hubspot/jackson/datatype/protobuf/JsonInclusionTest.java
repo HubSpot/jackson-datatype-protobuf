@@ -28,7 +28,8 @@ public class JsonInclusionTest {
     "USE_DEFAULTS",
     "CUSTOM"
   );
-  private static final ExtensionRegistry EXTENSION_REGISTRY = TestExtensionRegistry.getInstance();
+  private static final ExtensionRegistry EXTENSION_REGISTRY =
+    TestExtensionRegistry.getInstance();
 
   private static Set<String> allFields;
   private static Set<String> allExtensionFields;

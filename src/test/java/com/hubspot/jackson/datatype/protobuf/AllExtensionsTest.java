@@ -18,7 +18,8 @@ import org.junit.Test;
 
 public class AllExtensionsTest {
 
-  private static final ExtensionRegistry EXTENSION_REGISTRY = TestExtensionRegistry.getInstance();
+  private static final ExtensionRegistry EXTENSION_REGISTRY =
+    TestExtensionRegistry.getInstance();
 
   @Test
   public void testSingleMessageCamelCase() {
