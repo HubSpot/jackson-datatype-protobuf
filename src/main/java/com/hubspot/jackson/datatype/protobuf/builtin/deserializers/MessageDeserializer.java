@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
-import com.google.protobuf.GeneratedMessageV3.ExtendableMessageOrBuilder;
 import com.google.protobuf.Message;
 import com.google.protobuf.Message.Builder;
 import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
@@ -80,7 +79,7 @@ public class MessageDeserializer<T extends Message, V extends Builder>
     final Function<String, FieldDescriptor> fieldLookup =
       propertyNamingCache.forDeserialization(context.getConfig());
     final Map<String, ExtensionInfo> extensionLookup;
-    if (builder instanceof ExtendableMessageOrBuilder<?>) {
+    if (descriptor.isExtendable()) {
       extensionLookup = buildExtensionLookup(descriptor, context);
     } else {
       extensionLookup = Collections.emptyMap();
