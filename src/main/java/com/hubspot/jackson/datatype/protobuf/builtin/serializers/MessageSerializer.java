@@ -12,7 +12,6 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FileDescriptor.Syntax;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
-import com.google.protobuf.GeneratedMessageV3.ExtendableMessageOrBuilder;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
@@ -76,7 +75,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     );
     Descriptor descriptor = message.getDescriptorForType();
     List<FieldDescriptor> fields = descriptor.getFields();
-    if (message instanceof ExtendableMessageOrBuilder<?>) {
+    if (descriptor.isExtendable()) {
       fields = new ArrayList<>(fields);
 
       for (ExtensionInfo extensionInfo : getConfig()

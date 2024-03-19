@@ -12,7 +12,6 @@ import com.google.common.base.CaseFormat;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
-import com.google.protobuf.GeneratedMessageV3.ExtendableMessageOrBuilder;
 import com.google.protobuf.Message;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import java.lang.reflect.Method;
@@ -45,7 +44,7 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
 
     Descriptor descriptor = defaultInstance.getDescriptorForType();
     List<FieldDescriptor> fields = new ArrayList<>(descriptor.getFields());
-    if (defaultInstance instanceof ExtendableMessageOrBuilder<?>) {
+    if (descriptor.isExtendable()) {
       for (ExtensionInfo extensionInfo : config
         .extensionRegistry()
         .getExtensionsByDescriptor(descriptor)) {
