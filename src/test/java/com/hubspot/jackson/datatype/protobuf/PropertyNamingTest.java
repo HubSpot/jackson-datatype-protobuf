@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName;
 import com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper;
@@ -422,6 +423,82 @@ public class PropertyNamingTest {
     assertThat(parsed).isEqualTo(expected);
   }
 
+  @Test
+  public void ensureSerializationBehavior() {
+    ObjectMapper original = new ObjectMapper().registerModules(new ProtobufModule());
+    ObjectMapper custom = new ObjectMapper()
+      .registerModules(new ProtobufModule())
+      .setPropertyNamingStrategy(new PropertyNamingStrategy() {});
+
+    PropertyNamingSnakeCased snakeCase = PropertyNamingSnakeCased
+      .newBuilder()
+      .setStringAttribute("value")
+      .build();
+    PropertyNamingCamelCased camelCase = PropertyNamingCamelCased
+      .newBuilder()
+      .setStringAttribute("value")
+      .build();
+
+    assertThat(original.<JsonNode>valueToTree(snakeCase))
+      .isEqualTo(objectNode("stringAttribute", "value"));
+    assertThat(custom.<JsonNode>valueToTree(snakeCase))
+      .isEqualTo(objectNode("stringAttribute", "value"));
+
+    assertThat(original.<JsonNode>valueToTree(camelCase))
+      .isEqualTo(objectNode("stringattribute", "value"));
+    assertThat(custom.<JsonNode>valueToTree(camelCase))
+      .isEqualTo(objectNode("stringattribute", "value"));
+  }
+
+  @Test
+  public void ensureDeserializationBehavior() throws IOException {
+    ObjectMapper original = new ObjectMapper().registerModules(new ProtobufModule());
+    ObjectMapper custom = new ObjectMapper()
+      .registerModules(new ProtobufModule())
+      .setPropertyNamingStrategy(new PropertyNamingStrategy() {});
+
+    PropertyNamingSnakeCased snakeCase = PropertyNamingSnakeCased
+      .newBuilder()
+      .setStringAttribute("value")
+      .build();
+    PropertyNamingCamelCased camelCase = PropertyNamingCamelCased
+      .newBuilder()
+      .setStringAttribute("value")
+      .build();
+
+    assertThat(
+      original.treeToValue(
+        objectNode("stringAttribute", "value"),
+        PropertyNamingSnakeCased.class
+      )
+    )
+      .isEqualTo(snakeCase);
+
+    assertThat(
+      custom.treeToValue(
+        objectNode("stringAttribute", "value"),
+        PropertyNamingSnakeCased.class
+      )
+    )
+      .isEqualTo(snakeCase);
+
+    assertThat(
+      original.treeToValue(
+        objectNode("stringattribute", "value"),
+        PropertyNamingCamelCased.class
+      )
+    )
+      .isEqualTo(camelCase);
+
+    assertThat(
+      custom.treeToValue(
+        objectNode("stringattribute", "value"),
+        PropertyNamingCamelCased.class
+      )
+    )
+      .isEqualTo(camelCase);
+  }
+
   private static PropertyNamingStrategy snakeCaseNamingBase() {
     return new NamingBase() {
       @Override
@@ -429,5 +506,9 @@ public class PropertyNamingTest {
         return propertyName;
       }
     };
+  }
+
+  private static ObjectNode objectNode(String field, String value) {
+    return JsonNodeFactory.instance.objectNode().put(field, value);
   }
 }
