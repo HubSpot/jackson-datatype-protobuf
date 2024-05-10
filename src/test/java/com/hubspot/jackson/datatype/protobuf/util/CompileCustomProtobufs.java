@@ -179,11 +179,11 @@ public final class CompileCustomProtobufs {
       size = 0;
       if (fieldWithNoJsonName_ != 0) {
         size +=
-          com.google.protobuf.CodedOutputStream.computeInt32Size(1, fieldWithNoJsonName_);
+        com.google.protobuf.CodedOutputStream.computeInt32Size(1, fieldWithNoJsonName_);
       }
       if (fieldWithJsonName_ != 0) {
         size +=
-          com.google.protobuf.CodedOutputStream.computeInt32Size(2, fieldWithJsonName_);
+        com.google.protobuf.CodedOutputStream.computeInt32Size(2, fieldWithJsonName_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -196,9 +196,8 @@ public final class CompileCustomProtobufs {
         return true;
       }
       if (
-        !(
-          obj instanceof com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName
-        )
+        !(obj instanceof
+          com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName)
       ) {
         return super.equals(obj);
       }
@@ -468,7 +467,8 @@ public final class CompileCustomProtobufs {
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (
-          other instanceof com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName
+          other instanceof
+          com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName
         ) {
           return mergeFrom(
             (com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName) other

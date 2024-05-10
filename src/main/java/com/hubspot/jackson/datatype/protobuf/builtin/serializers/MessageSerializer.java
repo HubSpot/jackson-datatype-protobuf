@@ -110,11 +110,9 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
         }
       } else if (
         message.hasField(field) ||
-        (
-          writeDefaultValues &&
+        (writeDefaultValues &&
           !supportsFieldPresence(field) &&
-          field.getContainingOneof() == null
-        )
+          field.getContainingOneof() == null)
       ) {
         generator.writeFieldName(fieldName);
         writeValue(field, message.getField(field), generator, serializerProvider);
