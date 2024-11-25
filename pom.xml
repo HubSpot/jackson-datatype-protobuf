@@ -20,11 +20,12 @@
     <basepom.check.skip-dependency-versions-check>true</basepom.check.skip-dependency-versions-check>
     <basepom.check.skip-spotbugs>true</basepom.check.skip-spotbugs>
 
-    <dep.jackson.version>2.16.1</dep.jackson.version>
-    <dep.jackson-databind.version>2.16.1</dep.jackson-databind.version>
+    <dep.jackson.version>2.18.1</dep.jackson.version>
+    <dep.jackson-databind.version>2.18.1</dep.jackson-databind.version>
     <dep.javax-validation.version>2.0.1.Final</dep.javax-validation.version>
-    <dep.scala.version>2.12.18</dep.scala.version>
     <dep.protobuf-java.version>4.28.3</dep.protobuf-java.version>
+    <dep.protoc.version>${dep.protobuf-java.version}</dep.protoc.version>
+    <dep.scala.version>2.12.18</dep.scala.version>
   </properties>
 
   <dependencyManagement>

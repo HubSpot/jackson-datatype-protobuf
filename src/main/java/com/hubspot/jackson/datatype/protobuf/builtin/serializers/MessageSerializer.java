@@ -58,12 +58,8 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
       generator.writeStartObject();
     }
 
-    boolean proto3 = message
-      .getDescriptorForType()
-      .getFile()
-      .toProto()
-      .getSyntax()
-      .contentEquals("proto3");
+    boolean proto3 =
+      "proto3".equals(message.getDescriptorForType().getFile().toProto().getSyntax());
     Include include = serializerProvider
       .getConfig()
       .getDefaultPropertyInclusion()
