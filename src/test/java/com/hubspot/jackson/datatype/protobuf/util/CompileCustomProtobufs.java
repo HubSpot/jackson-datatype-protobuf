@@ -107,7 +107,6 @@ public final class CompileCustomProtobufs {
           .setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
       }
     }
 

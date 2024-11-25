@@ -1,4 +1,4 @@
-name: Jackson-2.14
+name: Jackson-2.16
 
 on:
   push:
@@ -19,4 +19,4 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn -B verify -Ddep.jackson.version=2.14.3 -Ddep.jackson-databind.version=2.14.3 -Dbasepom.git-id.skip
+        run: mvn -B verify -Ddep.jackson.version=2.16.2 -Ddep.jackson-databind.version=2.16.2 -Dbasepom.git-id.skip

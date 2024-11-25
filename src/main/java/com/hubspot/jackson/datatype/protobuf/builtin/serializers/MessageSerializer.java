@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrappe
 import com.fasterxml.jackson.databind.util.NameTransformer;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Descriptors.FileDescriptor.Syntax;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
@@ -60,7 +59,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     }
 
     boolean proto3 =
-      message.getDescriptorForType().getFile().getSyntax() == Syntax.PROTO3;
+      "proto3".equals(message.getDescriptorForType().getFile().toProto().getSyntax());
     Include include = serializerProvider
       .getConfig()
       .getDefaultPropertyInclusion()
