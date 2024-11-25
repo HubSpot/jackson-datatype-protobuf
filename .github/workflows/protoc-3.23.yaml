@@ -1,4 +1,4 @@
-name: Jackson-2.15
+name: Protoc-3.23
 
 on:
   push:
