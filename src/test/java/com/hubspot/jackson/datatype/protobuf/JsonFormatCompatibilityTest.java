@@ -7,6 +7,7 @@ import com.google.protobuf.util.JsonFormat;
 import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.AllFieldsProto3;
+import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.UnconventionalProto3;
 import java.io.IOException;
 import org.junit.Test;
 
@@ -76,6 +77,39 @@ public class JsonFormatCompatibilityTest {
         AllFieldsProto3 parsed = MAPPER.readValue(json, AllFieldsProto3.class);
 
         assertThat(parsed).isEqualTo(original);
+      },
+      1_000
+    );
+  }
+
+  @Test
+  public void jsonFormatSerializesAndWeDeserializeUnconventionalProto3()
+    throws IOException {
+    repeat(
+      () -> {
+        UnconventionalProto3 original = ProtobufCreator.create(
+          UnconventionalProto3.class
+        );
+        String json = JsonFormat.printer().print(original);
+        UnconventionalProto3 parsed = MAPPER.readValue(json, UnconventionalProto3.class);
+        assertThat(parsed).isEqualTo(original);
+      },
+      1_000
+    );
+  }
+
+  @Test
+  public void weSerializeAndJsonFormatDeserializesUnconventionalProto3()
+    throws IOException {
+    repeat(
+      () -> {
+        UnconventionalProto3 original = ProtobufCreator.create(
+          UnconventionalProto3.class
+        );
+        String json = MAPPER.writeValueAsString(original);
+        UnconventionalProto3.Builder builder = UnconventionalProto3.newBuilder();
+        JsonFormat.parser().merge(json, builder);
+        assertThat(builder.build()).isEqualTo(original);
       },
       1_000
     );
