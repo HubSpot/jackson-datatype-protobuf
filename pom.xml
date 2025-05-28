@@ -5,12 +5,14 @@
   <parent>
     <groupId>com.hubspot</groupId>
     <artifactId>basepom</artifactId>
-    <version>60.0</version>
+    <version>63.0</version>
   </parent>
 
   <groupId>com.hubspot.jackson</groupId>
   <artifactId>jackson-datatype-protobuf</artifactId>
   <version>0.9.18-SNAPSHOT</version>
+
+  <name>${project.groupId}:${project.artifactId}</name>
   <description>Jackson Module that adds support for reading/writing protobufs</description>
 
   <properties>
@@ -132,6 +134,15 @@
       </extension>
     </extensions>
   </build>
+
+  <url>https://github.com/HubSpot/jackson-datatype-protobuf</url>
+
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
 
   <developers>
     <developer>
