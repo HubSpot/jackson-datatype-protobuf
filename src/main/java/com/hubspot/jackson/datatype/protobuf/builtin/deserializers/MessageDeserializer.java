@@ -119,7 +119,8 @@ public class MessageDeserializer<T extends Message, V extends Builder>
   ) {
     PropertyNamingStrategyWrapper namingStrategy = new PropertyNamingStrategyWrapper(
       messageType,
-      context.getConfig()
+      context.getConfig(),
+      config
     );
 
     Map<String, ExtensionInfo> extensionLookup = new HashMap<>();

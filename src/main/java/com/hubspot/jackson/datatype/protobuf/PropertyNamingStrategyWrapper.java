@@ -8,18 +8,19 @@ import com.google.protobuf.Message;
 @SuppressWarnings("serial")
 public class PropertyNamingStrategyWrapper {
 
-  private static final NamingBase SNAKE_TO_CAMEL = new SnakeToCamelNamingStrategy();
+  static final NamingBase SNAKE_TO_CAMEL = new SnakeToCamelNamingStrategy();
 
   private final NamingBase delegate;
 
   public PropertyNamingStrategyWrapper(
     Class<? extends Message> messageType,
-    MapperConfig<?> mapperConfig
+    MapperConfig<?> mapperConfig,
+    ProtobufJacksonConfig protobufJacksonConfig
   ) {
     if (mapperConfig.getPropertyNamingStrategy() instanceof NamingBase) {
       this.delegate = (NamingBase) mapperConfig.getPropertyNamingStrategy();
     } else {
-      this.delegate = SNAKE_TO_CAMEL;
+      this.delegate = protobufJacksonConfig.propertyNamingStrategy();
     }
   }
 
