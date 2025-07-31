@@ -87,3 +87,13 @@ message JsonNameProto3 {
   string lower_underscore = 3 [json_name = "lower_underscore"];
   string different_name = 4 [json_name = "surprise!"];
 }
+
+message UnconventionalProto3 {
+  string camelCase = 1;
+  string weird_UpperCamelCase = 2;
+  string weird_lowerCamelCase = 3;
+  string weird_1lowerCamelCase = 4;
+  string weird_2UpperCamelCase = 5;
+  string weird_3_lowerCamelCase = 6;
+  string weird_4_UpperCamelCase = 7;
+}
