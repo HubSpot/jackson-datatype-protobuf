@@ -17,7 +17,7 @@
 
   <properties>
     <project.build.targetJdk>8</project.build.targetJdk>
-    <project.build.jdk.version>17</project.build.jdk.version>
+    <project.build.jdk.version>21</project.build.jdk.version>
 
     <basepom.check.skip-dependency-versions-check>true</basepom.check.skip-dependency-versions-check>
     <basepom.check.skip-spotbugs>true</basepom.check.skip-spotbugs>
