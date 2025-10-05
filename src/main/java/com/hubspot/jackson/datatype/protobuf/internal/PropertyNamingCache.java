@@ -1,5 +1,6 @@
 package com.hubspot.jackson.datatype.protobuf.internal;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.google.common.collect.ImmutableMap;
@@ -21,6 +22,20 @@ public class PropertyNamingCache {
   private final ProtobufJacksonConfig config;
   private final Map<PropertyNamingStrategy, Function<FieldDescriptor, String>> serializationCache;
   private final Map<PropertyNamingStrategy, Function<String, FieldDescriptor>> deserializationCache;
+
+  public static class JsonFormatPropertyNamingStrategy
+    extends PropertyNamingStrategies.NamingBase {
+
+    public static final JsonFormatPropertyNamingStrategy INSTANCE =
+      new JsonFormatPropertyNamingStrategy();
+
+    private JsonFormatPropertyNamingStrategy() {}
+
+    @Override
+    public String translate(String fieldName) {
+      return defaultJsonName(fieldName);
+    }
+  }
 
   private PropertyNamingCache(
     Descriptor descriptor,
@@ -86,7 +101,8 @@ public class PropertyNamingCache {
   ) {
     PropertyNamingStrategyWrapper namingStrategy = new PropertyNamingStrategyWrapper(
       messageType,
-      mapperConfig
+      mapperConfig,
+      config
     );
 
     Map<FieldDescriptor, String> tempMap = new HashMap<>();
@@ -107,7 +123,8 @@ public class PropertyNamingCache {
   ) {
     PropertyNamingStrategyWrapper namingStrategy = new PropertyNamingStrategyWrapper(
       messageType,
-      mapperConfig
+      mapperConfig,
+      config
     );
 
     Map<String, FieldDescriptor> tempMap = new HashMap<>();
