@@ -1,15 +1,15 @@
 package com.hubspot.jackson.datatype.protobuf;
 
-import com.fasterxml.jackson.databind.BeanDescription;
-import com.fasterxml.jackson.databind.DeserializationConfig;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.google.protobuf.Message;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.MessageDeserializer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import tools.jackson.databind.BeanDescription;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.DeserializationConfig;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.deser.Deserializers;
 
 public class MessageDeserializerFactory extends Deserializers.Base {
 
@@ -31,11 +31,11 @@ public class MessageDeserializerFactory extends Deserializers.Base {
 
   @Override
   @SuppressWarnings("unchecked")
-  public JsonDeserializer<?> findBeanDeserializer(
+  public ValueDeserializer<?> findBeanDeserializer(
     JavaType type,
     DeserializationConfig config,
-    BeanDescription beanDesc
-  ) throws JsonMappingException {
+    BeanDescription.Supplier beanDesc
+  ) throws DatabindException {
     if (Message.class.isAssignableFrom(type.getRawClass())) {
       return getDeserializer((Class<? extends Message>) type.getRawClass()).buildAtEnd();
     } else if (Message.Builder.class.isAssignableFrom(type.getRawClass())) {
@@ -62,5 +62,13 @@ public class MessageDeserializerFactory extends Deserializers.Base {
     }
 
     return (ProtobufDeserializer<T, ?>) deserializer;
+  }
+
+  @Override
+  public boolean hasDeserializerFor(DeserializationConfig config, Class<?> valueType) {
+    return (
+      Message.class.isAssignableFrom(valueType) ||
+      Message.Builder.class.isAssignableFrom(valueType)
+    );
   }
 }

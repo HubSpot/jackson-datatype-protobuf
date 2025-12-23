@@ -2,11 +2,11 @@ package com.hubspot.jackson.datatype.protobuf;
 
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasTimestamp;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.AllFieldsProto3;
 import java.io.IOException;
 import org.junit.Test;
+import tools.jackson.databind.exc.MismatchedInputException;
 
 public class FailOnMismatchedJsonTest {
 

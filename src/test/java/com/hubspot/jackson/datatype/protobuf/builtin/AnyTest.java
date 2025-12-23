@@ -4,12 +4,12 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.came
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.protobuf.Any;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasAny;
 import java.io.IOException;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
 
 public class AnyTest {
 
@@ -141,7 +141,7 @@ public class AnyTest {
 
   private static JsonNode anyNode() {
     String base64 = camelCase()
-      .getSerializationConfig()
+      .serializationConfig()
       .getBase64Variant()
       .encode(VALUE.toByteArray());
     JsonNode valueNode = camelCase()

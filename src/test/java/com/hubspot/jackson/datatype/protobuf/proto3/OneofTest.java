@@ -5,9 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.protobuf.Duration;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasOneof;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
@@ -17,6 +14,9 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.NullNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class OneofTest {
 

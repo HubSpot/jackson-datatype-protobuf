@@ -1,17 +1,16 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ListValue;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
+import tools.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 
 public class ListValueSerializer extends ProtobufSerializer<ListValue> {
 
@@ -35,8 +34,8 @@ public class ListValueSerializer extends ProtobufSerializer<ListValue> {
   public void serialize(
     ListValue listValue,
     JsonGenerator generator,
-    SerializerProvider serializerProvider
-  ) throws IOException {
+    SerializationContext serializerProvider
+  ) throws JacksonException {
     generator.writeStartArray();
     for (Value value : listValue.getValuesList()) {
       writeValue(VALUES_FIELD, value, generator, serializerProvider);
@@ -48,10 +47,10 @@ public class ListValueSerializer extends ProtobufSerializer<ListValue> {
   public void acceptJsonFormatVisitor(
     JsonFormatVisitorWrapper visitor,
     JavaType typeHint
-  ) throws JsonMappingException {
-    JavaType elementType = visitor.getProvider().constructType(Value.class);
+  ) {
+    JavaType elementType = visitor.getContext().constructType(Value.class);
     JavaType arrayType = visitor
-      .getProvider()
+      .getContext()
       .getTypeFactory()
       .constructArrayType(elementType);
     JsonArrayFormatVisitor itemVisitor = visitor.expectArrayFormat(arrayType);

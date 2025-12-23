@@ -1,13 +1,5 @@
 package com.hubspot.jackson.datatype.protobuf.internal;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonMapFormatVisitor;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
-import com.fasterxml.jackson.databind.type.ArrayType;
 import com.google.common.base.CaseFormat;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -18,6 +10,13 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
+import tools.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
+import tools.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
+import tools.jackson.databind.jsonFormatVisitors.JsonMapFormatVisitor;
+import tools.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
+import tools.jackson.databind.type.ArrayType;
 
 public class MessageSchemaGenerator implements JsonFormatVisitable {
 
@@ -39,7 +38,7 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
   public void acceptJsonFormatVisitor(
     JsonFormatVisitorWrapper visitor,
     JavaType typeHint
-  ) throws JsonMappingException {
+  ) {
     JsonObjectFormatVisitor objectVisitor = visitor.expectObjectFormat(typeHint);
 
     Descriptor descriptor = defaultInstance.getDescriptorForType();
@@ -55,7 +54,7 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
     for (final FieldDescriptor field : fields) {
       String fieldName = propertyNaming.apply(field);
       JavaType fieldType = visitor
-        .getProvider()
+        .getContext()
         .constructType(fieldClass(defaultInstance, field));
       JsonFormatVisitable fieldVisitable = new FieldSchemaGenerator(field, config);
 
@@ -73,7 +72,7 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
         try {
           mapType =
             visitor
-              .getProvider()
+              .getContext()
               .constructType(
                 defaultInstance
                   .getClass()
@@ -103,7 +102,7 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
         );
       } else if (field.isRepeated()) {
         ArrayType listType = visitor
-          .getProvider()
+          .getContext()
           .getTypeFactory()
           .constructArrayType(fieldType);
 

@@ -1,9 +1,5 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.deserializers;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
@@ -15,12 +11,16 @@ import com.hubspot.jackson.datatype.protobuf.ProtobufDeserializer;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.internal.PropertyNamingCache;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonToken;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.DeserializationContext;
 
 public class MessageDeserializer<T extends Message, V extends Builder>
   extends ProtobufDeserializer<T, V> {
@@ -56,8 +56,8 @@ public class MessageDeserializer<T extends Message, V extends Builder>
 
   @Override
   protected void populate(V builder, JsonParser parser, DeserializationContext context)
-    throws IOException {
-    JsonToken token = parser.getCurrentToken();
+    throws JacksonException {
+    JsonToken token = parser.currentToken();
     if (token == JsonToken.START_ARRAY) {
       token = parser.nextToken();
     }
@@ -86,11 +86,11 @@ public class MessageDeserializer<T extends Message, V extends Builder>
     }
 
     do {
-      if (!token.equals(JsonToken.FIELD_NAME)) {
-        throw reportWrongToken(JsonToken.FIELD_NAME, context, "");
+      if (!token.equals(JsonToken.PROPERTY_NAME)) {
+        throw reportWrongToken(JsonToken.PROPERTY_NAME, context, "");
       }
 
-      String name = parser.getCurrentName();
+      String name = parser.currentName();
       FieldDescriptor field = fieldLookup.apply(name);
       Message defaultInstance = null;
       if (field == null) {
@@ -141,7 +141,7 @@ public class MessageDeserializer<T extends Message, V extends Builder>
     Message defaultInstance,
     JsonParser parser,
     DeserializationContext context
-  ) throws IOException {
+  ) throws JacksonException {
     if (field.isMapField()) {
       List<Message> entries = readMap(builder, field, parser, context);
       for (Message entry : entries) {
@@ -166,7 +166,7 @@ public class MessageDeserializer<T extends Message, V extends Builder>
     JsonToken expected,
     DeserializationContext context,
     String message
-  ) throws JsonMappingException {
+  ) throws DatabindException {
     context.reportWrongTokenException(this, expected, message);
     // the previous method should have thrown
     throw new AssertionError();

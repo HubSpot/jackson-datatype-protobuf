@@ -3,11 +3,11 @@ package com.hubspot.jackson.datatype.protobuf;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.create;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.RepeatedFields;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.SerializationFeature;
 
 public class WriteSingleElementArraysUnwrappedTest {
 
@@ -39,9 +39,15 @@ public class WriteSingleElementArraysUnwrappedTest {
 
   private static ObjectMapper objectMapper(boolean enabled) {
     if (enabled) {
-      return create().enable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
+      return create()
+        .rebuild()
+        .enable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)
+        .build();
     } else {
-      return create().disable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
+      return create()
+        .rebuild()
+        .disable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)
+        .build();
     }
   }
 }

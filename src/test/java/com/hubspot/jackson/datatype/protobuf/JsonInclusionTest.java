@@ -5,8 +5,6 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.crea
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Enums;
 import com.google.protobuf.Descriptors.Descriptor;
@@ -20,6 +18,8 @@ import java.util.HashSet;
 import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 public class JsonInclusionTest {
 
@@ -146,14 +146,20 @@ public class JsonInclusionTest {
   }
 
   private static ObjectMapper mapper(Include inclusion) {
-    return create().setSerializationInclusion(inclusion);
+    return create()
+      .rebuild()
+      .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(inclusion))
+      .build();
   }
 
   private static ObjectMapper mapper(
     Include inclusion,
     ExtensionRegistry extensionRegistry
   ) {
-    return camelCase(extensionRegistry).copy().setSerializationInclusion(inclusion);
+    return camelCase(extensionRegistry)
+      .rebuild()
+      .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(inclusion))
+      .build();
   }
 
   private static EnumSet<Include> presentValues(String... values) {

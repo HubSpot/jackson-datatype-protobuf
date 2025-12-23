@@ -1,9 +1,9 @@
 package com.hubspot.jackson.datatype.protobuf;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies.NamingBase;
-import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.google.common.base.CaseFormat;
 import com.google.protobuf.Message;
+import tools.jackson.databind.PropertyNamingStrategies.NamingBase;
+import tools.jackson.databind.cfg.MapperConfig;
 
 @SuppressWarnings("serial")
 public class PropertyNamingStrategyWrapper {
@@ -24,7 +24,8 @@ public class PropertyNamingStrategyWrapper {
   }
 
   public String translate(String fieldName) {
-    return delegate.translate(fieldName);
+    // NOTE: the MapperConfig and AnnotatedField are not needed
+    return delegate.nameForField(null, null, fieldName);
   }
 
   private static class SnakeToCamelNamingStrategy extends NamingBase {

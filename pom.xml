@@ -2,28 +2,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>com.hubspot</groupId>
-    <artifactId>basepom</artifactId>
-    <version>63.10</version>
-  </parent>
-
   <groupId>com.hubspot.jackson</groupId>
   <artifactId>jackson-datatype-protobuf</artifactId>
-  <version>0.9.19-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
 
   <name>${project.groupId}:${project.artifactId}</name>
   <description>Jackson Module that adds support for reading/writing protobufs</description>
 
   <properties>
-    <project.build.targetJdk>8</project.build.targetJdk>
+    <project.build.targetJdk>17</project.build.targetJdk>
     <project.build.jdk.version>21</project.build.jdk.version>
 
     <basepom.check.skip-dependency-versions-check>true</basepom.check.skip-dependency-versions-check>
     <basepom.check.skip-spotbugs>true</basepom.check.skip-spotbugs>
 
-    <dep.jackson.version>2.18.1</dep.jackson.version>
-    <dep.jackson-databind.version>2.18.1</dep.jackson-databind.version>
+    <dep.jackson3.version>3.0.3</dep.jackson3.version>
     <dep.javax-validation.version>2.0.1.Final</dep.javax-validation.version>
     <dep.protobuf-java.version>4.28.3</dep.protobuf-java.version>
     <dep.protoc.version>${dep.protobuf-java.version}</dep.protoc.version>
@@ -32,10 +25,13 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- TODO: move to base BOM -->
       <dependency>
-        <groupId>com.kjetland</groupId>
-        <artifactId>mbknor-jackson-jsonschema_2.12</artifactId>
-        <version>1.0.39</version>
+        <groupId>tools.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${dep.jackson3.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -46,42 +42,43 @@
       <artifactId>jackson-annotations</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
+      <groupId>tools.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
+      <groupId>tools.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
+      <version>33.5.0-jre</version>
     </dependency>
     <dependency>
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-java</artifactId>
+      <version>4.33.2</version>
     </dependency>
     <dependency>
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-java-util</artifactId>
+      <version>4.33.2</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>annotations</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.kjetland</groupId>
-      <artifactId>mbknor-jackson-jsonschema_2.12</artifactId>
-      <scope>test</scope>
+      <version>3.0.1</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+      <version>3.17.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

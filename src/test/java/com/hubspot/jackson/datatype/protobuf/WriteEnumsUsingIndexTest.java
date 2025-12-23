@@ -4,12 +4,12 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.crea
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.writeAndReadBack;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.cfg.EnumFeature;
 
 public class WriteEnumsUsingIndexTest {
 
@@ -29,8 +29,8 @@ public class WriteEnumsUsingIndexTest {
 
     JsonNode node = mapper.valueToTree(getObject());
     assertThat(node.has("enum")).isTrue();
-    assertThat(node.get("enum").isTextual()).isTrue();
-    assertThat(node.get("enum").textValue()).isEqualTo("TWO");
+    assertThat(node.get("enum").isString()).isTrue();
+    assertThat(node.get("enum").stringValue()).isEqualTo("TWO");
   }
 
   @Test
@@ -47,9 +47,9 @@ public class WriteEnumsUsingIndexTest {
 
   private static ObjectMapper objectMapper(boolean enabled) {
     if (enabled) {
-      return create().enable(SerializationFeature.WRITE_ENUMS_USING_INDEX);
+      return create().rebuild().enable(EnumFeature.WRITE_ENUMS_USING_INDEX).build();
     } else {
-      return create().disable(SerializationFeature.WRITE_ENUMS_USING_INDEX);
+      return create().rebuild().disable(EnumFeature.WRITE_ENUMS_USING_INDEX).build();
     }
   }
 }

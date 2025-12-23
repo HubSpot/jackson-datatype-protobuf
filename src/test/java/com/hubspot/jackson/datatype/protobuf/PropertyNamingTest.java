@@ -5,16 +5,6 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.toTr
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies.NamingBase;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.cfg.MapperConfig;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import com.fasterxml.jackson.databind.introspect.AnnotatedField;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hubspot.jackson.datatype.protobuf.util.CompileCustomProtobufs.MixedJsonName;
 import com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper;
 import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
@@ -25,6 +15,18 @@ import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.JsonNameProto3;
 import java.io.IOException;
 import java.util.List;
 import org.junit.Test;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.PropertyNamingStrategies.NamingBase;
+import tools.jackson.databind.PropertyNamingStrategy;
+import tools.jackson.databind.cfg.MapperConfig;
+import tools.jackson.databind.exc.UnrecognizedPropertyException;
+import tools.jackson.databind.introspect.AnnotatedField;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.JsonNodeFactory;
+import tools.jackson.databind.node.ObjectNode;
 
 public class PropertyNamingTest {
 
@@ -39,7 +41,7 @@ public class PropertyNamingTest {
     assertThat(tree.isObject()).isTrue();
     assertThat(tree.size()).isEqualTo(1);
     assertThat(tree.get("stringAttribute")).isNotNull();
-    assertThat(tree.get("stringAttribute").textValue())
+    assertThat(tree.get("stringAttribute").stringValue())
       .isEqualTo(message.getStringAttribute());
   }
 
@@ -61,7 +63,7 @@ public class PropertyNamingTest {
       assertThat(subTree.isObject()).isTrue();
       assertThat(subTree.size()).isEqualTo(1);
       assertThat(subTree.get("stringAttribute")).isNotNull();
-      assertThat(subTree.get("stringAttribute").textValue())
+      assertThat(subTree.get("stringAttribute").stringValue())
         .isEqualTo(messages.get(i).getStringAttribute());
     }
   }
@@ -77,7 +79,7 @@ public class PropertyNamingTest {
     assertThat(tree.isObject()).isTrue();
     assertThat(tree.size()).isEqualTo(1);
     assertThat(tree.get("string_attribute")).isNotNull();
-    assertThat(tree.get("string_attribute").textValue())
+    assertThat(tree.get("string_attribute").stringValue())
       .isEqualTo(message.getStringAttribute());
   }
 
@@ -99,7 +101,7 @@ public class PropertyNamingTest {
       assertThat(subTree.isObject()).isTrue();
       assertThat(subTree.size()).isEqualTo(1);
       assertThat(subTree.get("string_attribute")).isNotNull();
-      assertThat(subTree.get("string_attribute").textValue())
+      assertThat(subTree.get("string_attribute").stringValue())
         .isEqualTo(messages.get(i).getStringAttribute());
     }
 
@@ -114,7 +116,7 @@ public class PropertyNamingTest {
       assertThat(subTree.isObject()).isTrue();
       assertThat(subTree.size()).isEqualTo(1);
       assertThat(subTree.get("string_attribute")).isNotNull();
-      assertThat(subTree.get("string_attribute").textValue())
+      assertThat(subTree.get("string_attribute").stringValue())
         .isEqualTo(messages.get(i).getStringAttribute());
     }
   }
@@ -126,9 +128,10 @@ public class PropertyNamingTest {
     );
 
     @SuppressWarnings("serial")
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModule(new ProtobufModule())
-      .setPropertyNamingStrategy(
+    ObjectMapper mapper = JsonMapper
+      .builder()
+      .addModule(new ProtobufModule())
+      .propertyNamingStrategy(
         new PropertyNamingStrategy() {
           @Override
           public String nameForField(
@@ -139,14 +142,15 @@ public class PropertyNamingTest {
             return defaultName;
           }
         }
-      );
+      )
+      .build();
 
     JsonNode tree = toTree(mapper, message);
 
     assertThat(tree.isObject()).isTrue();
     assertThat(tree.size()).isEqualTo(1);
     assertThat(tree.get("stringattribute")).isNotNull();
-    assertThat(tree.get("stringattribute").textValue())
+    assertThat(tree.get("stringattribute").stringValue())
       .isEqualTo(message.getStringAttribute());
   }
 
@@ -157,14 +161,14 @@ public class PropertyNamingTest {
     );
 
     @SuppressWarnings("serial")
-    ObjectMapper mapper = new ObjectMapper().registerModule(new ProtobufModule());
+    ObjectMapper mapper = JsonMapper.builder().addModule(new ProtobufModule()).build();
 
     JsonNode tree = toTree(mapper, message);
 
     assertThat(tree.isObject()).isTrue();
     assertThat(tree.size()).isEqualTo(1);
     assertThat(tree.get("stringattribute")).isNotNull();
-    assertThat(tree.get("stringattribute").textValue())
+    assertThat(tree.get("stringattribute").stringValue())
       .isEqualTo(message.getStringAttribute());
   }
 
@@ -175,16 +179,18 @@ public class PropertyNamingTest {
     );
 
     @SuppressWarnings("serial")
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModule(new ProtobufModule())
-      .setPropertyNamingStrategy(snakeCaseNamingBase());
+    ObjectMapper mapper = JsonMapper
+      .builder()
+      .addModule(new ProtobufModule())
+      .propertyNamingStrategy(snakeCaseNamingBase())
+      .build();
 
     JsonNode tree = toTree(mapper, message);
 
     assertThat(tree.isObject()).isTrue();
     assertThat(tree.size()).isEqualTo(1);
     assertThat(tree.get("stringAttribute")).isNotNull();
-    assertThat(tree.get("stringAttribute").textValue())
+    assertThat(tree.get("stringAttribute").stringValue())
       .isEqualTo(message.getStringAttribute());
   }
 
@@ -196,9 +202,10 @@ public class PropertyNamingTest {
     );
 
     @SuppressWarnings("serial")
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModule(new ProtobufModule())
-      .setPropertyNamingStrategy(
+    ObjectMapper mapper = JsonMapper
+      .builder()
+      .addModule(new ProtobufModule())
+      .propertyNamingStrategy(
         new PropertyNamingStrategy() {
           @Override
           public String nameForField(
@@ -209,7 +216,8 @@ public class PropertyNamingTest {
             return defaultName;
           }
         }
-      );
+      )
+      .build();
 
     JsonNode tree = toTree(mapper, messages);
 
@@ -222,7 +230,7 @@ public class PropertyNamingTest {
       assertThat(subTree.isObject()).isTrue();
       assertThat(subTree.size()).isEqualTo(1);
       assertThat(subTree.get("stringattribute")).isNotNull();
-      assertThat(subTree.get("stringattribute").textValue())
+      assertThat(subTree.get("stringattribute").stringValue())
         .isEqualTo(messages.get(i).getStringAttribute());
     }
   }
@@ -235,7 +243,7 @@ public class PropertyNamingTest {
     );
 
     @SuppressWarnings("serial")
-    ObjectMapper mapper = new ObjectMapper().registerModule(new ProtobufModule());
+    ObjectMapper mapper = JsonMapper.builder().addModule(new ProtobufModule()).build();
 
     JsonNode tree = toTree(mapper, messages);
 
@@ -248,7 +256,7 @@ public class PropertyNamingTest {
       assertThat(subTree.isObject()).isTrue();
       assertThat(subTree.size()).isEqualTo(1);
       assertThat(subTree.get("stringattribute")).isNotNull();
-      assertThat(subTree.get("stringattribute").textValue())
+      assertThat(subTree.get("stringattribute").stringValue())
         .isEqualTo(messages.get(i).getStringAttribute());
     }
   }
@@ -261,9 +269,11 @@ public class PropertyNamingTest {
     );
 
     @SuppressWarnings("serial")
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModule(new ProtobufModule())
-      .setPropertyNamingStrategy(snakeCaseNamingBase());
+    ObjectMapper mapper = JsonMapper
+      .builder()
+      .addModule(new ProtobufModule())
+      .propertyNamingStrategy(snakeCaseNamingBase())
+      .build();
 
     JsonNode tree = toTree(mapper, messages);
 
@@ -276,7 +286,7 @@ public class PropertyNamingTest {
       assertThat(subTree.isObject()).isTrue();
       assertThat(subTree.size()).isEqualTo(1);
       assertThat(subTree.get("stringAttribute")).isNotNull();
-      assertThat(subTree.get("stringAttribute").textValue())
+      assertThat(subTree.get("stringAttribute").stringValue())
         .isEqualTo(messages.get(i).getStringAttribute());
     }
   }
@@ -286,7 +296,11 @@ public class PropertyNamingTest {
     String json = "{\"string_attribute\":\"test\"}";
 
     Throwable t = catchThrowable(() ->
-      camelCase().readValue(json, PropertyNamingSnakeCased.class)
+      camelCase()
+        .rebuild()
+        .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+        .build()
+        .readValue(json, PropertyNamingSnakeCased.class)
     );
     assertThat(t).isInstanceOf(UnrecognizedPropertyException.class);
   }
@@ -302,7 +316,10 @@ public class PropertyNamingTest {
       .builder()
       .acceptLiteralFieldnames(true)
       .build();
-    ObjectMapper mapper = new ObjectMapper().registerModules(new ProtobufModule(config));
+    ObjectMapper mapper = JsonMapper
+      .builder()
+      .addModule(new ProtobufModule(config))
+      .build();
 
     String json = "{\"string_attribute\":\"test\"}";
     PropertyNamingSnakeCased message = mapper.readValue(
@@ -315,7 +332,7 @@ public class PropertyNamingTest {
 
   @Test
   public void itRespectsJsonNameAttributeProto2() throws IOException {
-    ObjectMapper mapper = new ObjectMapper().registerModules(new ProtobufModule());
+    ObjectMapper mapper = JsonMapper.builder().addModule(new ProtobufModule()).build();
     String json =
       "{\"custom-name\":\"v\",\"lowerCamel\":\"v2\",\"lower_underscore\":\"v3\",\"surprise!\":\"v4\"}";
     PropertyNamingJsonName message = mapper.readValue(json, PropertyNamingJsonName.class);
@@ -330,12 +347,14 @@ public class PropertyNamingTest {
   @Test
   public void itAcceptsLiteralNameForMessageWithJsonNameAttributeProto2()
     throws IOException {
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModules(
+    ObjectMapper mapper = JsonMapper
+      .builder()
+      .addModule(
         new ProtobufModule(
           ProtobufJacksonConfig.builder().acceptLiteralFieldnames(true).build()
         )
-      );
+      )
+      .build();
     String json =
       "{\"custom_name\":\"v\",\"lower_camel\":\"v2\",\"lower_underscore\":\"v3\",\"different_name\":\"v4\"}";
     PropertyNamingJsonName message = mapper.readValue(json, PropertyNamingJsonName.class);
@@ -348,7 +367,7 @@ public class PropertyNamingTest {
 
   @Test
   public void itRespectsJsonNameAttributeProto3() throws IOException {
-    ObjectMapper mapper = new ObjectMapper().registerModules(new ProtobufModule());
+    ObjectMapper mapper = JsonMapper.builder().addModule(new ProtobufModule()).build();
     String json =
       "{\"custom-name\":\"v\",\"lowerCamel\":\"v2\",\"lower_underscore\":\"v3\",\"surprise!\":\"v4\"}";
     JsonNameProto3 message = mapper.readValue(json, JsonNameProto3.class);
@@ -363,12 +382,14 @@ public class PropertyNamingTest {
   @Test
   public void itAcceptsLiteralNameForMessageWithJsonNameAttributeProto3()
     throws IOException {
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModules(
+    ObjectMapper mapper = JsonMapper
+      .builder()
+      .addModule(
         new ProtobufModule(
           ProtobufJacksonConfig.builder().acceptLiteralFieldnames(true).build()
         )
-      );
+      )
+      .build();
     String json =
       "{\"custom_name\":\"v\",\"lower_camel\":\"v2\",\"lower_underscore\":\"v3\",\"different_name\":\"v4\"}";
     JsonNameProto3 message = mapper.readValue(json, JsonNameProto3.class);
@@ -384,20 +405,22 @@ public class PropertyNamingTest {
     // protos compiled from descriptor set always have json_name populated
     // https://github.com/protocolbuffers/protobuf/issues/6175
 
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModules(
+    ObjectMapper mapper = JsonMapper
+      .builder()
+      .addModule(
         new ProtobufModule(
           ProtobufJacksonConfig.builder().acceptLiteralFieldnames(true).build()
         )
       )
-      .setPropertyNamingStrategy(
+      .propertyNamingStrategy(
         new NamingBase() {
           @Override
           public String translate(String propertyName) {
             return propertyName.toUpperCase();
           }
         }
-      );
+      )
+      .build();
 
     MixedJsonName expected = MixedJsonName
       .newBuilder()
@@ -425,10 +448,12 @@ public class PropertyNamingTest {
 
   @Test
   public void ensureSerializationBehavior() {
-    ObjectMapper original = new ObjectMapper().registerModules(new ProtobufModule());
-    ObjectMapper custom = new ObjectMapper()
-      .registerModules(new ProtobufModule())
-      .setPropertyNamingStrategy(new PropertyNamingStrategy() {});
+    ObjectMapper original = JsonMapper.builder().addModule(new ProtobufModule()).build();
+    ObjectMapper custom = JsonMapper
+      .builder()
+      .addModule(new ProtobufModule())
+      .propertyNamingStrategy(new PropertyNamingStrategy() {})
+      .build();
 
     PropertyNamingSnakeCased snakeCase = PropertyNamingSnakeCased
       .newBuilder()
@@ -452,10 +477,12 @@ public class PropertyNamingTest {
 
   @Test
   public void ensureDeserializationBehavior() throws IOException {
-    ObjectMapper original = new ObjectMapper().registerModules(new ProtobufModule());
-    ObjectMapper custom = new ObjectMapper()
-      .registerModules(new ProtobufModule())
-      .setPropertyNamingStrategy(new PropertyNamingStrategy() {});
+    ObjectMapper original = JsonMapper.builder().addModule(new ProtobufModule()).build();
+    ObjectMapper custom = JsonMapper
+      .builder()
+      .addModule(new ProtobufModule())
+      .propertyNamingStrategy(new PropertyNamingStrategy() {})
+      .build();
 
     PropertyNamingSnakeCased snakeCase = PropertyNamingSnakeCased
       .newBuilder()

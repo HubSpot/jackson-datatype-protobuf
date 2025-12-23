@@ -1,15 +1,15 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.Timestamps;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 
 public class TimestampSerializer extends ProtobufSerializer<Timestamp> {
 
@@ -29,8 +29,8 @@ public class TimestampSerializer extends ProtobufSerializer<Timestamp> {
   public void serialize(
     Timestamp timestamp,
     JsonGenerator generator,
-    SerializerProvider serializerProvider
-  ) throws IOException {
+    SerializationContext serializerProvider
+  ) throws JacksonException {
     generator.writeString(Timestamps.toString(timestamp));
   }
 
@@ -38,7 +38,7 @@ public class TimestampSerializer extends ProtobufSerializer<Timestamp> {
   public void acceptJsonFormatVisitor(
     JsonFormatVisitorWrapper visitor,
     JavaType typeHint
-  ) throws JsonMappingException {
+  ) throws DatabindException {
     visitor.expectStringFormat(typeHint);
   }
 }

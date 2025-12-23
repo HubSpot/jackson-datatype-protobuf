@@ -1,16 +1,15 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.MessageOrBuilder;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 import com.hubspot.jackson.datatype.protobuf.internal.FieldSchemaGenerator;
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 
 public class WrappedPrimitiveSerializer<T extends MessageOrBuilder>
   extends ProtobufSerializer<T> {
@@ -43,8 +42,8 @@ public class WrappedPrimitiveSerializer<T extends MessageOrBuilder>
   public void serialize(
     MessageOrBuilder message,
     JsonGenerator generator,
-    SerializerProvider serializerProvider
-  ) throws IOException {
+    SerializationContext serializerProvider
+  ) throws JacksonException {
     Object value = message.getField(valueField);
     writeValue(valueField, value, generator, serializerProvider);
   }
@@ -53,7 +52,7 @@ public class WrappedPrimitiveSerializer<T extends MessageOrBuilder>
   public void acceptJsonFormatVisitor(
     JsonFormatVisitorWrapper visitor,
     JavaType typeHint
-  ) throws JsonMappingException {
+  ) {
     new FieldSchemaGenerator(valueField, getConfig())
       .acceptJsonFormatVisitor(visitor, typeHint);
   }

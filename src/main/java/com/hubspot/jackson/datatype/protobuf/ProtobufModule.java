@@ -2,11 +2,6 @@ package com.hubspot.jackson.datatype.protobuf;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.module.SimpleDeserializers;
-import com.fasterxml.jackson.databind.module.SimpleSerializers;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.BytesValue;
 import com.google.protobuf.DoubleValue;
@@ -43,13 +38,17 @@ import com.hubspot.jackson.datatype.protobuf.builtin.serializers.StructSerialize
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.TimestampSerializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.ValueSerializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.WrappedPrimitiveSerializer;
+import tools.jackson.core.Version;
+import tools.jackson.databind.JacksonModule;
+import tools.jackson.databind.module.SimpleDeserializers;
+import tools.jackson.databind.module.SimpleSerializers;
 
 /**
  * Module to add support for reading and writing Protobufs
  *
  * Register with Jackson via {@link com.fasterxml.jackson.databind.ObjectMapper#registerModule}
  */
-public class ProtobufModule extends Module {
+public class ProtobufModule extends JacksonModule {
 
   private final ProtobufJacksonConfig config;
 
@@ -169,10 +168,10 @@ public class ProtobufModule extends Module {
       wrappedPrimitiveDeserializer(BytesValue.class)
     );
     context.addDeserializers(deserializers);
-    context.setMixInAnnotations(MessageOrBuilder.class, MessageOrBuilderMixin.class);
+    context.setMixIn(MessageOrBuilder.class, MessageOrBuilderMixin.class);
   }
 
-  private static <T extends Message> JsonDeserializer<T> wrappedPrimitiveDeserializer(
+  private static <T extends Message> tools.jackson.databind.ValueDeserializer<T> wrappedPrimitiveDeserializer(
     Class<T> type
   ) {
     return new WrappedPrimitiveDeserializer<>(type).buildAtEnd();

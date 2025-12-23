@@ -2,14 +2,14 @@ package com.hubspot.jackson.datatype.protobuf;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
+import tools.jackson.databind.cfg.MapperBuilder;
 
 public class ServiceLoaderTest {
 
   @Test
   public void itRegistersProtobufModule() {
-    long protobufModules = ObjectMapper
+    long protobufModules = MapperBuilder
       .findModules()
       .stream()
       .filter(module -> module instanceof ProtobufModule)

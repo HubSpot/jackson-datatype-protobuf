@@ -3,7 +3,6 @@ package com.hubspot.jackson.datatype.protobuf.builtin;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.protobuf.ListValue;
 import com.google.protobuf.NullValue;
 import com.google.protobuf.Struct;
@@ -12,6 +11,7 @@ import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasStruct;
 import java.io.IOException;
 import java.util.Map;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
 
 public class StructTest {
 
@@ -35,18 +35,18 @@ public class StructTest {
     assertThat(node.get("null").isNull()).isTrue();
     assertThat(node.get("number").isNumber()).isTrue();
     assertThat(node.get("number").numberValue().doubleValue()).isEqualTo(1.5d);
-    assertThat(node.get("string").isTextual()).isTrue();
-    assertThat(node.get("string").textValue()).isEqualTo("test");
+    assertThat(node.get("string").isString()).isTrue();
+    assertThat(node.get("string").stringValue()).isEqualTo("test");
     assertThat(node.get("boolean").isBoolean()).isTrue();
     assertThat(node.get("boolean").booleanValue()).isTrue();
     assertThat(node.get("struct").isObject()).isTrue();
     assertThat(node.get("struct").size()).isEqualTo(1);
-    assertThat(node.get("struct").get("key").isTextual()).isTrue();
-    assertThat(node.get("struct").get("key").textValue()).isEqualTo("nested");
+    assertThat(node.get("struct").get("key").isString()).isTrue();
+    assertThat(node.get("struct").get("key").stringValue()).isEqualTo("nested");
     assertThat(node.get("list").isArray()).isTrue();
     assertThat(node.get("list").size()).isEqualTo(1);
-    assertThat(node.get("list").get(0).isTextual()).isTrue();
-    assertThat(node.get("list").get(0).textValue()).isEqualTo("nested");
+    assertThat(node.get("list").get(0).isString()).isTrue();
+    assertThat(node.get("list").get(0).stringValue()).isEqualTo("nested");
   }
 
   @Test

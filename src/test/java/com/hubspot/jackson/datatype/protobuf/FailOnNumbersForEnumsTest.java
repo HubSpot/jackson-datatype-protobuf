@@ -4,26 +4,26 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.came
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.create;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import org.junit.Test;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.cfg.EnumFeature;
 
 public class FailOnNumbersForEnumsTest {
 
-  @Test(expected = JsonMappingException.class)
-  public void testEnabled() throws JsonProcessingException {
+  @Test(expected = DatabindException.class)
+  public void testEnabled() throws JacksonException {
     ObjectMapper mapper = objectMapper(true);
 
     mapper.treeToValue(buildNode(), AllFields.class);
   }
 
   @Test
-  public void testDisabled() throws JsonProcessingException {
+  public void testDisabled() throws JacksonException {
     ObjectMapper mapper = objectMapper(false);
 
     AllFields parsed = mapper.treeToValue(buildNode(), AllFields.class);
@@ -37,9 +37,9 @@ public class FailOnNumbersForEnumsTest {
 
   private static ObjectMapper objectMapper(boolean enabled) {
     if (enabled) {
-      return create().enable(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS);
+      return create().rebuild().enable(EnumFeature.FAIL_ON_NUMBERS_FOR_ENUMS).build();
     } else {
-      return create().disable(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS);
+      return create().rebuild().disable(EnumFeature.FAIL_ON_NUMBERS_FOR_ENUMS).build();
     }
   }
 }

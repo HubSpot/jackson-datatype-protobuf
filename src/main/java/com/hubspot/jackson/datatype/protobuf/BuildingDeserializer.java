@@ -1,12 +1,11 @@
 package com.hubspot.jackson.datatype.protobuf;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.google.protobuf.Message;
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
 public abstract class BuildingDeserializer<T extends Message, V extends Message.Builder>
   extends StdDeserializer<T> {
@@ -15,19 +14,20 @@ public abstract class BuildingDeserializer<T extends Message, V extends Message.
     super(messageType);
   }
 
-  public abstract JsonDeserializer<V> getWrappedDeserializer();
+  public abstract ValueDeserializer<V> getWrappedDeserializer();
 
   @Override
   @SuppressWarnings("unchecked")
   public T deserialize(JsonParser parser, DeserializationContext context)
-    throws IOException {
+    throws JacksonException {
     return (T) getWrappedDeserializer().deserialize(parser, context).build();
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public T getNullValue(DeserializationContext context) throws JsonMappingException {
-    Message.Builder builder = getWrappedDeserializer().getNullValue(context);
+  public T getNullValue(DeserializationContext context) {
+    Message.Builder builder = (Message.Builder) getWrappedDeserializer()
+      .getNullValue(context);
     return builder == null ? null : (T) builder.build();
   }
 }

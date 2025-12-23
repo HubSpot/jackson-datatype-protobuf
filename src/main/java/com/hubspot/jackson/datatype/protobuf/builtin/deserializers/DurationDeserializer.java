@@ -1,13 +1,13 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.deserializers;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.google.protobuf.Duration;
 import com.google.protobuf.util.Durations;
-import java.io.IOException;
 import java.text.ParseException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonToken;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
 public class DurationDeserializer extends StdDeserializer<Duration> {
 
@@ -17,14 +17,14 @@ public class DurationDeserializer extends StdDeserializer<Duration> {
 
   @Override
   public Duration deserialize(JsonParser parser, DeserializationContext context)
-    throws IOException {
-    switch (parser.getCurrentToken()) {
+    throws JacksonException {
+    switch (parser.currentToken()) {
       case VALUE_STRING:
         try {
-          return Durations.parse(parser.getText());
+          return Durations.parse(parser.getString());
         } catch (ParseException e) {
           throw context.weirdStringException(
-            parser.getText(),
+            parser.getString(),
             Duration.class,
             e.getMessage()
           );

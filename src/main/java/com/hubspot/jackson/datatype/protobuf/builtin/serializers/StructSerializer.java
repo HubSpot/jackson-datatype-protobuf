@@ -1,17 +1,17 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonMapFormatVisitor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
+import tools.jackson.databind.jsonFormatVisitors.JsonMapFormatVisitor;
 
 public class StructSerializer extends ProtobufSerializer<Struct> {
 
@@ -35,8 +35,8 @@ public class StructSerializer extends ProtobufSerializer<Struct> {
   public void serialize(
     Struct struct,
     JsonGenerator generator,
-    SerializerProvider serializerProvider
-  ) throws IOException {
+    SerializationContext serializerProvider
+  ) throws JacksonException {
     writeMap(FIELDS_FIELD, struct.getField(FIELDS_FIELD), generator, serializerProvider);
   }
 
@@ -44,11 +44,11 @@ public class StructSerializer extends ProtobufSerializer<Struct> {
   public void acceptJsonFormatVisitor(
     JsonFormatVisitorWrapper visitor,
     JavaType typeHint
-  ) throws JsonMappingException {
-    JavaType keyType = visitor.getProvider().constructType(String.class);
-    JavaType valueType = visitor.getProvider().constructType(Value.class);
+  ) throws DatabindException {
+    JavaType keyType = visitor.getContext().constructType(String.class);
+    JavaType valueType = visitor.getContext().constructType(Value.class);
     JavaType mapType = visitor
-      .getProvider()
+      .getContext()
       .getTypeFactory()
       .constructMapLikeType(typeHint.getRawClass(), keyType, valueType);
 

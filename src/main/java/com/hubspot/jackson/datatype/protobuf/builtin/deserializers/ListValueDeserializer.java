@@ -1,12 +1,12 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.deserializers;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ListValue;
 import com.hubspot.jackson.datatype.protobuf.ProtobufDeserializer;
-import java.io.IOException;
 import java.util.List;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
 
 public class ListValueDeserializer
   extends ProtobufDeserializer<ListValue, ListValue.Builder> {
@@ -24,7 +24,7 @@ public class ListValueDeserializer
     ListValue.Builder builder,
     JsonParser parser,
     DeserializationContext context
-  ) throws IOException {
+  ) throws JacksonException {
     List<Object> values = readArray(builder, VALUES_FIELD, null, parser, context);
     for (Object value : values) {
       builder.addRepeatedField(VALUES_FIELD, value);

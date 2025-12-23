@@ -1,11 +1,11 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.deserializers;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.google.protobuf.NullValue;
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonToken;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
 public class NullValueDeserializer extends StdDeserializer<NullValue> {
 
@@ -15,8 +15,8 @@ public class NullValueDeserializer extends StdDeserializer<NullValue> {
 
   @Override
   public NullValue deserialize(JsonParser parser, DeserializationContext context)
-    throws IOException {
-    switch (parser.getCurrentToken()) {
+    throws JacksonException {
+    switch (parser.currentToken()) {
       case VALUE_NULL:
         return NullValue.NULL_VALUE;
       default:

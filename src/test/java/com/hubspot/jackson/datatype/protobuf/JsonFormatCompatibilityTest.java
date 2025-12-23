@@ -2,22 +2,25 @@ package com.hubspot.jackson.datatype.protobuf;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.util.JsonFormat;
 import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.AllFieldsProto3;
 import java.io.IOException;
 import org.junit.Test;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 public class JsonFormatCompatibilityTest {
 
-  private static final ObjectMapper MAPPER = new ObjectMapper()
-    .registerModule(
+  private static final ObjectMapper MAPPER = JsonMapper
+    .builder()
+    .addModule(
       new ProtobufModule(
         ProtobufJacksonConfig.builder().useCanonicalSerialization().build()
       )
-    );
+    )
+    .build();
 
   @Test
   public void weSerializeAndJsonFormatDeserializesProto2() throws IOException {
