@@ -4,8 +4,6 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.came
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.BytesValue;
@@ -17,8 +15,9 @@ import com.google.protobuf.StringValue;
 import com.google.protobuf.UInt32Value;
 import com.google.protobuf.UInt64Value;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasWrappedPrimitives;
-import java.io.IOException;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 public class WrappedPrimitiveTest {
 
@@ -60,95 +59,91 @@ public class WrappedPrimitiveTest {
     .build();
 
   @Test
-  public void itWritesFieldsWhenSetWithDefaultInclusion() throws IOException {
+  public void itWritesFieldsWhenSetWithDefaultInclusion() {
     HasWrappedPrimitives message = fullyPopulatedMessage();
     JsonNode json = toNode(message, camelCase());
     assertThat(json).isEqualTo(fullyPopulatedJsonNode(camelCase()));
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithDefaultInclusion()
-    throws IOException {
+  public void itWritesZeroWhenSetToDefaultInstanceWithDefaultInclusion() {
     HasWrappedPrimitives message = defaultPopulatedMessage();
     JsonNode json = toNode(message, camelCase());
     assertThat(json).isEqualTo(defaultPopulatedJsonNode(camelCase()));
   }
 
   @Test
-  public void itOmitsFieldsWhenNotSetWithDefaultInclusion() throws IOException {
+  public void itOmitsFieldsWhenNotSetWithDefaultInclusion() {
     HasWrappedPrimitives message = emptyMessage();
     JsonNode json = toNode(message, camelCase());
     assertThat(json).isEqualTo(emptyJsonNode(camelCase()));
   }
 
   @Test
-  public void itWritesFieldsWhenSetWithNonDefaultInclusion() throws IOException {
+  public void itWritesFieldsWhenSetWithNonDefaultInclusion() {
     HasWrappedPrimitives message = fullyPopulatedMessage();
     JsonNode json = toNode(message, camelCase(Include.NON_DEFAULT));
     assertThat(json).isEqualTo(fullyPopulatedJsonNode(camelCase(Include.NON_DEFAULT)));
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithNonDefaultInclusion()
-    throws IOException {
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonDefaultInclusion() {
     HasWrappedPrimitives message = defaultPopulatedMessage();
     JsonNode json = toNode(message, camelCase(Include.NON_DEFAULT));
     assertThat(json).isEqualTo(defaultPopulatedJsonNode(camelCase(Include.NON_DEFAULT)));
   }
 
   @Test
-  public void itOmitsFieldsWhenNotSetWithNonDefaultInclusion() throws IOException {
+  public void itOmitsFieldsWhenNotSetWithNonDefaultInclusion() {
     HasWrappedPrimitives message = emptyMessage();
     JsonNode json = toNode(message, camelCase(Include.NON_DEFAULT));
     assertThat(json).isEqualTo(emptyJsonNode(camelCase(Include.NON_DEFAULT)));
   }
 
   @Test
-  public void itWritesFieldsSetWithAlwaysInclusion() throws IOException {
+  public void itWritesFieldsSetWithAlwaysInclusion() {
     HasWrappedPrimitives message = fullyPopulatedMessage();
     JsonNode json = toNode(message, camelCase(Include.ALWAYS));
     assertThat(json).isEqualTo(fullyPopulatedJsonNode(camelCase(Include.ALWAYS)));
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithAlwaysInclusion()
-    throws IOException {
+  public void itWritesZeroWhenSetToDefaultInstanceWithAlwaysInclusion() {
     HasWrappedPrimitives message = defaultPopulatedMessage();
     JsonNode json = toNode(message, camelCase(Include.ALWAYS));
     assertThat(json).isEqualTo(defaultPopulatedJsonNode(camelCase(Include.ALWAYS)));
   }
 
   @Test
-  public void itWritesNullWhenNotSetWithAlwaysInclusion() throws IOException {
+  public void itWritesNullWhenNotSetWithAlwaysInclusion() {
     HasWrappedPrimitives message = emptyMessage();
     JsonNode json = toNode(message, camelCase(Include.ALWAYS));
     assertThat(json).isEqualTo(nullPopulatedJsonNode(camelCase(Include.ALWAYS)));
   }
 
   @Test
-  public void itWritesFieldsWhenSetWithNonNullInclusion() throws IOException {
+  public void itWritesFieldsWhenSetWithNonNullInclusion() {
     HasWrappedPrimitives message = fullyPopulatedMessage();
     JsonNode json = toNode(message, camelCase(Include.NON_NULL));
     assertThat(json).isEqualTo(fullyPopulatedJsonNode(camelCase(Include.NON_NULL)));
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithNonNullInclusion()
-    throws IOException {
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonNullInclusion() {
     HasWrappedPrimitives message = defaultPopulatedMessage();
     JsonNode json = toNode(message, camelCase(Include.NON_NULL));
     assertThat(json).isEqualTo(defaultPopulatedJsonNode(camelCase(Include.NON_NULL)));
   }
 
   @Test
-  public void itOmitsFieldsWhenNotSetWithNonNullInclusion() throws IOException {
+  public void itOmitsFieldsWhenNotSetWithNonNullInclusion() {
     HasWrappedPrimitives message = emptyMessage();
     JsonNode json = toNode(message, camelCase(Include.NON_NULL));
     assertThat(json).isEqualTo(emptyJsonNode(camelCase(Include.NON_NULL)));
   }
 
   @Test
-  public void itSetsFieldsWhenPresentInJson() throws IOException {
+  public void itSetsFieldsWhenPresentInJson() {
     String json = camelCase().writeValueAsString(fullyPopulatedJsonNode(camelCase()));
     HasWrappedPrimitives message = camelCase()
       .readValue(json, HasWrappedPrimitives.class);
@@ -173,7 +168,7 @@ public class WrappedPrimitiveTest {
   }
 
   @Test
-  public void itSetsFieldsWhenZeroInJson() throws IOException {
+  public void itSetsFieldsWhenZeroInJson() {
     String json = camelCase().writeValueAsString(defaultPopulatedJsonNode(camelCase()));
     HasWrappedPrimitives message = camelCase()
       .readValue(json, HasWrappedPrimitives.class);
@@ -198,7 +193,7 @@ public class WrappedPrimitiveTest {
   }
 
   @Test
-  public void itDoesntSetFieldsWhenNullInJson() throws IOException {
+  public void itDoesntSetFieldsWhenNullInJson() {
     String json = camelCase().writeValueAsString(nullPopulatedJsonNode(camelCase()));
     HasWrappedPrimitives message = camelCase()
       .readValue(json, HasWrappedPrimitives.class);
@@ -214,7 +209,7 @@ public class WrappedPrimitiveTest {
   }
 
   @Test
-  public void itDoesntSetFieldsWhenMissingFromJson() throws IOException {
+  public void itDoesntSetFieldsWhenMissingFromJson() {
     String json = camelCase().writeValueAsString(emptyJsonNode(camelCase()));
     HasWrappedPrimitives message = camelCase()
       .readValue(json, HasWrappedPrimitives.class);
@@ -229,8 +224,7 @@ public class WrappedPrimitiveTest {
     assertThat(message.hasBytesWrapper()).isFalse();
   }
 
-  private static JsonNode toNode(HasWrappedPrimitives message, ObjectMapper mapper)
-    throws IOException {
+  private static JsonNode toNode(HasWrappedPrimitives message, ObjectMapper mapper) {
     String json = mapper.writeValueAsString(message);
     return mapper.readTree(json);
   }

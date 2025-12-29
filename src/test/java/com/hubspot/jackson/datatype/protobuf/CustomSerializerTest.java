@@ -1,27 +1,28 @@
 package com.hubspot.jackson.datatype.protobuf;
 
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.create;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.protobuf.Message;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.Nested;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.Custom;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.CustomMessageWrapper;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.RepeatedCustomWrapper;
-import java.io.IOException;
 import org.junit.Test;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
+import tools.jackson.databind.module.SimpleModule;
 
 public class CustomSerializerTest {
 
   @Test
   public void testTopLevelMessage() {
-    ObjectMapper MAPPER = new ObjectMapper()
-      .registerModules(new ProtobufModule(), new SerializerModule(AllFields.class));
+    ObjectMapper MAPPER = create()
+      .addModule(new SerializerModule(AllFields.class))
+      .build();
 
     AllFields allFields = AllFields.newBuilder().setString("test").build();
 
@@ -33,8 +34,7 @@ public class CustomSerializerTest {
 
   @Test
   public void testNestedMessage() {
-    ObjectMapper MAPPER = new ObjectMapper()
-      .registerModules(new ProtobufModule(), new SerializerModule(Nested.class));
+    ObjectMapper MAPPER = create().addModule(new SerializerModule(Nested.class)).build();
 
     AllFields allFields = AllFields
       .newBuilder()
@@ -52,9 +52,8 @@ public class CustomSerializerTest {
   }
 
   @Test
-  public void itUsesCustomSerializerForTopLevelObject() throws IOException {
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModules(new ProtobufModule(), new CustomSerializer());
+  public void itUsesCustomSerializerForTopLevelObject() {
+    ObjectMapper mapper = create().addModule(new CustomSerializer()).build();
 
     Custom custom = Custom.newBuilder().setValue(123).build();
     String json = mapper.writeValueAsString(custom);
@@ -62,9 +61,8 @@ public class CustomSerializerTest {
   }
 
   @Test
-  public void itUsesCustomSerializerForWrappedObject() throws IOException {
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModules(new ProtobufModule(), new CustomSerializer());
+  public void itUsesCustomSerializerForWrappedObject() {
+    ObjectMapper mapper = create().addModule(new CustomSerializer()).build();
 
     Custom custom = Custom.newBuilder().setValue(123).build();
     CustomMessageWrapper wrapper = CustomMessageWrapper
@@ -76,9 +74,8 @@ public class CustomSerializerTest {
   }
 
   @Test
-  public void itUsesCustomSerializerForWrappedRepeatedObject() throws IOException {
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModules(new ProtobufModule(), new CustomSerializer());
+  public void itUsesCustomSerializerForWrappedRepeatedObject() {
+    ObjectMapper mapper = create().addModule(new CustomSerializer()).build();
 
     Custom first = Custom.newBuilder().setValue(123).build();
     Custom second = Custom.newBuilder().setValue(456).build();
@@ -96,15 +93,15 @@ public class CustomSerializerTest {
     public SerializerModule(Class<? extends Message> messageType) {
       addSerializer(
         messageType,
-        new JsonSerializer<Message>() {
+        new ValueSerializer<Message>() {
           @Override
           public void serialize(
             Message value,
             JsonGenerator jgen,
-            SerializerProvider provider
-          ) throws IOException {
+            SerializationContext serializationContext
+          ) {
             jgen.writeStartObject();
-            jgen.writeStringField("toString", value.toString());
+            jgen.writeStringProperty("toString", value.toString());
             jgen.writeEndObject();
           }
         }
@@ -117,13 +114,13 @@ public class CustomSerializerTest {
     public CustomSerializer() {
       addSerializer(
         Custom.class,
-        new JsonSerializer<Custom>() {
+        new ValueSerializer<Custom>() {
           @Override
           public void serialize(
             Custom custom,
             JsonGenerator jgen,
-            SerializerProvider provider
-          ) throws IOException {
+            SerializationContext serializationContext
+          ) {
             jgen.writeNumber(custom.getValue());
           }
         }

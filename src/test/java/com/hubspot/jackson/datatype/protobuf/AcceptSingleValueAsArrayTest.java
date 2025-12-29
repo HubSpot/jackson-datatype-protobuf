@@ -4,18 +4,17 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.came
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.create;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.RepeatedFields;
 import org.junit.Test;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 public class AcceptSingleValueAsArrayTest {
 
   @Test
-  public void testEnabled() throws JsonProcessingException {
+  public void testEnabled() {
     ObjectMapper mapper = objectMapper(true);
 
     RepeatedFields parsed = mapper.treeToValue(buildNode(), RepeatedFields.class);
@@ -23,8 +22,8 @@ public class AcceptSingleValueAsArrayTest {
     assertThat(parsed.getBoolList()).containsExactly(true);
   }
 
-  @Test(expected = JsonMappingException.class)
-  public void testDisabled() throws JsonProcessingException {
+  @Test(expected = JacksonException.class)
+  public void testDisabled() {
     ObjectMapper mapper = objectMapper(false);
 
     mapper.treeToValue(buildNode(), RepeatedFields.class);
@@ -36,9 +35,11 @@ public class AcceptSingleValueAsArrayTest {
 
   private static ObjectMapper objectMapper(boolean enabled) {
     if (enabled) {
-      return create().enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+      return create().enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY).build();
     } else {
-      return create().disable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+      return create()
+        .disable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+        .build();
     }
   }
 }

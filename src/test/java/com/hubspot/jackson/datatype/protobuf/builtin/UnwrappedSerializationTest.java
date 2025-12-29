@@ -8,13 +8,12 @@ import com.google.protobuf.ListValue;
 import com.google.protobuf.NullValue;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs;
-import java.io.IOException;
 import org.junit.Test;
 
 public class UnwrappedSerializationTest {
 
   @Test
-  public void itWritesUnwrappedNullValue() throws IOException {
+  public void itWritesUnwrappedNullValue() {
     BuiltInProtobufs.HasValue message = BuiltInProtobufs.HasValue
       .newBuilder()
       .setValue(Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build())
@@ -26,7 +25,7 @@ public class UnwrappedSerializationTest {
   }
 
   @Test
-  public void itWritesUnwrappedListValue() throws IOException {
+  public void itWritesUnwrappedListValue() {
     ListValue list = ListValue
       .newBuilder()
       .addValues(Value.newBuilder().setStringValue("test").build())

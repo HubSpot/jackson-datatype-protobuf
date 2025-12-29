@@ -1,14 +1,14 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.deserializers;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.NullValue;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.ProtobufDeserializer;
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
 
-public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder> {
+public class ProtobufValueDeserializer
+  extends ProtobufDeserializer<Value, Value.Builder> {
 
   private static final FieldDescriptor STRUCT_FIELD = Value
     .getDescriptor()
@@ -17,7 +17,7 @@ public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder
     .getDescriptor()
     .findFieldByName("list_value");
 
-  public ValueDeserializer() {
+  public ProtobufValueDeserializer() {
     super(Value.class);
   }
 
@@ -26,8 +26,8 @@ public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder
     Value.Builder builder,
     JsonParser parser,
     DeserializationContext context
-  ) throws IOException {
-    switch (parser.getCurrentToken()) {
+  ) {
+    switch (parser.currentToken()) {
       case START_OBJECT:
         Object structValue = readValue(builder, STRUCT_FIELD, null, parser, context);
         builder.setField(STRUCT_FIELD, structValue);
@@ -37,7 +37,7 @@ public class ValueDeserializer extends ProtobufDeserializer<Value, Value.Builder
         builder.setField(LIST_FIELD, listValue);
         return;
       case VALUE_STRING:
-        builder.setStringValue(parser.getText());
+        builder.setStringValue(parser.getString());
         return;
       case VALUE_NUMBER_INT:
       case VALUE_NUMBER_FLOAT:

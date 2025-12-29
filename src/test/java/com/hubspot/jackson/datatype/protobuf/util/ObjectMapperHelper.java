@@ -1,28 +1,34 @@
 package com.hubspot.jackson.datatype.protobuf.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.TreeNode;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.MessageOrBuilder;
+import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.TreeNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.PropertyNamingStrategy;
+import tools.jackson.databind.json.JsonMapper;
 
 public class ObjectMapperHelper {
 
-  private static final ObjectMapper DEFAULT = create();
-  private static final ObjectMapper UNDERSCORE = create(underscoreStrategy());
+  private static final ObjectMapper DEFAULT = create().build();
+  private static final ObjectMapper UNDERSCORE = create()
+    .propertyNamingStrategy(underscoreStrategy())
+    .build();
 
-  public static ObjectMapper create() {
-    return new ObjectMapper().registerModule(new ProtobufModule());
+  public static JsonMapper.Builder create() {
+    return create(ProtobufJacksonConfig.getDefaultInstance());
+  }
+
+  public static JsonMapper.Builder create(ProtobufJacksonConfig config) {
+    return JsonMapper.builder().addModule(new ProtobufModule(config));
   }
 
   public static ObjectMapper camelCase() {
@@ -34,15 +40,17 @@ public class ObjectMapperHelper {
   }
 
   public static ObjectMapper camelCase(Include inclusion) {
-    return create().setSerializationInclusion(inclusion);
+    return create()
+      .changeDefaultPropertyInclusion(handler -> handler.withValueInclusion(inclusion))
+      .build();
   }
 
   public static ObjectMapper camelCase(ExtensionRegistry extensionRegistry) {
-    return create(extensionRegistry);
+    return create(extensionRegistry).build();
   }
 
   public static ObjectMapper underscore(ExtensionRegistry extensionRegistry) {
-    return create(underscoreStrategy(), extensionRegistry);
+    return create(underscoreStrategy(), extensionRegistry).build();
   }
 
   public static JsonNode toTree(ObjectMapper mapper, Object value) {
@@ -56,11 +64,7 @@ public class ObjectMapperHelper {
   ) {
     TreeNode tree = toTree(mapper, value);
 
-    try {
-      return (T) mapper.treeToValue(tree, value.getClass());
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
+    return (T) mapper.treeToValue(tree, value.getClass());
   }
 
   @SuppressWarnings("unchecked")
@@ -75,26 +79,24 @@ public class ObjectMapperHelper {
     Class<T> messageType = (Class<T>) values.get(0).getClass();
     JsonParser parser = mapper.treeAsTokens(toTree(mapper, values));
 
-    try {
-      return Lists.newArrayList(mapper.readValues(parser, messageType));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    return Lists.newArrayList(mapper.readValues(parser, messageType));
   }
 
-  private static ObjectMapper create(
+  private static JsonMapper.Builder create(
     PropertyNamingStrategy namingStrategy,
     ExtensionRegistry extensionRegistry
   ) {
-    return create(extensionRegistry).setPropertyNamingStrategy(namingStrategy);
+    return create(extensionRegistry).propertyNamingStrategy(namingStrategy);
   }
 
-  private static ObjectMapper create(ExtensionRegistry extensionRegistry) {
-    return new ObjectMapper().registerModule(new ProtobufModule(extensionRegistry));
-  }
-
-  private static ObjectMapper create(PropertyNamingStrategy namingStrategy) {
-    return create().setPropertyNamingStrategy(namingStrategy);
+  private static JsonMapper.Builder create(ExtensionRegistry extensionRegistry) {
+    return JsonMapper
+      .builder()
+      .addModule(
+        new ProtobufModule(
+          ProtobufJacksonConfig.builder().extensionRegistry(extensionRegistry).build()
+        )
+      );
   }
 
   private static PropertyNamingStrategy underscoreStrategy() {

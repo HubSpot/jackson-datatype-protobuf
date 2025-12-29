@@ -1,29 +1,19 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 
-public class ValueSerializer extends ProtobufSerializer<Value> {
+public class ProtobufValueSerializer extends ProtobufSerializer<Value> {
 
-  /**
-   * @deprecated use {@link #ValueSerializer(ProtobufJacksonConfig)}
-   */
-  @Deprecated
-  public ValueSerializer() {
-    this(ProtobufJacksonConfig.getDefaultInstance());
-  }
-
-  public ValueSerializer(ProtobufJacksonConfig config) {
+  public ProtobufValueSerializer(ProtobufJacksonConfig config) {
     super(Value.class, config);
   }
 
@@ -31,15 +21,15 @@ public class ValueSerializer extends ProtobufSerializer<Value> {
   public void serialize(
     Value value,
     JsonGenerator generator,
-    SerializerProvider serializerProvider
-  ) throws IOException {
+    SerializationContext serializationContext
+  ) {
     Map<FieldDescriptor, Object> fields = value.getAllFields();
     if (fields.isEmpty()) {
       generator.writeNull();
     } else {
       // should only have 1 entry
       for (Entry<FieldDescriptor, Object> entry : fields.entrySet()) {
-        writeValue(entry.getKey(), entry.getValue(), generator, serializerProvider);
+        writeValue(entry.getKey(), entry.getValue(), generator, serializationContext);
       }
     }
   }
@@ -48,7 +38,7 @@ public class ValueSerializer extends ProtobufSerializer<Value> {
   public void acceptJsonFormatVisitor(
     JsonFormatVisitorWrapper visitor,
     JavaType typeHint
-  ) throws JsonMappingException {
+  ) {
     // don't think we can do any better here since a Value is arbitrary json
     visitor.expectAnyFormat(typeHint);
   }

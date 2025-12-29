@@ -1,42 +1,31 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.serializers;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
-import com.fasterxml.jackson.databind.util.NameTransformer;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.ExtensionRegistry.ExtensionInfo;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
-import com.hubspot.jackson.datatype.protobuf.ExtensionRegistryWrapper;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import com.hubspot.jackson.datatype.protobuf.ProtobufSerializer;
 import com.hubspot.jackson.datatype.protobuf.internal.MessageSchemaGenerator;
 import com.hubspot.jackson.datatype.protobuf.internal.PropertyNamingCache;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
+import tools.jackson.databind.util.NameTransformer;
 
 public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
   private final boolean unwrappingSerializer;
   private final Map<Descriptor, PropertyNamingCache> propertyNamingCache;
-
-  /**
-   * @deprecated use {@link #MessageSerializer(ProtobufJacksonConfig)} instead
-   */
-  @Deprecated
-  public MessageSerializer(ExtensionRegistryWrapper extensionRegistry) {
-    this(ProtobufJacksonConfig.builder().extensionRegistry(extensionRegistry).build());
-  }
 
   public MessageSerializer(ProtobufJacksonConfig config) {
     this(config, false);
@@ -52,15 +41,15 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   public void serialize(
     MessageOrBuilder message,
     JsonGenerator generator,
-    SerializerProvider serializerProvider
-  ) throws IOException {
+    SerializationContext serializationContext
+  ) {
     if (!isUnwrappingSerializer()) {
       generator.writeStartObject();
     }
 
     boolean proto3 =
       "proto3".equals(message.getDescriptorForType().getFile().toProto().getSyntax());
-    Include include = serializerProvider
+    Include include = serializationContext
       .getConfig()
       .getDefaultPropertyInclusion()
       .getValueInclusion();
@@ -70,7 +59,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
     Function<FieldDescriptor, String> propertyNaming = getPropertyNaming(
       message,
-      serializerProvider
+      serializationContext
     );
     Descriptor descriptor = message.getDescriptorForType();
     List<FieldDescriptor> fields = descriptor.getFields();
@@ -92,17 +81,18 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
         if (!valueList.isEmpty() || writeEmptyCollections) {
           if (field.isMapField()) {
-            generator.writeFieldName(fieldName);
-            writeMap(field, valueList, generator, serializerProvider);
+            generator.writeName(fieldName);
+            writeMap(field, valueList, generator, serializationContext);
           } else if (
-            valueList.size() == 1 && writeSingleElementArraysUnwrapped(serializerProvider)
+            valueList.size() == 1 &&
+            writeSingleElementArraysUnwrapped(serializationContext)
           ) {
-            generator.writeFieldName(fieldName);
-            writeValue(field, valueList.get(0), generator, serializerProvider);
+            generator.writeName(fieldName);
+            writeValue(field, valueList.get(0), generator, serializationContext);
           } else {
-            generator.writeArrayFieldStart(fieldName);
+            generator.writeArrayPropertyStart(fieldName);
             for (Object subValue : valueList) {
-              writeValue(field, subValue, generator, serializerProvider);
+              writeValue(field, subValue, generator, serializationContext);
             }
             generator.writeEndArray();
           }
@@ -113,10 +103,10 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
           !supportsFieldPresence(field) &&
           field.getContainingOneof() == null)
       ) {
-        generator.writeFieldName(fieldName);
-        writeValue(field, message.getField(field), generator, serializerProvider);
+        generator.writeName(fieldName);
+        writeValue(field, message.getField(field), generator, serializationContext);
       } else if (include == Include.ALWAYS && field.getContainingOneof() == null) {
-        generator.writeFieldName(fieldName);
+        generator.writeName(fieldName);
         generator.writeNull();
       }
     }
@@ -140,11 +130,11 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
   public void acceptJsonFormatVisitor(
     JsonFormatVisitorWrapper visitor,
     JavaType typeHint
-  ) throws JsonMappingException {
+  ) {
     Message defaultInstance = defaultInstance(typeHint);
     Function<FieldDescriptor, String> propertyNaming = getPropertyNaming(
       defaultInstance,
-      visitor.getProvider()
+      visitor.getContext()
     );
 
     new MessageSchemaGenerator(defaultInstance, getConfig(), propertyNaming)
@@ -178,7 +168,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
 
   private Function<FieldDescriptor, String> getPropertyNaming(
     MessageOrBuilder messageOrBuilder,
-    SerializerProvider serializerProvider
+    SerializationContext serializationContext
   ) {
     Descriptor descriptor = messageOrBuilder.getDescriptorForType();
     PropertyNamingCache cache = propertyNamingCache.get(descriptor);
@@ -196,7 +186,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
         );
     }
 
-    return cache.forSerialization(serializerProvider.getConfig());
+    return cache.forSerialization(serializationContext.getConfig());
   }
 
   private static boolean supportsFieldPresence(FieldDescriptor field) {
@@ -207,7 +197,11 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
     );
   }
 
-  private static boolean writeSingleElementArraysUnwrapped(SerializerProvider config) {
-    return config.isEnabled(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED);
+  private static boolean writeSingleElementArraysUnwrapped(
+    SerializationContext serializationContext
+  ) {
+    return serializationContext.isEnabled(
+      SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED
+    );
   }
 }

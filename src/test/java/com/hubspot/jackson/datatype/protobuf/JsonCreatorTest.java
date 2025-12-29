@@ -11,14 +11,14 @@ import org.junit.Test;
 public class JsonCreatorTest {
 
   @Test
-  public void testEmptyObject() throws Exception {
+  public void testEmptyObject() {
     Wrapper wrapper = camelCase().readValue("{}", Wrapper.class);
 
     assertThat(wrapper.getAllFields()).isEqualTo(AllFields.getDefaultInstance());
   }
 
   @Test
-  public void testPopulatedObject() throws Exception {
+  public void testPopulatedObject() {
     AllFields original = ProtobufCreator.create(AllFields.class);
 
     Wrapper wrapper = camelCase()

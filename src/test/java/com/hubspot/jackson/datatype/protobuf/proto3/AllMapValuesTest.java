@@ -4,10 +4,6 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.came
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 import com.google.protobuf.Any;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.ByteString;
@@ -30,13 +26,16 @@ import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasAllMapValu
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.AllFieldsProto3;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.EnumProto3;
-import java.io.IOException;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.NullNode;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.StringNode;
 
 public class AllMapValuesTest {
 
   @Test
-  public void itWritesAllMapValuesWhenPopulated() throws IOException {
+  public void itWritesAllMapValuesWhenPopulated() {
     HasAllMapValues message = hasAllMapValues();
     String json = camelCase(Include.NON_DEFAULT).writeValueAsString(message);
     JsonNode node = camelCase().readTree(json);
@@ -44,7 +43,7 @@ public class AllMapValuesTest {
   }
 
   @Test
-  public void itWritesEmptyMapsWhenNotPopulated() throws IOException {
+  public void itWritesEmptyMapsWhenNotPopulated() {
     HasAllMapValues message = HasAllMapValues.newBuilder().build();
     String json = camelCase().writeValueAsString(message);
     JsonNode node = camelCase().readTree(json);
@@ -52,21 +51,21 @@ public class AllMapValuesTest {
   }
 
   @Test
-  public void itReadsAllMapValuesWhenPopulated() throws IOException {
+  public void itReadsAllMapValuesWhenPopulated() {
     String json = camelCase().writeValueAsString(hasAllMapValuesNode());
     HasAllMapValues message = camelCase().readValue(json, HasAllMapValues.class);
     assertThat(message).isEqualTo(hasAllMapValues());
   }
 
   @Test
-  public void itDoesntSetMapFieldsWhenEmpty() throws IOException {
+  public void itDoesntSetMapFieldsWhenEmpty() {
     String json = camelCase().writeValueAsString(hasEmptyMapsNode());
     HasAllMapValues message = camelCase().readValue(json, HasAllMapValues.class);
     assertThat(message).isEqualTo(HasAllMapValues.getDefaultInstance());
   }
 
   @Test
-  public void itDoesntSetMapFieldsWhenNull() throws IOException {
+  public void itDoesntSetMapFieldsWhenNull() {
     String json = camelCase().writeValueAsString(hasNullMapsNode());
     HasAllMapValues message = camelCase().readValue(json, HasAllMapValues.class);
     assertThat(message).isEqualTo(HasAllMapValues.getDefaultInstance());
@@ -164,7 +163,7 @@ public class AllMapValuesTest {
     node.set(
       "listValueMap",
       newObjectNode()
-        .set("list_value", camelCase().createArrayNode().add(TextNode.valueOf("test")))
+        .set("list_value", camelCase().createArrayNode().add(StringNode.valueOf("test")))
     );
     node.set("nullValueMap", newObjectNode().set("null_value", NullNode.getInstance()));
     node.set(
@@ -196,7 +195,7 @@ public class AllMapValuesTest {
 
   private static ObjectNode anyNode() {
     byte[] bytes = Value.newBuilder().setStringValue("test").build().toByteArray();
-    String base64 = camelCase().getSerializationConfig().getBase64Variant().encode(bytes);
+    String base64 = camelCase().serializationConfig().getBase64Variant().encode(bytes);
     return newObjectNode()
       .put("typeUrl", "type.googleapis.com/google.protobuf.Value")
       .put("value", base64);

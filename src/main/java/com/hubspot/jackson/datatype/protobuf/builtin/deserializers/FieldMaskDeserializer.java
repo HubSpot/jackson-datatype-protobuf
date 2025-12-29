@@ -1,12 +1,11 @@
 package com.hubspot.jackson.datatype.protobuf.builtin.deserializers;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.google.protobuf.FieldMask;
 import com.google.protobuf.util.FieldMaskUtil;
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonToken;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
 public class FieldMaskDeserializer extends StdDeserializer<FieldMask> {
 
@@ -15,11 +14,10 @@ public class FieldMaskDeserializer extends StdDeserializer<FieldMask> {
   }
 
   @Override
-  public FieldMask deserialize(JsonParser parser, DeserializationContext context)
-    throws IOException {
-    switch (parser.getCurrentToken()) {
+  public FieldMask deserialize(JsonParser parser, DeserializationContext context) {
+    switch (parser.currentToken()) {
       case VALUE_STRING:
-        return FieldMaskUtil.fromJsonString(parser.getText());
+        return FieldMaskUtil.fromJsonString(parser.getString());
       default:
         context.reportWrongTokenException(
           FieldMask.class,

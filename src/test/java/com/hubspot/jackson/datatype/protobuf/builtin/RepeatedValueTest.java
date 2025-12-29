@@ -8,7 +8,6 @@ import com.google.protobuf.NullValue;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.RepeatedValue;
-import java.io.IOException;
 import org.junit.Test;
 
 public class RepeatedValueTest {
@@ -24,7 +23,7 @@ public class RepeatedValueTest {
     .build();
 
   @Test
-  public void itReadsListValues() throws IOException {
+  public void itReadsListValues() {
     String json = "{\"values\":[\"nested\"]}";
     RepeatedValue message = camelCase().readValue(json, RepeatedValue.class);
     assertThat(message.getValuesCount()).isEqualTo(1);
@@ -32,7 +31,7 @@ public class RepeatedValueTest {
   }
 
   @Test
-  public void itReadsNestedListValues() throws IOException {
+  public void itReadsNestedListValues() {
     String json = "{\"values\":[[\"nested\"]]}";
     RepeatedValue message = camelCase().readValue(json, RepeatedValue.class);
     assertThat(message.getValuesCount()).isEqualTo(1);
@@ -40,7 +39,7 @@ public class RepeatedValueTest {
   }
 
   @Test
-  public void itReadsMixedTypeValues() throws IOException {
+  public void itReadsMixedTypeValues() {
     String json =
       "{\"values\":[null,1.5,\"test\",true,{\"key\":\"value\"},[\"nested\"]]}";
     RepeatedValue message = camelCase().readValue(json, RepeatedValue.class);

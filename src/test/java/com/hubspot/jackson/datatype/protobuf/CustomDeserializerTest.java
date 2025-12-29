@@ -1,29 +1,28 @@
 package com.hubspot.jackson.datatype.protobuf;
 
+import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.create;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.protobuf.Message;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.Nested;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.Custom;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.CustomMessageWrapper;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.RepeatedCustomWrapper;
-import java.io.IOException;
 import org.junit.Test;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonToken;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.module.SimpleModule;
 
 public class CustomDeserializerTest {
 
   @Test
-  public void testTopLevelMessage() throws IOException {
+  public void testTopLevelMessage() {
     AllFields expected = AllFields.newBuilder().setString("test").build();
-    ObjectMapper MAPPER = new ObjectMapper()
-      .registerModules(new ProtobufModule(), new DeserializerModule(expected));
+    ObjectMapper MAPPER = create().addModule(new DeserializerModule(expected)).build();
 
     AllFields actual = MAPPER.readValue("{}", AllFields.class);
 
@@ -31,10 +30,9 @@ public class CustomDeserializerTest {
   }
 
   @Test
-  public void testNestedMessage() throws IOException {
+  public void testNestedMessage() {
     Nested expected = Nested.newBuilder().setString("test").build();
-    ObjectMapper MAPPER = new ObjectMapper()
-      .registerModules(new ProtobufModule(), new DeserializerModule(expected));
+    ObjectMapper MAPPER = create().addModule(new DeserializerModule(expected)).build();
 
     Nested actual = MAPPER.readValue("{\"nested\":{}}", AllFields.class).getNested();
 
@@ -42,9 +40,8 @@ public class CustomDeserializerTest {
   }
 
   @Test
-  public void itUsesCustomDeserializerForTopLevelObject() throws IOException {
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModules(new ProtobufModule(), new CustomDeserializer());
+  public void itUsesCustomDeserializerForTopLevelObject() {
+    ObjectMapper mapper = create().addModule(new CustomDeserializer()).build();
 
     String json = "123";
     Custom custom = mapper.readValue(json, Custom.class);
@@ -52,9 +49,8 @@ public class CustomDeserializerTest {
   }
 
   @Test
-  public void itUsesCustomDeserializerForWrappedObject() throws IOException {
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModules(new ProtobufModule(), new CustomDeserializer());
+  public void itUsesCustomDeserializerForWrappedObject() {
+    ObjectMapper mapper = create().addModule(new CustomDeserializer()).build();
 
     String json = "{\"custom\":123}";
     CustomMessageWrapper wrapper = mapper.readValue(json, CustomMessageWrapper.class);
@@ -63,9 +59,8 @@ public class CustomDeserializerTest {
   }
 
   @Test
-  public void itUsesCustomDeserializerForWrappedRepeatedObject() throws IOException {
-    ObjectMapper mapper = new ObjectMapper()
-      .registerModules(new ProtobufModule(), new CustomDeserializer());
+  public void itUsesCustomDeserializerForWrappedRepeatedObject() {
+    ObjectMapper mapper = create().addModule(new CustomDeserializer()).build();
 
     String json = "{\"custom\":[123,456]}";
     RepeatedCustomWrapper wrapper = mapper.readValue(json, RepeatedCustomWrapper.class);
@@ -80,10 +75,9 @@ public class CustomDeserializerTest {
     public DeserializerModule(final Message message) {
       addDeserializer(
         (Class<Message>) message.getClass(),
-        new JsonDeserializer<Message>() {
+        new ValueDeserializer<Message>() {
           @Override
-          public Message deserialize(JsonParser jp, DeserializationContext ctxt)
-            throws IOException {
+          public Message deserialize(JsonParser jp, DeserializationContext ctxt) {
             return message;
           }
         }
@@ -96,11 +90,10 @@ public class CustomDeserializerTest {
     public CustomDeserializer() {
       addDeserializer(
         Custom.class,
-        new JsonDeserializer<Custom>() {
+        new ValueDeserializer<Custom>() {
           @Override
-          public Custom deserialize(JsonParser p, DeserializationContext ctxt)
-            throws IOException {
-            assertThat(p.getCurrentToken()).isEqualTo(JsonToken.VALUE_NUMBER_INT);
+          public Custom deserialize(JsonParser p, DeserializationContext ctxt) {
+            assertThat(p.currentToken()).isEqualTo(JsonToken.VALUE_NUMBER_INT);
             return Custom.newBuilder().setValue(p.getIntValue()).build();
           }
         }

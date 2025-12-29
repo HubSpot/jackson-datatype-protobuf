@@ -3,20 +3,19 @@ package com.hubspot.jackson.datatype.protobuf.builtin;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.protobuf.ListValue;
 import com.google.protobuf.NullValue;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasStruct;
-import java.io.IOException;
 import java.util.Map;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
 
 public class StructTest {
 
   @Test
-  public void itWritesAllStructValueTypes() throws IOException {
+  public void itWritesAllStructValueTypes() {
     Value nestedValue = Value.newBuilder().setStringValue("nested").build();
     Struct nestedStruct = Struct.newBuilder().putFields("key", nestedValue).build();
     ListValue list = ListValue.newBuilder().addValues(nestedValue).build();
@@ -50,14 +49,14 @@ public class StructTest {
   }
 
   @Test
-  public void itDoesntSetStructWhenValueIsNull() throws IOException {
+  public void itDoesntSetStructWhenValueIsNull() {
     String json = "{\"struct\":null}";
     HasStruct valueWrapper = camelCase().readValue(json, HasStruct.class);
     assertThat(valueWrapper.hasStruct()).isFalse();
   }
 
   @Test
-  public void itSetsEmptyMapWhenStructIsEmpty() throws IOException {
+  public void itSetsEmptyMapWhenStructIsEmpty() {
     String json = "{\"struct\":{}}";
     HasStruct valueWrapper = camelCase().readValue(json, HasStruct.class);
     assertThat(valueWrapper.hasStruct()).isTrue();
@@ -65,7 +64,7 @@ public class StructTest {
   }
 
   @Test
-  public void itReadsAllStructValueTypes() throws IOException {
+  public void itReadsAllStructValueTypes() {
     String json =
       "{\"struct\":{\"null\":null,\"number\":1.5,\"string\":\"test\",\"boolean\":true,\"struct\":{\"key\":\"nested\"},\"list\":[\"nested\"]}}";
     HasStruct message = camelCase().readValue(json, HasStruct.class);

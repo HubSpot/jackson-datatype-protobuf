@@ -3,17 +3,16 @@ package com.hubspot.jackson.datatype.protobuf.proto3;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasAllMapKeys;
-import java.io.IOException;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.NullNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class AllMapKeysTest {
 
   @Test
-  public void itWritesAllMapKeysWhenPopulated() throws IOException {
+  public void itWritesAllMapKeysWhenPopulated() {
     HasAllMapKeys message = hasAllMapKeys();
     String json = camelCase().writeValueAsString(message);
     JsonNode node = camelCase().readTree(json);
@@ -21,7 +20,7 @@ public class AllMapKeysTest {
   }
 
   @Test
-  public void itWritesEmptyMapsWhenNotPopulated() throws IOException {
+  public void itWritesEmptyMapsWhenNotPopulated() {
     HasAllMapKeys message = HasAllMapKeys.newBuilder().build();
     String json = camelCase().writeValueAsString(message);
     JsonNode node = camelCase().readTree(json);
@@ -29,21 +28,21 @@ public class AllMapKeysTest {
   }
 
   @Test
-  public void itReadsAllMapKeysWhenPopulated() throws IOException {
+  public void itReadsAllMapKeysWhenPopulated() {
     String json = camelCase().writeValueAsString(hasAllMapKeysNode());
     HasAllMapKeys message = camelCase().readValue(json, HasAllMapKeys.class);
     assertThat(message).isEqualTo(hasAllMapKeys());
   }
 
   @Test
-  public void itDoesntSetMapFieldsWhenEmpty() throws IOException {
+  public void itDoesntSetMapFieldsWhenEmpty() {
     String json = camelCase().writeValueAsString(hasEmptyMapsNode());
     HasAllMapKeys message = camelCase().readValue(json, HasAllMapKeys.class);
     assertThat(message).isEqualTo(HasAllMapKeys.getDefaultInstance());
   }
 
   @Test
-  public void itDoesntSetMapFieldsWhenNull() throws IOException {
+  public void itDoesntSetMapFieldsWhenNull() {
     String json = camelCase().writeValueAsString(hasNullMapsNode());
     HasAllMapKeys message = camelCase().readValue(json, HasAllMapKeys.class);
     assertThat(message).isEqualTo(HasAllMapKeys.getDefaultInstance());

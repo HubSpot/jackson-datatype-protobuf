@@ -1,19 +1,18 @@
 package com.hubspot.jackson.datatype.protobuf.internal;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser.NumberType;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.NullValue;
 import com.hubspot.jackson.datatype.protobuf.ProtobufJacksonConfig;
 import java.math.BigInteger;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
+import tools.jackson.databind.cfg.EnumFeature;
+import tools.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
+import tools.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 public class FieldSchemaGenerator
   extends StdSerializer<String>
@@ -29,7 +28,11 @@ public class FieldSchemaGenerator
   }
 
   @Override
-  public void serialize(String value, JsonGenerator gen, SerializerProvider provider) {
+  public void serialize(
+    String value,
+    JsonGenerator gen,
+    SerializationContext serializationContext
+  ) {
     throw new UnsupportedOperationException();
   }
 
@@ -37,7 +40,7 @@ public class FieldSchemaGenerator
   public void acceptJsonFormatVisitor(
     JsonFormatVisitorWrapper visitor,
     JavaType typeHint
-  ) throws JsonMappingException {
+  ) {
     switch (field.getJavaType()) {
       case INT:
         if (
@@ -45,33 +48,33 @@ public class FieldSchemaGenerator
         ) {
           visitIntFormat(
             visitor,
-            visitor.getProvider().constructType(Long.class),
-            NumberType.LONG
+            visitor.getContext().constructType(Long.class),
+            JsonParser.NumberType.LONG
           );
         } else {
-          visitIntFormat(visitor, typeHint, NumberType.INT);
+          visitIntFormat(visitor, typeHint, JsonParser.NumberType.INT);
         }
         break;
       case LONG:
         if (config.serializeLongsAsString()) {
-          visitor.expectStringFormat(visitor.getProvider().constructType(String.class));
+          visitor.expectStringFormat(visitor.getContext().constructType(String.class));
         } else if (
           Types.isUnsigned(field.getType()) && config.properUnsignedNumberSerialization()
         ) {
           visitIntFormat(
             visitor,
-            visitor.getProvider().constructType(BigInteger.class),
-            NumberType.BIG_INTEGER
+            visitor.getContext().constructType(BigInteger.class),
+            JsonParser.NumberType.BIG_INTEGER
           );
         } else {
-          visitIntFormat(visitor, typeHint, NumberType.LONG);
+          visitIntFormat(visitor, typeHint, JsonParser.NumberType.LONG);
         }
         break;
       case FLOAT:
-        visitFloatFormat(visitor, typeHint, NumberType.FLOAT);
+        visitFloatFormat(visitor, typeHint, JsonParser.NumberType.FLOAT);
         break;
       case DOUBLE:
-        visitFloatFormat(visitor, typeHint, NumberType.DOUBLE);
+        visitFloatFormat(visitor, typeHint, JsonParser.NumberType.DOUBLE);
         break;
       case BOOLEAN:
         visitor.expectBooleanFormat(typeHint);
@@ -83,18 +86,16 @@ public class FieldSchemaGenerator
       case ENUM:
         if (typeHint.getRawClass() == NullValue.class) {
           visitor.expectNullFormat(typeHint);
-        } else if (
-          visitor.getProvider().isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX)
-        ) {
+        } else if (visitor.getContext().isEnabled(EnumFeature.WRITE_ENUMS_USING_INDEX)) {
           visitor.expectIntegerFormat(typeHint);
         } else {
           visitor.expectStringFormat(typeHint);
         }
         break;
       case MESSAGE:
-        JsonSerializer<Object> serializer = visitor
-          .getProvider()
-          .findValueSerializer(typeHint.getRawClass(), null);
+        ValueSerializer<Object> serializer = visitor
+          .getContext()
+          .findValueSerializer(typeHint.getRawClass());
         serializer.acceptJsonFormatVisitor(visitor, typeHint);
         break;
     }

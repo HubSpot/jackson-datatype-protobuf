@@ -5,21 +5,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 import static org.assertj.core.api.Assertions.fail;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.protobuf.ListValue;
 import com.google.protobuf.NullValue;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasValue;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
 
 public class ValueTest {
 
   @Test
-  public void itWritesNullValue() throws IOException {
+  public void itWritesNullValue() {
     HasValue message = HasValue
       .newBuilder()
       .setValue(Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build())
@@ -29,7 +28,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itWritesNumberValue() throws IOException {
+  public void itWritesNumberValue() {
     HasValue message = HasValue
       .newBuilder()
       .setValue(Value.newBuilder().setNumberValue(1.5d).build())
@@ -39,7 +38,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itWritesStringValue() throws IOException {
+  public void itWritesStringValue() {
     HasValue message = HasValue
       .newBuilder()
       .setValue(Value.newBuilder().setStringValue("test").build())
@@ -49,7 +48,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itWritesBooleanValue() throws IOException {
+  public void itWritesBooleanValue() {
     HasValue message = HasValue
       .newBuilder()
       .setValue(Value.newBuilder().setBoolValue(true).build())
@@ -59,7 +58,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itWritesStructValue() throws IOException {
+  public void itWritesStructValue() {
     Struct struct = Struct
       .newBuilder()
       .putFields("key", Value.newBuilder().setStringValue("value").build())
@@ -73,7 +72,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itWritesListValue() throws IOException {
+  public void itWritesListValue() {
     ListValue list = ListValue
       .newBuilder()
       .addValues(Value.newBuilder().setStringValue("test").build())
@@ -87,7 +86,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itWritesMixedStruct() throws IOException {
+  public void itWritesMixedStruct() {
     Value nestedValue = Value.newBuilder().setStringValue("nested").build();
     Struct nestedStruct = Struct.newBuilder().putFields("key", nestedValue).build();
     ListValue list = ListValue.newBuilder().addValues(nestedValue).build();
@@ -124,7 +123,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itWritesMixedListValue() throws IOException {
+  public void itWritesMixedListValue() {
     Value nestedValue = Value.newBuilder().setStringValue("nested").build();
     Struct struct = Struct.newBuilder().putFields("key", nestedValue).build();
     ListValue nestedList = ListValue.newBuilder().addValues(nestedValue).build();
@@ -149,7 +148,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itReadsNullValue() throws IOException {
+  public void itReadsNullValue() {
     String json = "{\"value\":null}";
     HasValue valueWrapper = camelCase().readValue(json, HasValue.class);
     assertThat(valueWrapper.hasValue()).isTrue();
@@ -165,7 +164,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itReadsIntegralValue() throws IOException {
+  public void itReadsIntegralValue() {
     String json = "{\"value\":1}";
     HasValue valueWrapper = camelCase().readValue(json, HasValue.class);
     assertThat(valueWrapper.hasValue()).isTrue();
@@ -181,7 +180,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itReadsFloatingPointValue() throws IOException {
+  public void itReadsFloatingPointValue() {
     String json = "{\"value\":1.5}";
     HasValue valueWrapper = camelCase().readValue(json, HasValue.class);
     assertThat(valueWrapper.hasValue()).isTrue();
@@ -197,7 +196,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itReadsStringValue() throws IOException {
+  public void itReadsStringValue() {
     String json = "{\"value\":\"test\"}";
     HasValue valueWrapper = camelCase().readValue(json, HasValue.class);
     assertThat(valueWrapper.hasValue()).isTrue();
@@ -213,7 +212,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itReadsBooleanValue() throws IOException {
+  public void itReadsBooleanValue() {
     String json = "{\"value\":true}";
     HasValue valueWrapper = camelCase().readValue(json, HasValue.class);
     assertThat(valueWrapper.hasValue()).isTrue();
@@ -229,7 +228,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itReadsStructValue() throws IOException {
+  public void itReadsStructValue() {
     String json = "{\"value\":{\"key\":\"value\"}}";
     HasValue valueWrapper = camelCase().readValue(json, HasValue.class);
     assertThat(valueWrapper.hasValue()).isTrue();
@@ -249,7 +248,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itReadsListValue() throws IOException {
+  public void itReadsListValue() {
     String json = "{\"value\":[\"test\"]}";
     HasValue valueWrapper = camelCase().readValue(json, HasValue.class);
     assertThat(valueWrapper.hasValue()).isTrue();
@@ -269,7 +268,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itReadsMixedStruct() throws IOException {
+  public void itReadsMixedStruct() {
     String json =
       "{\"value\":{\"null\":null,\"number\":1.5,\"string\":\"test\",\"boolean\":true,\"struct\":{\"key\":\"nested\"},\"list\":[\"nested\"]}}";
     HasValue message = camelCase().readValue(json, HasValue.class);
@@ -301,7 +300,7 @@ public class ValueTest {
   }
 
   @Test
-  public void itReadsMixedListValue() throws IOException {
+  public void itReadsMixedListValue() {
     String json =
       "{\"value\":[null,1.5,\"test\",true,{\"key\":\"nested\"},[\"nested\"]]}";
     HasValue message = camelCase().readValue(json, HasValue.class);

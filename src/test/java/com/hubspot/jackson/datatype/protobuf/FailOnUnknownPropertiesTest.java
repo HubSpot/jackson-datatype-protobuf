@@ -5,34 +5,33 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.crea
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.toTree;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import org.junit.Test;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 public class FailOnUnknownPropertiesTest {
 
-  @Test(expected = JsonMappingException.class)
-  public void testEnabled() throws JsonProcessingException {
+  @Test(expected = JacksonException.class)
+  public void testEnabled() {
     ObjectMapper mapper = objectMapper(true);
 
     mapper.treeToValue(buildNode(), AllFields.class);
   }
 
   @Test
-  public void testDisabled() throws JsonProcessingException {
+  public void testDisabled() {
     ObjectMapper mapper = objectMapper(false);
 
     mapper.treeToValue(buildNode(), AllFields.class);
   }
 
   @Test
-  public void testAdvancesParser() throws JsonProcessingException {
+  public void testAdvancesParser() {
     AllFields message = ProtobufCreator.create(AllFields.class);
 
     ObjectNode tree = (ObjectNode) toTree(camelCase(), message);
@@ -63,9 +62,9 @@ public class FailOnUnknownPropertiesTest {
 
   private static ObjectMapper objectMapper(boolean enabled) {
     if (enabled) {
-      return create().enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+      return create().enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).build();
     } else {
-      return create().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+      return create().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).build();
     }
   }
 }

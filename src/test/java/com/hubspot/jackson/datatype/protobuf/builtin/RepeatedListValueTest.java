@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.google.protobuf.ListValue;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.RepeatedListValue;
-import java.io.IOException;
 import org.junit.Test;
 
 public class RepeatedListValueTest {
@@ -15,7 +14,7 @@ public class RepeatedListValueTest {
   private static final ListValue LIST = ListValue.newBuilder().addValues(NESTED).build();
 
   @Test
-  public void itReadsNestedListValues() throws IOException {
+  public void itReadsNestedListValues() {
     String json = "{\"listValues\":[[\"nested\"]]}";
     RepeatedListValue message = camelCase().readValue(json, RepeatedListValue.class);
     assertThat(message.getListValuesCount()).isEqualTo(1);

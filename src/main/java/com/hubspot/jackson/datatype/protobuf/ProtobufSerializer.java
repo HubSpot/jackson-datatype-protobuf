@@ -2,15 +2,6 @@ package com.hubspot.jackson.datatype.protobuf;
 
 import static java.lang.String.format;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
@@ -20,11 +11,18 @@ import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.NullValue;
 import com.hubspot.jackson.datatype.protobuf.internal.Constants;
 import com.hubspot.jackson.datatype.protobuf.internal.Types;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.exc.StreamWriteException;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
+import tools.jackson.databind.cfg.EnumFeature;
+import tools.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 public abstract class ProtobufSerializer<T extends MessageOrBuilder>
   extends StdSerializer<T> {
@@ -34,15 +32,7 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder>
     .getFullName();
 
   private final ProtobufJacksonConfig config;
-  private final Map<Class<?>, JsonSerializer<Object>> serializerCache;
-
-  /**
-   * @deprecated use {@link #ProtobufSerializer(Class, ProtobufJacksonConfig)}
-   */
-  @Deprecated
-  public ProtobufSerializer(Class<T> protobufType) {
-    this(protobufType, ProtobufJacksonConfig.getDefaultInstance());
-  }
+  private final Map<Class<?>, ValueSerializer<Object>> serializerCache;
 
   public ProtobufSerializer(Class<T> protobufType, ProtobufJacksonConfig config) {
     super(protobufType);
@@ -54,25 +44,25 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder>
   public abstract void acceptJsonFormatVisitor(
     JsonFormatVisitorWrapper visitor,
     JavaType typeHint
-  ) throws JsonMappingException;
+  );
 
   @SuppressWarnings("unchecked")
   protected void writeMap(
     FieldDescriptor field,
     Object entries,
     JsonGenerator generator,
-    SerializerProvider serializerProvider
-  ) throws IOException {
+    SerializationContext serializationContext
+  ) {
     Descriptor entryDescriptor = field.getMessageType();
     FieldDescriptor keyDescriptor = entryDescriptor.findFieldByName("key");
     FieldDescriptor valueDescriptor = entryDescriptor.findFieldByName("value");
     generator.writeStartObject();
     for (Message entry : (List<? extends Message>) entries) {
       // map keys can only be integers or strings so this should be fine
-      generator.writeFieldName(entry.getField(keyDescriptor).toString());
+      generator.writeName(entry.getField(keyDescriptor).toString());
       Object value = entry.getField(valueDescriptor);
       // map values can't be maps or repeated so this should be fine
-      writeValue(valueDescriptor, value, generator, serializerProvider);
+      writeValue(valueDescriptor, value, generator, serializationContext);
     }
     generator.writeEndObject();
   }
@@ -85,8 +75,8 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder>
     FieldDescriptor field,
     Object value,
     JsonGenerator generator,
-    SerializerProvider serializerProvider
-  ) throws IOException {
+    SerializationContext serializationContext
+  ) {
     switch (field.getJavaType()) {
       case INT:
         writeInt(field, (int) value, generator);
@@ -112,7 +102,7 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder>
         // special-case NullValue
         if (NULL_VALUE_FULL_NAME.equals(enumDescriptor.getType().getFullName())) {
           generator.writeNull();
-        } else if (writeEnumsUsingIndex(serializerProvider)) {
+        } else if (writeEnumsUsingIndex(serializationContext)) {
           generator.writeNumber(enumDescriptor.getNumber());
         } else {
           generator.writeString(enumDescriptor.getName());
@@ -120,7 +110,7 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder>
         break;
       case BYTE_STRING:
         generator.writeString(
-          serializerProvider
+          serializationContext
             .getConfig()
             .getBase64Variant()
             .encode(((ByteString) value).toByteArray())
@@ -129,21 +119,20 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder>
       case MESSAGE:
         Class<?> subType = value.getClass();
 
-        JsonSerializer<Object> serializer = serializerCache.get(subType);
+        ValueSerializer<Object> serializer = serializerCache.get(subType);
         if (serializer == null) {
-          serializer = serializerProvider.findValueSerializer(value.getClass(), null);
+          serializer = serializationContext.findValueSerializer(value.getClass());
           serializerCache.put(subType, serializer);
         }
 
-        serializer.serialize(value, generator, serializerProvider);
+        serializer.serialize(value, generator, serializationContext);
         break;
       default:
         throw unrecognizedType(field, generator);
     }
   }
 
-  private void writeInt(FieldDescriptor field, int value, JsonGenerator generator)
-    throws IOException {
+  private void writeInt(FieldDescriptor field, int value, JsonGenerator generator) {
     if (
       value < 0 &&
       config.properUnsignedNumberSerialization() &&
@@ -156,8 +145,7 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder>
     }
   }
 
-  private void writeLong(FieldDescriptor field, long value, JsonGenerator generator)
-    throws IOException {
+  private void writeLong(FieldDescriptor field, long value, JsonGenerator generator) {
     if (
       value < 0 &&
       config.properUnsignedNumberSerialization() &&
@@ -178,19 +166,19 @@ public abstract class ProtobufSerializer<T extends MessageOrBuilder>
     }
   }
 
-  private static boolean writeEnumsUsingIndex(SerializerProvider config) {
-    return config.isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX);
+  private static boolean writeEnumsUsingIndex(SerializationContext serializationContext) {
+    return serializationContext.isEnabled(EnumFeature.WRITE_ENUMS_USING_INDEX);
   }
 
-  private static IOException unrecognizedType(
+  private static RuntimeException unrecognizedType(
     FieldDescriptor field,
     JsonGenerator generator
-  ) throws IOException {
+  ) {
     String error = format(
       "Unrecognized java type '%s' for field %s",
       field.getJavaType(),
       field.getFullName()
     );
-    throw new JsonGenerationException(error, generator);
+    throw new StreamWriteException(generator, error);
   }
 }

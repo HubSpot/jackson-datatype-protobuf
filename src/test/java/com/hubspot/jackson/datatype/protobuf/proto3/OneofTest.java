@@ -5,18 +5,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.protobuf.Duration;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasOneof;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.AllFieldsProto3;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf3.EnumProto3;
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.NullNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class OneofTest {
 
@@ -56,67 +55,62 @@ public class OneofTest {
     .build();
 
   @Test
-  public void itOmitsOneofWhenNotSetWithDefaultInclusion() throws IOException {
+  public void itOmitsOneofWhenNotSetWithDefaultInclusion() {
     String json = camelCase().writeValueAsString(EMPTY);
     assertThat(json).isEqualTo("{}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToStringWithDefaultInclusion() throws IOException {
+  public void itWritesOneofWhenSetToStringWithDefaultInclusion() {
     String json = camelCase().writeValueAsString(STRING);
     assertThat(json).isEqualTo("{\"string\":\"test\"}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultDurationWithDefaultInclusion()
-    throws IOException {
+  public void itWritesOneofWhenSetToDefaultDurationWithDefaultInclusion() {
     String json = camelCase().writeValueAsString(DEFAULT_DURATION);
     assertThat(json).isEqualTo("{\"duration\":\"0s\"}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToDurationWithDefaultInclusion() throws IOException {
+  public void itWritesOneofWhenSetToDurationWithDefaultInclusion() {
     String json = camelCase().writeValueAsString(DURATION);
     assertThat(json).isEqualTo("{\"duration\":\"30s\"}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultEnumWithDefaultInclusion() throws IOException {
+  public void itWritesOneofWhenSetToDefaultEnumWithDefaultInclusion() {
     String json = camelCase().writeValueAsString(DEFAULT_ENUM);
     assertThat(json).isEqualTo("{\"enum\":\"DEFAULT\"}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToEnumWithDefaultInclusion() throws IOException {
+  public void itWritesOneofWhenSetToEnumWithDefaultInclusion() {
     String json = camelCase().writeValueAsString(ENUM);
     assertThat(json).isEqualTo("{\"enum\":\"FIRST\"}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultProto2MessageWithDefaultInclusion()
-    throws IOException {
+  public void itWritesOneofWhenSetToDefaultProto2MessageWithDefaultInclusion() {
     String json = camelCase().writeValueAsString(DEFAULT_PROTO2_MESSAGE);
     assertThat(json).isEqualTo("{\"proto2Message\":{}}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToProto2MessageWithDefaultInclusion()
-    throws IOException {
+  public void itWritesOneofWhenSetToProto2MessageWithDefaultInclusion() {
     String json = camelCase().writeValueAsString(PROTO2_MESSAGE);
     assertThat(json).isEqualTo("{\"proto2Message\":{\"string\":\"proto2\"}}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultProto3MessageWithDefaultInclusion()
-    throws IOException {
+  public void itWritesOneofWhenSetToDefaultProto3MessageWithDefaultInclusion() {
     String json = camelCase().writeValueAsString(DEFAULT_PROTO3_MESSAGE);
     JsonNode node = camelCase().readTree(json).get("proto3Message");
     assertThat(node).isEqualTo(nullProto3Message().without("nested"));
   }
 
   @Test
-  public void itWritesOneofWhenSetToProto3MessageWithDefaultInclusion()
-    throws IOException {
+  public void itWritesOneofWhenSetToProto3MessageWithDefaultInclusion() {
     String json = camelCase().writeValueAsString(PROTO3_MESSAGE);
     JsonNode node = camelCase().readTree(json).get("proto3Message");
     assertThat(node)
@@ -124,76 +118,71 @@ public class OneofTest {
   }
 
   @Test
-  public void itOmitsOneofWhenNotSetWithAlwaysInclusion() throws IOException {
+  public void itOmitsOneofWhenNotSetWithAlwaysInclusion() {
     String json = camelCase(Include.ALWAYS).writeValueAsString(EMPTY);
     assertThat(json).isEqualTo("{}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToStringWithAlwaysInclusion() throws IOException {
+  public void itWritesOneofWhenSetToStringWithAlwaysInclusion() {
     String json = camelCase(Include.ALWAYS).writeValueAsString(STRING);
     assertThat(json).isEqualTo("{\"string\":\"test\"}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultDurationWithAlwaysInclusion()
-    throws IOException {
+  public void itWritesOneofWhenSetToDefaultDurationWithAlwaysInclusion() {
     String json = camelCase(Include.ALWAYS).writeValueAsString(DEFAULT_DURATION);
     assertThat(json).isEqualTo("{\"duration\":\"0s\"}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToDurationWithAlwaysInclusion() throws IOException {
+  public void itWritesOneofWhenSetToDurationWithAlwaysInclusion() {
     String json = camelCase(Include.ALWAYS).writeValueAsString(DURATION);
     assertThat(json).isEqualTo("{\"duration\":\"30s\"}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultEnumWithAlwaysInclusion() throws IOException {
+  public void itWritesOneofWhenSetToDefaultEnumWithAlwaysInclusion() {
     String json = camelCase(Include.ALWAYS).writeValueAsString(DEFAULT_ENUM);
     assertThat(json).isEqualTo("{\"enum\":\"DEFAULT\"}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToEnumWithAlwaysInclusion() throws IOException {
+  public void itWritesOneofWhenSetToEnumWithAlwaysInclusion() {
     String json = camelCase(Include.ALWAYS).writeValueAsString(ENUM);
     assertThat(json).isEqualTo("{\"enum\":\"FIRST\"}");
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultProto2MessageWithAlwaysInclusion()
-    throws IOException {
+  public void itWritesOneofWhenSetToDefaultProto2MessageWithAlwaysInclusion() {
     String json = camelCase(Include.ALWAYS).writeValueAsString(DEFAULT_PROTO2_MESSAGE);
     JsonNode node = camelCase(Include.ALWAYS).readTree(json).get("proto2Message");
     assertThat(node).isEqualTo(nullProto2Message());
   }
 
   @Test
-  public void itWritesOneofWhenSetToProto2MessageWithAlwaysInclusion()
-    throws IOException {
+  public void itWritesOneofWhenSetToProto2MessageWithAlwaysInclusion() {
     String json = camelCase(Include.ALWAYS).writeValueAsString(PROTO2_MESSAGE);
     JsonNode node = camelCase(Include.ALWAYS).readTree(json).get("proto2Message");
     assertThat(node).isEqualTo(nullProto2Message().put("string", "proto2"));
   }
 
   @Test
-  public void itWritesOneofWhenSetToDefaultProto3MessageWithAlwaysInclusion()
-    throws IOException {
+  public void itWritesOneofWhenSetToDefaultProto3MessageWithAlwaysInclusion() {
     String json = camelCase(Include.ALWAYS).writeValueAsString(DEFAULT_PROTO3_MESSAGE);
     JsonNode node = camelCase(Include.ALWAYS).readTree(json).get("proto3Message");
     assertThat(node).isEqualTo(nullProto3Message());
   }
 
   @Test
-  public void itWritesOneofWhenSetToProto3MessageWithAlwaysInclusion()
-    throws IOException {
+  public void itWritesOneofWhenSetToProto3MessageWithAlwaysInclusion() {
     String json = camelCase(Include.ALWAYS).writeValueAsString(PROTO3_MESSAGE);
     JsonNode node = camelCase(Include.ALWAYS).readTree(json).get("proto3Message");
     assertThat(node).isEqualTo(nullProto3Message().put("string", "proto3"));
   }
 
   @Test
-  public void itDoesntSetAnythingWhenJsonIsEmpty() throws IOException {
+  public void itDoesntSetAnythingWhenJsonIsEmpty() {
     String json = "{}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
@@ -206,7 +195,7 @@ public class OneofTest {
   }
 
   @Test
-  public void itSetsStringWhenPresentInJson() throws IOException {
+  public void itSetsStringWhenPresentInJson() {
     String json = "{\"string\":\"test\"}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
@@ -219,7 +208,7 @@ public class OneofTest {
   }
 
   @Test
-  public void itDoesntSetStringWhenNullInJson() throws IOException {
+  public void itDoesntSetStringWhenNullInJson() {
     String json = "{\"string\":null}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
@@ -232,7 +221,7 @@ public class OneofTest {
   }
 
   @Test
-  public void itSetsDurationWhenPresentInJson() throws IOException {
+  public void itSetsDurationWhenPresentInJson() {
     String json = "{\"duration\":\"30s\"}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
@@ -246,7 +235,7 @@ public class OneofTest {
   }
 
   @Test
-  public void itDoesntSetDurationWhenNullInJson() throws IOException {
+  public void itDoesntSetDurationWhenNullInJson() {
     String json = "{\"duration\":null}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
@@ -259,7 +248,7 @@ public class OneofTest {
   }
 
   @Test
-  public void itSetsEnumWhenPresentInJson() throws IOException {
+  public void itSetsEnumWhenPresentInJson() {
     String json = "{\"enum\":\"FIRST\"}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
@@ -272,7 +261,7 @@ public class OneofTest {
   }
 
   @Test
-  public void itSetsEnumWhenSetToDefaultInJson() throws IOException {
+  public void itSetsEnumWhenSetToDefaultInJson() {
     String json = "{\"enum\":\"DEFAULT\"}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
@@ -285,7 +274,7 @@ public class OneofTest {
   }
 
   @Test
-  public void itDoesntSetEnumWhenNullInJson() throws IOException {
+  public void itDoesntSetEnumWhenNullInJson() {
     String json = "{\"enum\":null}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
@@ -298,7 +287,7 @@ public class OneofTest {
   }
 
   @Test
-  public void itSetsProto2MessageWhenPresentInJson() throws IOException {
+  public void itSetsProto2MessageWhenPresentInJson() {
     String json = "{\"proto2Message\":{\"string\":\"test\"}}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
@@ -312,7 +301,7 @@ public class OneofTest {
   }
 
   @Test
-  public void itSetsProto2MessageWhenEmptyInJson() throws IOException {
+  public void itSetsProto2MessageWhenEmptyInJson() {
     String json = "{\"proto2Message\":{}}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
@@ -325,7 +314,7 @@ public class OneofTest {
   }
 
   @Test
-  public void itDoesntSetProto2MessageWhenNullInJson() throws IOException {
+  public void itDoesntSetProto2MessageWhenNullInJson() {
     String json = "{\"proto2Message\":null}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
@@ -338,7 +327,7 @@ public class OneofTest {
   }
 
   @Test
-  public void itSetsProto3MessageWhenPresentInJson() throws IOException {
+  public void itSetsProto3MessageWhenPresentInJson() {
     String json = "{\"proto3Message\":{\"string\":\"test\"}}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
@@ -352,7 +341,7 @@ public class OneofTest {
   }
 
   @Test
-  public void itSetsProto3MessageWhenEmptyInJson() throws IOException {
+  public void itSetsProto3MessageWhenEmptyInJson() {
     String json = "{\"proto3Message\":{}}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {
@@ -366,7 +355,7 @@ public class OneofTest {
   }
 
   @Test
-  public void itDoesntSetProto3MessageWhenNullInJson() throws IOException {
+  public void itDoesntSetProto3MessageWhenNullInJson() {
     String json = "{\"proto3Message\":null}";
     HasOneof message = camelCase().readValue(json, HasOneof.class);
     switch (message.getOneofCase()) {

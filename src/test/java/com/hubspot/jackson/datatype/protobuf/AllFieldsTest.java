@@ -10,7 +10,6 @@ import com.hubspot.jackson.datatype.protobuf.util.ProtobufCreator;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.AllFields.Builder;
 import com.hubspot.jackson.datatype.protobuf.util.TestProtobuf.Nested;
-import java.io.IOException;
 import java.util.List;
 import org.junit.Test;
 
@@ -98,7 +97,7 @@ public class AllFieldsTest {
   }
 
   @Test
-  public void testEmptyNestedObject() throws IOException {
+  public void testEmptyNestedObject() {
     String json = "{\"nested\":{}}";
 
     AllFields parsed = camelCase().readValue(json, AllFields.class);

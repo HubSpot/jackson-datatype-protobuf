@@ -4,12 +4,11 @@ import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.came
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.protobuf.Any;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasAny;
-import java.io.IOException;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
 
 public class AnyTest {
 
@@ -22,95 +21,91 @@ public class AnyTest {
     .build();
 
   @Test
-  public void itWritesDurationWhenSetWithDefaultInclusion() throws IOException {
+  public void itWritesDurationWhenSetWithDefaultInclusion() {
     HasAny message = HasAny.newBuilder().setAny(ANY).build();
     String json = camelCase().writeValueAsString(message);
     assertThat(camelCase().readTree(json)).isEqualTo(anyNode());
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithDefaultInclusion()
-    throws IOException {
+  public void itWritesZeroWhenSetToDefaultInstanceWithDefaultInclusion() {
     HasAny message = HasAny.newBuilder().setAny(Any.getDefaultInstance()).build();
     String json = camelCase().writeValueAsString(message);
     assertThat(camelCase().readTree(json)).isEqualTo(defaultNode());
   }
 
   @Test
-  public void itOmitsDurationWhenNotSetWithDefaultInclusion() throws IOException {
+  public void itOmitsDurationWhenNotSetWithDefaultInclusion() {
     HasAny message = HasAny.newBuilder().build();
     String json = camelCase().writeValueAsString(message);
     assertThat(json).isEqualTo("{}");
   }
 
   @Test
-  public void itWritesDurationWhenSetWithNonDefaultInclusion() throws IOException {
+  public void itWritesDurationWhenSetWithNonDefaultInclusion() {
     HasAny message = HasAny.newBuilder().setAny(ANY).build();
     String json = camelCase().writeValueAsString(message);
     assertThat(camelCase().readTree(json)).isEqualTo(anyNode());
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithNonDefaultInclusion()
-    throws IOException {
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonDefaultInclusion() {
     HasAny message = HasAny.newBuilder().setAny(Any.getDefaultInstance()).build();
     String json = camelCase().writeValueAsString(message);
     assertThat(camelCase().readTree(json)).isEqualTo(defaultNode());
   }
 
   @Test
-  public void itOmitsDurationWhenNotSetWithNonDefaultInclusion() throws IOException {
+  public void itOmitsDurationWhenNotSetWithNonDefaultInclusion() {
     HasAny message = HasAny.newBuilder().build();
     String json = camelCase(Include.NON_DEFAULT).writeValueAsString(message);
     assertThat(json).isEqualTo("{}");
   }
 
   @Test
-  public void itWritesDurationSetWithAlwaysInclusion() throws IOException {
+  public void itWritesDurationSetWithAlwaysInclusion() {
     HasAny message = HasAny.newBuilder().setAny(ANY).build();
     String json = camelCase().writeValueAsString(message);
     assertThat(camelCase().readTree(json)).isEqualTo(anyNode());
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithAlwaysInclusion()
-    throws IOException {
+  public void itWritesZeroWhenSetToDefaultInstanceWithAlwaysInclusion() {
     HasAny message = HasAny.newBuilder().setAny(Any.getDefaultInstance()).build();
     String json = camelCase().writeValueAsString(message);
     assertThat(camelCase().readTree(json)).isEqualTo(defaultNode());
   }
 
   @Test
-  public void itWritesNullWhenNotSetWithAlwaysInclusion() throws IOException {
+  public void itWritesNullWhenNotSetWithAlwaysInclusion() {
     HasAny message = HasAny.newBuilder().build();
     String json = camelCase(Include.ALWAYS).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"any\":null}");
   }
 
   @Test
-  public void itWritesDurationWhenSetWithNonNullInclusion() throws IOException {
+  public void itWritesDurationWhenSetWithNonNullInclusion() {
     HasAny message = HasAny.newBuilder().setAny(ANY).build();
     String json = camelCase().writeValueAsString(message);
     assertThat(camelCase().readTree(json)).isEqualTo(anyNode());
   }
 
   @Test
-  public void itWritesZeroWhenSetToDefaultInstanceWithNonNullInclusion()
-    throws IOException {
+  public void itWritesZeroWhenSetToDefaultInstanceWithNonNullInclusion() {
     HasAny message = HasAny.newBuilder().setAny(Any.getDefaultInstance()).build();
     String json = camelCase().writeValueAsString(message);
     assertThat(camelCase().readTree(json)).isEqualTo(defaultNode());
   }
 
   @Test
-  public void itOmitsDurationWhenNotSetWithNonNullInclusion() throws IOException {
+  public void itOmitsDurationWhenNotSetWithNonNullInclusion() {
     HasAny message = HasAny.newBuilder().build();
     String json = camelCase(Include.NON_NULL).writeValueAsString(message);
     assertThat(json).isEqualTo("{}");
   }
 
   @Test
-  public void itSetsDurationWhenPresentInJson() throws IOException {
+  public void itSetsDurationWhenPresentInJson() {
     String json = camelCase().writeValueAsString(anyNode());
     HasAny message = camelCase().readValue(json, HasAny.class);
     assertThat(message.hasAny()).isTrue();
@@ -118,7 +113,7 @@ public class AnyTest {
   }
 
   @Test
-  public void itSetsDurationWhenZeroInJson() throws IOException {
+  public void itSetsDurationWhenZeroInJson() {
     String json = camelCase().writeValueAsString(defaultNode());
     HasAny message = camelCase().readValue(json, HasAny.class);
     assertThat(message.hasAny()).isTrue();
@@ -126,14 +121,14 @@ public class AnyTest {
   }
 
   @Test
-  public void itDoesntSetDurationWhenNullInJson() throws IOException {
+  public void itDoesntSetDurationWhenNullInJson() {
     String json = "{\"any\":null}";
     HasAny message = camelCase().readValue(json, HasAny.class);
     assertThat(message.hasAny()).isFalse();
   }
 
   @Test
-  public void itDoesntSetDurationWhenMissingFromJson() throws IOException {
+  public void itDoesntSetDurationWhenMissingFromJson() {
     String json = "{}";
     HasAny message = camelCase().readValue(json, HasAny.class);
     assertThat(message.hasAny()).isFalse();
@@ -141,7 +136,7 @@ public class AnyTest {
 
   private static JsonNode anyNode() {
     String base64 = camelCase()
-      .getSerializationConfig()
+      .serializationConfig()
       .getBase64Variant()
       .encode(VALUE.toByteArray());
     JsonNode valueNode = camelCase()

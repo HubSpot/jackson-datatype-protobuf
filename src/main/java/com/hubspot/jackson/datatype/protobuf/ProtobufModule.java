@@ -2,16 +2,10 @@ package com.hubspot.jackson.datatype.protobuf;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.module.SimpleDeserializers;
-import com.fasterxml.jackson.databind.module.SimpleSerializers;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.BytesValue;
 import com.google.protobuf.DoubleValue;
 import com.google.protobuf.Duration;
-import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.FieldMask;
 import com.google.protobuf.FloatValue;
 import com.google.protobuf.Int32Value;
@@ -30,39 +24,37 @@ import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.DurationDeser
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.FieldMaskDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.ListValueDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.NullValueDeserializer;
+import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.ProtobufValueDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.StructDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.TimestampDeserializer;
-import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.ValueDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.deserializers.WrappedPrimitiveDeserializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.DurationSerializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.FieldMaskSerializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.ListValueSerializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.MessageSerializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.NullValueSerializer;
+import com.hubspot.jackson.datatype.protobuf.builtin.serializers.ProtobufValueSerializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.StructSerializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.TimestampSerializer;
-import com.hubspot.jackson.datatype.protobuf.builtin.serializers.ValueSerializer;
 import com.hubspot.jackson.datatype.protobuf.builtin.serializers.WrappedPrimitiveSerializer;
+import tools.jackson.core.Version;
+import tools.jackson.databind.JacksonModule;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.module.SimpleDeserializers;
+import tools.jackson.databind.module.SimpleSerializers;
 
 /**
  * Module to add support for reading and writing Protobufs
  *
- * Register with Jackson via {@link com.fasterxml.jackson.databind.ObjectMapper#registerModule}
+ * Register with Jackson via {@link ObjectMapper#registeredModules()}
  */
-public class ProtobufModule extends Module {
+public class ProtobufModule extends JacksonModule {
 
   private final ProtobufJacksonConfig config;
 
   public ProtobufModule() {
     this(ProtobufJacksonConfig.getDefaultInstance());
-  }
-
-  /**
-   * @deprecated use {@link #ProtobufModule(ProtobufJacksonConfig)} instead
-   */
-  @Deprecated
-  public ProtobufModule(ExtensionRegistry extensionRegistry) {
-    this(ProtobufJacksonConfig.builder().extensionRegistry(extensionRegistry).build());
   }
 
   public ProtobufModule(ProtobufJacksonConfig config) {
@@ -89,7 +81,7 @@ public class ProtobufModule extends Module {
     serializers.addSerializer(new NullValueSerializer(config));
     serializers.addSerializer(new StructSerializer(config));
     serializers.addSerializer(new TimestampSerializer(config));
-    serializers.addSerializer(new ValueSerializer(config));
+    serializers.addSerializer(new ProtobufValueSerializer(config));
     serializers.addSerializer(
       new WrappedPrimitiveSerializer<>(DoubleValue.getDefaultInstance(), config)
     );
@@ -131,7 +123,10 @@ public class ProtobufModule extends Module {
     deserializers.addDeserializer(NullValue.class, new NullValueDeserializer());
     deserializers.addDeserializer(Struct.class, new StructDeserializer().buildAtEnd());
     deserializers.addDeserializer(Timestamp.class, new TimestampDeserializer());
-    deserializers.addDeserializer(Value.class, new ValueDeserializer().buildAtEnd());
+    deserializers.addDeserializer(
+      Value.class,
+      new ProtobufValueDeserializer().buildAtEnd()
+    );
     deserializers.addDeserializer(
       DoubleValue.class,
       wrappedPrimitiveDeserializer(DoubleValue.class)
@@ -169,10 +164,10 @@ public class ProtobufModule extends Module {
       wrappedPrimitiveDeserializer(BytesValue.class)
     );
     context.addDeserializers(deserializers);
-    context.setMixInAnnotations(MessageOrBuilder.class, MessageOrBuilderMixin.class);
+    context.setMixIn(MessageOrBuilder.class, MessageOrBuilderMixin.class);
   }
 
-  private static <T extends Message> JsonDeserializer<T> wrappedPrimitiveDeserializer(
+  private static <T extends Message> ValueDeserializer<T> wrappedPrimitiveDeserializer(
     Class<T> type
   ) {
     return new WrappedPrimitiveDeserializer<>(type).buildAtEnd();

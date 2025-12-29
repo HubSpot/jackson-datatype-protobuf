@@ -10,7 +10,6 @@ import com.google.protobuf.NullValue;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 import com.hubspot.jackson.datatype.protobuf.util.BuiltInProtobufs.HasListValue;
-import java.io.IOException;
 import org.junit.Test;
 
 public class ListValueTest {
@@ -22,15 +21,14 @@ public class ListValueTest {
     .build();
 
   @Test
-  public void itWritesListValueWhenSetWithDefaultInclusion() throws IOException {
+  public void itWritesListValueWhenSetWithDefaultInclusion() {
     HasListValue message = HasListValue.newBuilder().setListValue(LIST_VALUE).build();
     String json = camelCase().writeValueAsString(message);
     assertThat(json).isEqualTo("{\"listValue\":[\"test\"]}");
   }
 
   @Test
-  public void itWritesEmptyArrayWhenSetToDefaultInstanceWithDefaultInclusion()
-    throws IOException {
+  public void itWritesEmptyArrayWhenSetToDefaultInstanceWithDefaultInclusion() {
     HasListValue message = HasListValue
       .newBuilder()
       .setListValue(ListValue.getDefaultInstance())
@@ -40,22 +38,21 @@ public class ListValueTest {
   }
 
   @Test
-  public void itOmitsListValueWhenNotSetWithDefaultInclusion() throws IOException {
+  public void itOmitsListValueWhenNotSetWithDefaultInclusion() {
     HasListValue message = HasListValue.newBuilder().build();
     String json = camelCase().writeValueAsString(message);
     assertThat(json).isEqualTo("{}");
   }
 
   @Test
-  public void itWritesListValueWhenSetWithNonDefaultInclusion() throws IOException {
+  public void itWritesListValueWhenSetWithNonDefaultInclusion() {
     HasListValue message = HasListValue.newBuilder().setListValue(LIST_VALUE).build();
     String json = camelCase(Include.NON_DEFAULT).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"listValue\":[\"test\"]}");
   }
 
   @Test
-  public void itWritesEmptyArrayWhenSetToDefaultInstanceWithNonDefaultInclusion()
-    throws IOException {
+  public void itWritesEmptyArrayWhenSetToDefaultInstanceWithNonDefaultInclusion() {
     HasListValue message = HasListValue
       .newBuilder()
       .setListValue(ListValue.getDefaultInstance())
@@ -65,22 +62,21 @@ public class ListValueTest {
   }
 
   @Test
-  public void itOmitsListValueWhenNotSetWithNonDefaultInclusion() throws IOException {
+  public void itOmitsListValueWhenNotSetWithNonDefaultInclusion() {
     HasListValue message = HasListValue.newBuilder().build();
     String json = camelCase(Include.NON_DEFAULT).writeValueAsString(message);
     assertThat(json).isEqualTo("{}");
   }
 
   @Test
-  public void itWritesListValueSetWithAlwaysInclusion() throws IOException {
+  public void itWritesListValueSetWithAlwaysInclusion() {
     HasListValue message = HasListValue.newBuilder().setListValue(LIST_VALUE).build();
     String json = camelCase(Include.ALWAYS).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"listValue\":[\"test\"]}");
   }
 
   @Test
-  public void itWritesEmptyArrayWhenSetToDefaultInstanceWithAlwaysInclusion()
-    throws IOException {
+  public void itWritesEmptyArrayWhenSetToDefaultInstanceWithAlwaysInclusion() {
     HasListValue message = HasListValue
       .newBuilder()
       .setListValue(ListValue.getDefaultInstance())
@@ -90,22 +86,21 @@ public class ListValueTest {
   }
 
   @Test
-  public void itWritesNullWhenNotSetWithAlwaysInclusion() throws IOException {
+  public void itWritesNullWhenNotSetWithAlwaysInclusion() {
     HasListValue message = HasListValue.newBuilder().build();
     String json = camelCase(Include.ALWAYS).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"listValue\":null}");
   }
 
   @Test
-  public void itWritesListValueWhenSetWithNonNullInclusion() throws IOException {
+  public void itWritesListValueWhenSetWithNonNullInclusion() {
     HasListValue message = HasListValue.newBuilder().setListValue(LIST_VALUE).build();
     String json = camelCase(Include.NON_NULL).writeValueAsString(message);
     assertThat(json).isEqualTo("{\"listValue\":[\"test\"]}");
   }
 
   @Test
-  public void itWritesEmptyArrayWhenSetToDefaultInstanceWithNonNullInclusion()
-    throws IOException {
+  public void itWritesEmptyArrayWhenSetToDefaultInstanceWithNonNullInclusion() {
     HasListValue message = HasListValue
       .newBuilder()
       .setListValue(ListValue.getDefaultInstance())
@@ -115,14 +110,14 @@ public class ListValueTest {
   }
 
   @Test
-  public void itOmitsListValueWhenNotSetWithNonNullInclusion() throws IOException {
+  public void itOmitsListValueWhenNotSetWithNonNullInclusion() {
     HasListValue message = HasListValue.newBuilder().build();
     String json = camelCase(Include.NON_NULL).writeValueAsString(message);
     assertThat(json).isEqualTo("{}");
   }
 
   @Test
-  public void itReadsNestedListValues() throws IOException {
+  public void itReadsNestedListValues() {
     String json = "{\"listValue\":[[\"nested\"]]}";
     HasListValue message = camelCase().readValue(json, HasListValue.class);
     assertThat(message.hasListValue()).isTrue();
@@ -142,7 +137,7 @@ public class ListValueTest {
   }
 
   @Test
-  public void itReadsMixedTypeValues() throws IOException {
+  public void itReadsMixedTypeValues() {
     String json =
       "{\"listValue\":[null,1.5,\"test\",true,{\"key\":\"value\"},[\"nested\"]]}";
     HasListValue message = camelCase().readValue(json, HasListValue.class);
@@ -168,7 +163,7 @@ public class ListValueTest {
   }
 
   @Test
-  public void itSetsListValueWhenPresentInJson() throws IOException {
+  public void itSetsListValueWhenPresentInJson() {
     String json = "{\"listValue\":[\"test\"]}";
     HasListValue message = camelCase().readValue(json, HasListValue.class);
     assertThat(message.hasListValue()).isTrue();
@@ -176,7 +171,7 @@ public class ListValueTest {
   }
 
   @Test
-  public void itSetsListValueWhenEmptyInJson() throws IOException {
+  public void itSetsListValueWhenEmptyInJson() {
     String json = "{\"listValue\":[]}";
     HasListValue message = camelCase().readValue(json, HasListValue.class);
     assertThat(message.hasListValue()).isTrue();
@@ -184,14 +179,14 @@ public class ListValueTest {
   }
 
   @Test
-  public void itDoesntSetListValueWhenNullInJson() throws IOException {
+  public void itDoesntSetListValueWhenNullInJson() {
     String json = "{\"listValue\":null}";
     HasListValue message = camelCase().readValue(json, HasListValue.class);
     assertThat(message.hasListValue()).isFalse();
   }
 
   @Test
-  public void itDoesntSetListValueWhenMissingFromJson() throws IOException {
+  public void itDoesntSetListValueWhenMissingFromJson() {
     String json = "{}";
     HasListValue message = camelCase().readValue(json, HasListValue.class);
     assertThat(message.hasListValue()).isFalse();

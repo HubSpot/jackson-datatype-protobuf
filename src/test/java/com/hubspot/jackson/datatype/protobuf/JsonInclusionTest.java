@@ -1,12 +1,9 @@
 package com.hubspot.jackson.datatype.protobuf;
 
-import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.camelCase;
 import static com.hubspot.jackson.datatype.protobuf.util.ObjectMapperHelper.create;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Enums;
 import com.google.protobuf.Descriptors.Descriptor;
@@ -20,6 +17,8 @@ import java.util.HashSet;
 import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 public class JsonInclusionTest {
 
@@ -74,9 +73,9 @@ public class JsonInclusionTest {
     for (String field : allFields) {
       assertThat(node.has(field)).isTrue();
       if (arrayFields.contains(field)) {
-        assertThat(node.get(field).isArray());
+        assertThat(node.get(field).isArray()).isTrue();
       } else {
-        assertThat(node.get(field).isNull());
+        assertThat(node.get(field).isNull()).isTrue();
       }
     }
 
@@ -95,7 +94,7 @@ public class JsonInclusionTest {
       for (String field : allFields) {
         if (arrayFields.contains(field)) {
           assertThat(node.has(field)).isTrue();
-          assertThat(node.get(field).isArray());
+          assertThat(node.get(field).isArray()).isTrue();
         } else {
           assertThat(node.has(field)).isFalse();
         }
@@ -116,9 +115,9 @@ public class JsonInclusionTest {
     for (String field : allExtensionFields) {
       assertThat(node.has(field)).isTrue();
       if (arrayExtensionFields.contains(field)) {
-        assertThat(node.get(field).isArray());
+        assertThat(node.get(field).isArray()).isTrue();
       } else {
-        assertThat(node.get(field).isNull());
+        assertThat(node.get(field).isNull()).isTrue();
       }
     }
   }
@@ -133,7 +132,7 @@ public class JsonInclusionTest {
       for (String field : allExtensionFields) {
         if (arrayExtensionFields.contains(field)) {
           assertThat(node.has(field)).isTrue();
-          assertThat(node.get(field).isArray());
+          assertThat(node.get(field).isArray()).isTrue();
         } else {
           assertThat(node.has(field)).isFalse();
         }
@@ -146,14 +145,20 @@ public class JsonInclusionTest {
   }
 
   private static ObjectMapper mapper(Include inclusion) {
-    return create().setSerializationInclusion(inclusion);
+    return create()
+      .changeDefaultPropertyInclusion(handler -> handler.withValueInclusion(inclusion))
+      .build();
   }
 
   private static ObjectMapper mapper(
     Include inclusion,
     ExtensionRegistry extensionRegistry
   ) {
-    return camelCase(extensionRegistry).copy().setSerializationInclusion(inclusion);
+    return create(
+      ProtobufJacksonConfig.builder().extensionRegistry(extensionRegistry).build()
+    )
+      .changeDefaultPropertyInclusion(handler -> handler.withValueInclusion(inclusion))
+      .build();
   }
 
   private static EnumSet<Include> presentValues(String... values) {
