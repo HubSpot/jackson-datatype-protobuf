@@ -1,7 +1,7 @@
 ## Overview
 
 Jackson module that adds support for serializing and deserializing Google's 
-[Protocol Buffers](https://code.google.com/p/protobuf/) to and from JSON.
+[Protocol Buffers](https://github.com/protocolbuffers/protobuf) to and from JSON.
 
 ## Usage
 
@@ -13,27 +13,23 @@ To use module on Maven-based projects, use following dependency:
 <dependency>
   <groupId>com.hubspot.jackson</groupId>
   <artifactId>jackson3-datatype-protobuf</artifactId>
-  <version><!-- see table below --></version>
+  <version><!-- latest --></version>
 </dependency>
 ```
-
-### Versions
-
-Starting with version 0.9.12, only Jackson 2.9+ is supported. If you're using Jackson 2.9 or newer, you can use the latest version of this library in Maven Central ([link](https://search.maven.org/artifact/com.hubspot.jackson/jackson-datatype-protobuf)).
-
-If you're using a version of Jackson prior to 2.9, you can use the last release before support was dropped:
-
-| Jackson 2.7.x | Jackson 2.8.x |
-| ------------- | ------------- |
-| 0.9.11-jackson2.7 | 0.9.11-jackson2.8 
 
 ### Registering module
 
 Registration is done as follows:
 
 ```java
-ObjectMapper mapper = new ObjectMapper();
-mapper.registerModule(new ProtobufModule());
+JsonMapper.builder().addModule(new ProtobufModule());
+```
+
+or to customize behavior:
+
+```java
+ProtobufJacksonConfig config = // create config 
+JsonMapper.builder().addModule(new ProtobufModule(config));
 ```
 
 after which functionality is available for all normal Jackson operations.
@@ -44,9 +40,9 @@ Protobuf 3 specifies a canonical JSON representation (available [here](https://d
 - unsigned numbers (uint32, fixed32, uint64, fixed64) can be improperly serialized as negative numbers. This can be overridden by enabling `ProtobufJacksonConfig#properUnsignedNumberSerialization`
 - int64, fixed64, uint64 are written as JSON numbers instead of strings. This can be overridden by enabling `ProtobufJacksonConfig#serializeLongsAsString`
 - `Any` objects don't have any special handling, so the value will be a base64 string, and the type URL field name is `typeUrl` instead of `@type`
-- original field names are not accepted on deserialization. This can be overriden by enabling `ProtobufJacksonConfig#acceptLiteralFieldnames`
+- original field names are not accepted on deserialization. This can be overridden by enabling `ProtobufJacksonConfig#acceptLiteralFieldnames`
 
-If you want interop with canonical serialization/deserialization, you can call `ProtobufJacksonConfig#useCanonicalSerialization`. This will enable all of the available options to get as close to the canonical behavior as possible. The behavior of this method may change in the future as new options are added.
+If you want interop with canonical serialization/deserialization, you can call `ProtobufJacksonConfig#useCanonicalSerialization`. This will enable all the available options to get as close to the canonical behavior as possible. The behavior of this method may change in the future as new options are added.
 
 ### Gotchas
 
