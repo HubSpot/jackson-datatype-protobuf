@@ -9,7 +9,7 @@
   </parent>
 
   <groupId>com.hubspot.jackson</groupId>
-  <artifactId>jackson-datatype-protobuf</artifactId>
+  <artifactId>jackson3-datatype-protobuf</artifactId>
   <version>0.9.19-SNAPSHOT</version>
 
   <name>${project.groupId}:${project.artifactId}</name>
@@ -22,8 +22,8 @@
     <basepom.check.skip-dependency-versions-check>true</basepom.check.skip-dependency-versions-check>
     <basepom.check.skip-spotbugs>true</basepom.check.skip-spotbugs>
 
-    <dep.jackson.version>2.18.1</dep.jackson.version>
-    <dep.jackson-databind.version>2.18.1</dep.jackson-databind.version>
+    <dep.jackson.version>2.20</dep.jackson.version>
+    <dep.jackson3.version>3.0.3</dep.jackson3.version>
     <dep.javax-validation.version>2.0.1.Final</dep.javax-validation.version>
     <dep.protobuf-java.version>4.28.3</dep.protobuf-java.version>
     <dep.protoc.version>${dep.protobuf-java.version}</dep.protoc.version>
@@ -33,9 +33,14 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.kjetland</groupId>
-        <artifactId>mbknor-jackson-jsonschema_2.12</artifactId>
-        <version>1.0.39</version>
+        <groupId>tools.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${dep.jackson3.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tools.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${dep.jackson3.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -46,11 +51,11 @@
       <artifactId>jackson-annotations</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
+      <groupId>tools.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
+      <groupId>tools.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
     </dependency>
     <dependency>
@@ -70,11 +75,6 @@
       <artifactId>annotations</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.kjetland</groupId>
-      <artifactId>mbknor-jackson-jsonschema_2.12</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
@@ -90,14 +90,6 @@
     <resources>
       <resource>
         <directory>src/main/resources</directory>
-      </resource>
-      <resource>
-        <targetPath>com/hubspot/jackson/datatype/protobuf</targetPath>
-        <filtering>true</filtering>
-        <directory>src/main/version</directory>
-        <includes>
-          <include>VERSION.txt</include>
-        </includes>
       </resource>
     </resources>
 

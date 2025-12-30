@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package com.hubspot.jackson.datatype.protobuf.util;
+package com.hubspot.jackson3.datatype.protobuf.util;
 
 option java_outer_classname = "BuiltInProtobufs";
 
