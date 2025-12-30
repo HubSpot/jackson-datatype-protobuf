@@ -12,7 +12,7 @@ To use module on Maven-based projects, use following dependency:
 ```xml
 <dependency>
   <groupId>com.hubspot.jackson</groupId>
-  <artifactId>jackson-datatype-protobuf</artifactId>
+  <artifactId>jackson3-datatype-protobuf</artifactId>
   <version><!-- see table below --></version>
 </dependency>
 ```
@@ -47,14 +47,6 @@ Protobuf 3 specifies a canonical JSON representation (available [here](https://d
 - original field names are not accepted on deserialization. This can be overriden by enabling `ProtobufJacksonConfig#acceptLiteralFieldnames`
 
 If you want interop with canonical serialization/deserialization, you can call `ProtobufJacksonConfig#useCanonicalSerialization`. This will enable all of the available options to get as close to the canonical behavior as possible. The behavior of this method may change in the future as new options are added.
-
-### Protobuf 2 Support
-
-Support has been dropped for `com.google.protobuf:protobuf-java:2.x`, but you can use an older release if necessary:
-- 0.9.10-jackson2.9-proto2
-- 0.9.10-jackson2.8-proto2
-- 0.9.10-jackson2.7-proto2
-- 0.9.10-preJackson2.7-proto2
 
 ### Gotchas
 

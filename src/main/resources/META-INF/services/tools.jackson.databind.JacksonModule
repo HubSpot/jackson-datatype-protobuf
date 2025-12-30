@@ -1,1 +1,1 @@
-com.hubspot.jackson.datatype.protobuf.ProtobufModule
+com.hubspot.jackson3.datatype.protobuf.ProtobufModule
