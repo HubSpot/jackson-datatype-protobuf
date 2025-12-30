@@ -78,6 +78,9 @@ public class CustomDeserializerTest {
         new ValueDeserializer<Message>() {
           @Override
           public Message deserialize(JsonParser jp, DeserializationContext ctxt) {
+            // consume tokens so jackson doesn't get mad
+            jp.readValueAsTree();
+
             return message;
           }
         }

@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import tools.jackson.core.JsonParser;
 import tools.jackson.core.TreeNode;
+import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.PropertyNamingStrategies;
@@ -28,7 +29,10 @@ public class ObjectMapperHelper {
   }
 
   public static JsonMapper.Builder create(ProtobufJacksonConfig config) {
-    return JsonMapper.builder().addModule(new ProtobufModule(config));
+    return JsonMapper
+      .builder()
+      .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+      .addModule(new ProtobufModule(config));
   }
 
   public static ObjectMapper camelCase() {

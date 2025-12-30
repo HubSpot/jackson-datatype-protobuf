@@ -31,7 +31,7 @@ public class JsonCreatorTest {
 
     private final AllFields allFields;
 
-    @JsonCreator
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public Wrapper(AllFields allFields) {
       this.allFields = allFields;
     }
