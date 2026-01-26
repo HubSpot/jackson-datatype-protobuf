@@ -105,7 +105,7 @@ public class MessageSerializer extends ProtobufSerializer<MessageOrBuilder> {
       ) {
         generator.writeName(fieldName);
         writeValue(field, message.getField(field), generator, serializationContext);
-      } else if (include == Include.ALWAYS && field.getContainingOneof() == null) {
+      } else if (include == Include.ALWAYS && field.getRealContainingOneof() == null) {
         generator.writeName(fieldName);
         generator.writeNull();
       }
