@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.hubspot</groupId>
     <artifactId>basepom</artifactId>
-    <version>63.10</version>
+    <version>67.3</version>
   </parent>
 
   <groupId>com.hubspot.jackson</groupId>
@@ -22,28 +22,13 @@
     <basepom.check.skip-dependency-versions-check>true</basepom.check.skip-dependency-versions-check>
     <basepom.check.skip-spotbugs>true</basepom.check.skip-spotbugs>
 
-    <dep.jackson.version>2.20</dep.jackson.version>
+    <dep.jackson.version>2.20.0</dep.jackson.version>
     <dep.jackson3.version>3.0.3</dep.jackson3.version>
     <dep.javax-validation.version>2.0.1.Final</dep.javax-validation.version>
     <dep.protobuf-java.version>4.28.3</dep.protobuf-java.version>
     <dep.protoc.version>${dep.protobuf-java.version}</dep.protoc.version>
     <dep.scala.version>2.12.18</dep.scala.version>
   </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>tools.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-        <version>${dep.jackson3.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>tools.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>${dep.jackson3.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <dependency>
