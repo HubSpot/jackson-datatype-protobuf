@@ -1,7 +1,17 @@
 ## Overview
 
-Jackson module that adds support for serializing and deserializing Google's 
+Jackson module that adds support for serializing and deserializing Google's
 [Protocol Buffers](https://github.com/protocolbuffers/protobuf) to and from JSON.
+
+## Compatibility
+
+The original version line supports jackson versions up to 2.18. Jackson 2.20+ introduces some breaking changes, which are supported in the 0.10.x line. For jackson3, use 1.x (and the `jackson3-datatype-protobuf` artifactId).
+
+| jackson-datatype-protobuf | jackson-databind |
+|---------------------------|------------------|
+| 0.9.x                     | 2.18             |
+| 0.10.x                    | 2.21             |
+| 1.x                       | 3.x              |
 
 ## Usage
 
@@ -28,7 +38,7 @@ JsonMapper.builder().addModule(new ProtobufModule());
 or to customize behavior:
 
 ```java
-ProtobufJacksonConfig config = // create config 
+ProtobufJacksonConfig config = // create config
 JsonMapper.builder().addModule(new ProtobufModule(config));
 ```
 
