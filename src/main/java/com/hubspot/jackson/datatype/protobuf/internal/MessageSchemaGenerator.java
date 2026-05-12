@@ -41,6 +41,9 @@ public class MessageSchemaGenerator implements JsonFormatVisitable {
     JavaType typeHint
   ) throws JsonMappingException {
     JsonObjectFormatVisitor objectVisitor = visitor.expectObjectFormat(typeHint);
+    if (objectVisitor == null) {
+      return;
+    }
 
     Descriptor descriptor = defaultInstance.getDescriptorForType();
     List<FieldDescriptor> fields = new ArrayList<>(descriptor.getFields());
